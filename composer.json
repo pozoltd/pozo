@@ -15,7 +15,7 @@
 
         "swiftmailer/swiftmailer": "5.*",
         "omnipay/paypal": "~2.0",
-        "phpoffice/phpexcel": "dev-master",
+        "phpoffice/phpexcel": "1.8.*",
         "danielstjules/php-pretty-datetime": "dev-master",
         "facebook/php-sdk-v4" : "~5.0"
 
