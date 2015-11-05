@@ -27,7 +27,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Pozo\\": "src/Pozo"
+            "Pz\\": "/"
         }
     }
 }

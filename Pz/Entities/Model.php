@@ -1,15 +1,15 @@
 <?php
 
-namespace Pozo\Entities;
+namespace Pz\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="_models")
+ * @ORM\Table(name="models")
  */
-class _Model {
+class Model {
 	/**
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id

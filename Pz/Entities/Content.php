@@ -1,13 +1,13 @@
 <?php
 
-namespace Pozo\Entities;
+namespace Pz\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity(repositoryClass="Secret\Repositories\ContentRepository")
- * @ORM\Table(name="_contents")
+ * @ORM\Entity(repositoryClass="Pz\Repositories\ContentRepository")
+ * @ORM\Table(name="contents")
  */
 class Content {
 	/**
