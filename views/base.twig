@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Pozo | designed by Hsh</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+<meta charset="utf-8">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/metro-ui-css/2.0.23/min/metro-bootstrap.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/metro-ui-css/2.0.23/min/metro-responsive.min.css">
+<script src="//cdn.jsdelivr.net/metro-ui-css/2.0.23/min/metro.min.js"></script>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="{{ constant('CDN') }}/css/cms.css" rel="stylesheet">
+<script src="//cdn.ckeditor.com/4.4.2/standard/ckeditor.js"></script>
+{# <script src="{{ constant('CDN') }}/js/autogrow/plugin.js"></script>#}
+{# <script src="{{ constant('CDN') }}/js/colorbutton/plugin.js"></script>#}
+<script src="{{ constant('CDN') }}/js/function.js"></script>
+{% block extraHead %}{% endblock %}
+
+<style type="text/css">
+body { background: url('{{ constant('CDN') }}/images/background/bg{{ random(30) }}.jpg') no-repeat center top; min-height: 500px; text-align: left; }
+.container { margin: 0 !important; }
+.example { display: inline-block; }
+.example:before { content: '' !important; display: table; }
+* { font-family: Trebuchet MS; }
+i.fa { font-family: FontAwesome !important; }
+</style>
+</head>
+<body class="metro">
+	{% block menuBar %}
+{# 		{% set user = app['user'].getUser() %} #}
+		{% set user = 1 %}
+		{% if user %}
+		<nav class="navigation-bar dark">
+			<div class="navigation-bar-content">
+				<a href="#" class="element"><span class="icon-grid-view"></span> Pozo <sup>2.0</sup></a> <span class="element-divider"></span> <a class="pull-menu" href="#"></a>
+				<ul class="element-menu">
+				
+					<li><a class="element" href="">Website</a></li>
+	
+					<li>
+						<a class="dropdown-toggle" href="#">User data</a>
+						<ul class="dropdown-menu" data-role="dropdown">
+
+						</ul>
+					</li>
+					
+					<li><a class="element" href=""><span class="icon-pictures"></span> &nbsp;Assets</a></li>
+	
+					{% if user.admin is defined and user.admin == 1 %}
+					<li>
+						<a class="dropdown-toggle" href="#">Admin</a>
+						<ul class="dropdown-menu" data-role="dropdown">
+							{% for itm in models %}
+								{% if itm.permission == 1 %}
+									<li><a href="{% if itm.resortable == 1 %}{{ path('contents', { modelName: itm.name|url_encode }) }}{% else %}{{ path('contents-by-page', { modelName: itm.name|url_encode, page: 1 }) }}{% endif %}">{{ itm.name }}</a></li> 
+								{% endif %}
+							{% endfor %}
+							<li class="divider"></li>
+							<li><a href="{{ path('models-with-type', { type: 1 }) }}">Custom models</a></li>
+							<li><a href="{{ path('models-with-type', { type: 0 }) }}">Built-in models</a></li>
+						</ul>
+					</li>
+					{% endif %}
+				</ul>
+	
+				<div class="no-tablet-portrait">
+					<div class="element place-right">
+						<a class="dropdown-toggle" href="#"> <span class="icon-cog"></span></a>
+						<ul class="dropdown-menu place-right" data-role="dropdown">
+							<li><a href="#">Change Password</a></li>
+							<li><a href="{{ constant('SUPPORT_SITE') }}" target="__blank">About</a></li>
+							<li><a href="">Logout</a></li>
+						</ul>
+					</div>
+					<span class="element-divider place-right"></span> <span class="element place-right"> <span class="icon-user"></span> &nbsp;
+					</span>
+				</div>
+			</div>
+		</nav>
+		{% endif %}
+	{% endblock %}
+
+	{% block contentContainer %} {% endblock %}
+	
+	<div>&nbsp;</div>
+
+	{% block extraFoot %} {% endblock %}
+</body>
+</html>

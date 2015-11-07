@@ -1,0 +1,19 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{%- block choice_widget_expanded -%}
+    <div {{ block('widget_container_attributes') }}>
+    {%- for child in form %}
+        {{- form_widget(child) -}}
+        {{- form_label(child) -}}
+        &nbsp;&nbsp;
+    {% endfor -%}
+    </div>
+{%- endblock choice_widget_expanded -%}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        {%- for error in errors -%}
+            <span class="help-block" style="background: red; color: white; margin-top: 0; padding: .5em 1em;">{{ error.message }}</<span>
+        {%- endfor -%}
+    {%- endif -%}
+{%- endblock form_errors -%}

@@ -1,0 +1,163 @@
+{# {% set user = app['user'].getUser() %} #}
+{# {% set models = app.generic.data('Model', 'entity.visible = 1', {}, { sort: 'rank', order: 'ASC' }) %}#}
+
+{# {% if model is defined and model.name == 'Page' %}#}
+{# 	{% set _menu = 'pages' %}#}
+{# {% endif %}#}
+
+{# {% if model is defined and model.name == 'Asset' %}#}
+{# 	{% set _menu = 'assets' %}#}
+{# {% endif %}#}
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{ constant('CLIENT') }}</title>
+
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+	<link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+	<link href="{{ constant('CDN') }}/inspinia/css/bootstrap.min.css" rel="stylesheet">
+	<link href="{{ constant('CDN') }}/inspinia/css/plugins/iCheck/custom.css" rel="stylesheet">
+	<link href="{{ constant('CDN') }}/inspinia/css/animate.css" rel="stylesheet">
+	<link href="{{ constant('CDN') }}/inspinia/css/style.css" rel="stylesheet">
+	<link href="{{ constant('CDN') }}/style.css" rel="stylesheet">
+	
+	<!-- Mainly scripts -->
+	<script src="{{ constant('CDN') }}/inspinia/js/jquery-2.1.1.js"></script>
+	<script src="{{ constant('CDN') }}/inspinia/js/bootstrap.min.js"></script>
+	<script src="{{ constant('CDN') }}/inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+	<script src="{{ constant('CDN') }}/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+	
+	<!-- Custom and plugin javascript -->
+	<script src="{{ constant('CDN') }}/inspinia/js/inspinia.js"></script>
+	<script src="{{ constant('CDN') }}/inspinia/js/plugins/pace/pace.min.js"></script>
+	
+	<!-- iCheck -->
+	<script src="{{ constant('CDN') }}/inspinia/js/plugins/iCheck/icheck.min.js"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+	
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" rel="stylesheet">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	
+	<link href="{{ constant('CDN') }}/css/jquery.datetimepicker.css" rel="stylesheet">
+	<script src="{{ constant('CDN') }}/js/jquery.datetimepicker.js"></script> 	
+
+	{% block extraHead %}{% endblock %}
+</head>
+
+<body class="{{ bodyClass is defined ? bodyClass : 'pace-done' }}">
+
+	{% block wrapper %}
+	<div id="wrapper">
+
+	<nav class="navbar-default navbar-static-side" role="navigation">
+		<div class="sidebar-collapse">
+			<ul class="nav" id="side-menu">
+				<li class="nav-header">
+					<div class="dropdown profile-element">
+						<span> 
+							<img alt="image" class="img-circle" src="/images/profile_small.jpg" />
+						</span> 
+						<a data-toggle="dropdown" class="dropdown-toggle" href="#"> 
+							<span class="clear">
+								<span class="block m-t-xs"> <strong class="font-bold">{{ constant('CLIENT') }}</strong>
+							</span> 
+						</a>
+					</div>
+					<div class="logo-element"><img style="width: 30px;" alt="image" class="img-circle" src="{{ constant('CDN') }}/inspinia/img/profile_small.jpg" /></div>
+				</li>
+				
+				<li class="">
+					<a href="">
+						<i class="fa fa-sitemap"></i>
+						<span class="nav-label">Pages</span>
+					</a>
+				</li>
+				
+				<li class="">
+					<a href="#">
+						<i class="fa fa-database"></i> 
+						<span class="nav-label">Data</span> 
+						<span class="fa arrow"></span>
+					</a>
+					<ul class="nav nav-second-level">
+
+					</ul>
+				</li>
+				
+				<li class="">
+					<a href="">
+						<i class="fa fa-file-image-o"></i>
+						<span class="nav-label">Assets</span> 
+					</a>
+				</li>
+				
+				{% if user is defined and user.admin == 1 %}
+				<li>
+					<a href="#">
+						<i class="fa fa-cog"></i> 
+						<span class="nav-label">Admin</span>
+						<span class="fa arrow"></span>
+					</a>
+					<ul class="nav nav-second-level">
+						<li class="active"><a href="">Custom models</a></li>
+						<li><a href="">Built-in models</a></li>
+					</ul>
+				</li>
+				{% endif %}
+			</ul>
+
+		</div>
+	</nav>
+
+	<div id="page-wrapper" class="gray-bg">
+		<div class="row border-bottom">
+			<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+				<div class="navbar-header">
+					<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+				</div>
+				<ul class="nav navbar-top-links navbar-right">
+					<li><span class="m-r-sm text-muted welcome-message"></span></li>
+					<li><a href=""> <i class="fa fa-sign-out"></i> Log out</a></li>
+				</ul>
+			</nav>
+
+		</div>
+
+		<div class="row wrapper border-bottom white-bg page-heading">
+			<div class="col-lg-10">
+				{% block extraHeader %}
+
+				{% endblock %}
+			</div>
+			<div class="col-lg-2"></div>
+		</div>
+		<div class="wrapper wrapper-content animated fadeInRight">
+			{% block content %}{% endblock %}
+		</div>
+	</div>
+
+	<div id="confirm-dialog" style="display: none;" class="fancybox">
+		<div class="form-group">
+			Are you sure?
+		</div>
+		<div>
+			<button id="confirm-ok" type="submit" class="btn btn-sm btn-primary m-t-n-xs"><strong>OK</strong></button>
+			<button type="submit" class="btn btn-sm m-t-n-xs" onclick="$.fancybox.close();"><strong>Cancel</strong></button>
+		</div>
+	</div>
+	{% endblock %}
+
+	<script src="{{ constant('CDN') }}/inspinia/js/plugins/iCheck/icheck.min.js"></script>
+	<script src="{{ constant('CDN') }}/js/function.js"></script> 	
+	{% block extraFooter %}{% endblock %}
+</body>
+
+</html>

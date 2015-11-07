@@ -1,0 +1,177 @@
+{% extends 'layout.twig' %} 
+
+{% block extraHead %}
+	<style>
+		.dataTables_wrapper { padding-bottom: 0; }
+		.table #columns td { vertical-align: middle; cursor: move; }
+	</style>
+{% endblock %} 
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-7">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+				</div>
+				<div class="ibox-content">
+					<form method="post" autocomplete="off" novalidate>
+						<div class="row show-grid form-group">
+							<div class="col-md-6">
+								{{ form_label(form.name) }}
+								{{ form_widget(form.name, {attr: {class: 'form-control'}}) }}
+								{{ form_errors(form.name) }}
+							</div>
+							<div class="col-md-6">
+								{{ form_label(form.className) }}
+								{{ form_widget(form.className, {attr: {class: 'form-control'}}) }}
+								{{ form_errors(form.className) }}
+							</div>
+							<div class="col-md-3">
+								<div class="i-checks">
+									{{ form_widget(form.modelType) }}
+								</div>
+								{{ form_errors(form.modelType) }}
+							</div>
+							<div class="col-md-4">
+								<div class="i-checks">
+									{{ form_widget(form.dataType) }}
+								</div>
+								{{ form_errors(form.dataType) }}
+							</div>
+							<div class="col-md-5">
+								<div class="i-checks">
+									{{ form_widget(form.listType) }}
+								</div>
+								{{ form_errors(form.listType) }}
+							</div>
+							<div class="col-md-1 col-md-offset-6 model-pagination-detail" style="visibility: hidden;">
+								{{ form_label(form.numPerPage) }}
+								{{ form_widget(form.numPerPage, {attr: {class: 'form-control'}}) }}
+								{{ form_errors(form.numPerPage) }}
+							</div>
+							<div class="col-md-2 model-pagination-detail" style="visibility: hidden;">
+								{{ form_label(form.defaultSortBy) }}
+								{{ form_widget(form.defaultSortBy, {attr: {class: 'form-control'}}) }}
+								{{ form_errors(form.defaultSortBy) }}
+							</div>
+							<div class="col-md-3 model-pagination-detail" style="visibility: hidden;">
+								{{ form_label(form.defaultOrder) }}
+								{{ form_widget(form.defaultOrder, {attr: {class: 'form-control'}}) }}
+								{{ form_errors(form.defaultOrder) }}
+							</div>
+						</div>
+						
+						<div class="row form-group">
+							<div class="col-md-4">
+								<select id="fields" class="form-control" style="margin-bottom: .2em;"></select>
+							</div>
+							
+							<div class="col-md-12">
+								<table class="table table-striped table-bordered table-hover">
+									<thead>
+										<tr>
+												<th width="10%"></th>
+												<th width="25%">Widget</th>
+												<th width="30%">Label</th>
+												<th width="30%">Field</th>
+												<th width="5%"></th>
+										</tr>
+									</thead>
+									<tbody id="columns"></tbody>
+								</table>
+							</div>
+						</div>
+						
+						<div class="form-group" style="display: none;">
+							{{ form_label(form.columnsJson) }}
+							{{ form_widget(form.columnsJson, {attr: {class: 'form-control'}}) }}
+							{{ form_errors(form.columnsJson) }}
+						</div>
+							
+						<div class="form-group">
+							{{ form_widget(form._token) }}
+							<button class="btn btn-primary">
+								<i class="icon"></i>
+								<span class="txt">Add model</span>
+							</button>
+							<button class="btn">
+								<span class="txt">or Cancel</span>
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %} 
+
+{% block extraFooter %}
+
+	
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	
+	<script>
+		var _columns = JSON.parse('{{ form.columnsJson.vars.value ?: '[]' }}');
+		var _fields = {{ fields|json_encode|raw }};
+		var _metas = {{ metas|json_encode|raw }};
+		var _widgets = {{ widgets|json_encode|raw }};
+	
+		$(function() {
+
+			$(document).on('change', '#fields', function(ev) {
+				_columns.push({
+					dbField: $(this).val(),
+					widget: '',
+					label: $(this).find('option:selected').attr('data-label').toLowerCase().replace(/\b[a-z]/g, function(letter) { return letter.toUpperCase(); }),
+					field: $(this).find('option:selected').attr('data-label'),
+				});
+				render();
+			});
+			render();
+			
+			$('#form_listType :radio').on('ifChanged', function(event){
+				if ($(this).val() == 0) {
+					$('.model-pagination-detail').css('visibility', 'visible');
+				} else {
+					$('.model-pagination-detail').css('visibility', 'hidden');
+				}
+			});
+		});
+
+		function render() {
+			$('#fields').empty();
+			$('#fields').append('<option>Add a field...</option>');
+			for (var idx in _fields) {
+				var itm = _fields[idx];
+				var exist = false;
+				for (var idx2 in _columns) {
+					var itm2 = _columns[idx2];
+					if (itm2.dbField == itm) {
+						exist = true;
+					}
+				}
+				if (!exist) {
+					$('#fields').append('<option value="' + itm + '" data-label="' + idx + '">' + idx + (idx.indexOf('date') === -1 ? '' : ' (DATE)') + '</option>');
+				}
+			}
+			
+			$('#columns').empty();
+			for (var idx in _columns) {
+				var itm = _columns[idx];
+				$('#columns').append(
+					'<tr>' +
+						'<td style="vertical-align: middle;">' + itm.dbField + '</td>' +
+						'<td><select class="form-control"></select></td>' +
+						'<td><input class="form-control" type="text" value="' + itm.label + '" /></td>' +
+						'<td><input class="form-control" type="text" value="' + itm.field + '"/></td>' +
+						'<td><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-times"></i></button></td>' +
+					'</tr>'
+				);
+			}
+			$.each($('#columns td'), function(key, value) {
+				$(value).css('width', $(value).outerWidth() + 'px');
+			});
+			$('#columns').sortable();
+		};
+	</script>
+{% endblock %}
