@@ -27,7 +27,7 @@ class Model implements ControllerProviderInterface {
 	public function models(Application $app, $type = 0) {
 
 		$models = $app['em']->createQueryBuilder()
-			->from('CMS\Entities\PzModel', 'entity')
+			->from('Pz\Entities\Model', 'entity')
 			->select('entity')
 			->where('entity.type = :v1')
 			->setParameter('v1', $type)
@@ -42,8 +42,10 @@ class Model implements ControllerProviderInterface {
 		global $CMS_FIELDS_ALIAS, $CMS_FIELDS_META, $CMS_WIDGETS;
 		
 		ksort($CMS_FIELDS_ALIAS, SORT_NATURAL);
-		
-		$formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Model(), array(), array());
+
+		$model = new \Pz\Entities\Model();
+
+		$formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Model(), $model, array());
 		$form = $formBuilder->getForm();
 		$form->handleRequest($request);
 		if ($form->isValid()) {

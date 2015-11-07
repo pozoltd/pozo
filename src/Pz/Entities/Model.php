@@ -82,7 +82,7 @@ class Model {
      * Set rank
      *
      * @param integer $rank
-     * @return _Model
+     * @return Model
      */
     public function setRank($rank)
     {
@@ -105,7 +105,7 @@ class Model {
      * Set label
      *
      * @param string $label
-     * @return _Model
+     * @return Model
      */
     public function setLabel($label)
     {
@@ -128,7 +128,7 @@ class Model {
      * Set className
      *
      * @param string $className
-     * @return _Model
+     * @return Model
      */
     public function setClassName($className)
     {
@@ -151,7 +151,7 @@ class Model {
      * Set modelType
      *
      * @param integer $modelType
-     * @return _Model
+     * @return Model
      */
     public function setModelType($modelType)
     {
@@ -174,7 +174,7 @@ class Model {
      * Set dataType
      *
      * @param integer $dataType
-     * @return _Model
+     * @return Model
      */
     public function setDataType($dataType)
     {
@@ -197,7 +197,7 @@ class Model {
      * Set listType
      *
      * @param integer $listType
-     * @return _Model
+     * @return Model
      */
     public function setListType($listType)
     {
@@ -220,7 +220,7 @@ class Model {
      * Set numberPerPage
      *
      * @param integer $numberPerPage
-     * @return _Model
+     * @return Model
      */
     public function setNumberPerPage($numberPerPage)
     {
@@ -243,7 +243,7 @@ class Model {
      * Set defaultSortBy
      *
      * @param string $defaultSortBy
-     * @return _Model
+     * @return Model
      */
     public function setDefaultSortBy($defaultSortBy)
     {
@@ -263,10 +263,33 @@ class Model {
     }
 
     /**
+     * Set defaultOrder
+     *
+     * @param integer $defaultOrder
+     * @return Model
+     */
+    public function setDefaultOrder($defaultOrder)
+    {
+        $this->defaultOrder = $defaultOrder;
+    
+        return $this;
+    }
+
+    /**
+     * Get defaultOrder
+     *
+     * @return integer 
+     */
+    public function getDefaultOrder()
+    {
+        return $this->defaultOrder;
+    }
+
+    /**
      * Set columnsJson
      *
      * @param string $columnsJson
-     * @return _Model
+     * @return Model
      */
     public function setColumnsJson($columnsJson)
     {

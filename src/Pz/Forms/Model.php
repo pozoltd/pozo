@@ -15,7 +15,7 @@ class Model extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		parent::buildForm($builder, $options);
 		
-		$builder->add('name', 'text', array(
+		$builder->add('label', 'text', array(
 			'label' => 'Name:',
 			'constraints' => array(
 				new Assert\NotBlank()
@@ -51,7 +51,7 @@ class Model extends AbstractType {
 				2 => 'Nested tree',
 				0 => 'Pagination',
 			)
-		))->add('numPerPage', 'text', array(
+		))->add('numberPerPage', 'text', array(
 			'data' => 25,
 			'label' => 'Limit:',
 		))->add('defaultSortBy', 'choice', array(
