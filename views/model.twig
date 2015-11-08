@@ -18,6 +18,7 @@
         <div class="col-lg-7">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+                    <h1>New Model</h1>
                 </div>
                 <div class="ibox-content">
                     <form method="post" autocomplete="off" novalidate>
@@ -50,7 +51,7 @@
                                 </div>
                                 {{ form_errors(form.listType) }}
                             </div>
-                            <div class="col-md-1 col-md-offset-6 model-pagination-detail" style="visibility: hidden;">
+                            <div class="col-md-2 col-md-offset-5 model-pagination-detail" style="visibility: hidden;">
                                 {{ form_label(form.numberPerPage) }}
                                 {{ form_widget(form.numberPerPage, {attr: {class: 'form-control'}}) }}
                                 {{ form_errors(form.numberPerPage) }}
@@ -69,17 +70,17 @@
 
                         <div class="row form-group">
                             <div class="col-md-4">
-                                <select id="fields" class="form-control" style="margin-bottom: .2em;"></select>
+                                <select id="fields" class="chosen-select form-control"></select>
                             </div>
 
                             <div class="col-md-12">
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th width="10%"></th>
-                                        <th width="25%">Widget</th>
-                                        <th width="30%">Label</th>
-                                        <th width="30%">Field</th>
+                                        <th width="15%">Table column</th>
+                                        <th width="20%">Widget</th>
+                                        <th width="35%">Label</th>
+                                        <th width="25%">Field</th>
                                         <th width="5%"></th>
                                     </tr>
                                     </thead>
@@ -112,32 +113,31 @@
 {% endblock %} 
 
 {% block extraFooter %}
-
-
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script id="field-source" type="text/x-handlebars-template">{% include 'handlebars/model/field.twig' %}</script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
     <script>
+        var _fieldSource = $("#field-source").html();
         var _columns = JSON.parse('{{ form.columnsJson.vars.value ?: '[]' }}');
         var _fields = {{ fields|json_encode|raw }};
         var _metas = {{ metas|json_encode|raw }};
         var _widgets = {{ widgets|json_encode|raw }};
 
         $(function () {
-
             $(document).on('change', '#fields', function (ev) {
                 _columns.push({
                     dbField: $(this).val(),
-                    widget: '',
-                    label: $(this).find('option:selected').attr('data-label').toLowerCase().replace(/\b[a-z]/g, function (letter) {
+                    widget: $(this).find('option:selected').val().toLowerCase().indexOf('date') === -1 ? 'text' : 'date',
+                    label: $(this).find('option:selected').text().toLowerCase().replace(/\b[a-z]/g, function (letter) {
                         return letter.toUpperCase();
-                    }),
-                    field: $(this).find('option:selected').attr('data-label'),
+                    }) + ':',
+                    field: $(this).find('option:selected').text().toLowerCase(),
                 });
                 render();
             });
             render();
 
-            $('#form_listType :radio').on('ifChanged', function (event) {
+            $('#form_listType :radio').on('change', function (event) {
                 if ($(this).val() == 0) {
                     $('.model-pagination-detail').css('visibility', 'visible');
                 } else {
@@ -148,7 +148,7 @@
 
         function render() {
             $('#fields').empty();
-            $('#fields').append('<option>Add a field...</option>');
+            $('#fields').append('<option></option>');
             for (var idx in _fields) {
                 var itm = _fields[idx];
                 var exist = false;
@@ -159,27 +159,38 @@
                     }
                 }
                 if (!exist) {
-                    $('#fields').append('<option value="' + itm + '" data-label="' + idx + '">' + idx + (idx.indexOf('date') === -1 ? '' : ' (DATE)') + '</option>');
+                    $('#fields').append('<option value="' + itm + '">' + idx.toLowerCase().replace(/\b[a-z]/g, function (letter) {
+                                return letter.toUpperCase();
+                            }) + '</option>');
                 }
             }
 
+            if (_columns.length == 0) {
+                _columns.push({
+                    dbField: 'text1',
+                    widget: 'text',
+                    label: 'Title:',
+                    field: 'title',
+                });
+            }
             $('#columns').empty();
             for (var idx in _columns) {
                 var itm = _columns[idx];
-                $('#columns').append(
-                        '<tr>' +
-                        '<td style="vertical-align: middle;">' + itm.dbField + '</td>' +
-                        '<td><select class="form-control"></select></td>' +
-                        '<td><input class="form-control" type="text" value="' + itm.label + '" /></td>' +
-                        '<td><input class="form-control" type="text" value="' + itm.field + '"/></td>' +
-                        '<td><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-times"></i></button></td>' +
-                        '</tr>'
-                );
+                var template = Handlebars.compile(_fieldSource);
+                $('#columns').append(template({
+                    itm: itm,
+                    widgets: _widgets,
+                }));
             }
             $.each($('#columns td'), function (key, value) {
                 $(value).css('width', $(value).outerWidth() + 'px');
             });
             $('#columns').sortable();
+
+            $(".chosen-select").trigger("chosen:updated");
+            $(".chosen-select").chosen({
+                allow_single_deselect: true
+            });
         }
         ;
     </script>

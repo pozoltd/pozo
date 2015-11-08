@@ -53,7 +53,7 @@ class Model extends AbstractType {
 			)
 		))->add('numberPerPage', 'text', array(
 			'data' => 25,
-			'label' => 'Limit:',
+			'label' => 'Page size:',
 		))->add('defaultSortBy', 'choice', array(
 			'label' => 'Sort:',
 			'choices' => array(

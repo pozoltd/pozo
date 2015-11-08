@@ -1,0 +1,21 @@
+{% raw %}
+    <tr>
+        <td>{{ itm.dbField }}</td>
+        <td>
+            <select class="chosen-select form-control">
+                {{# each widgets }}
+                    <option {{#compare @key ../itm.widget operator="=="}}selected{{/compare}} value="{{@key}}">{{ this }}</option>
+                {{/each}}
+            </select>
+        </td>
+        <td><input class="form-control" type="text" value="{{ itm.label }}"/></td>
+        <td><input class="form-control" type="text" value="{{ itm.field }}"/></td>
+        <td>
+            <button type="button" class="btn btn-danger btn-circle"><i class="fa fa-times"></i></button>
+        </td>
+    </tr>
+    <tr style="display: none;"></tr>
+    <tr>
+        <td colspan="5"><textarea class="form-control"></textarea></td>
+    </tr>
+{% endraw %}
