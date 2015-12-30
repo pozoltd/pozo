@@ -27,7 +27,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Pz\\": "/../../../cms/v1.0/vendor/luckyweida/pz/src/"
+            "Pz\\": "/src/"
         }
     }
 }
