@@ -1,6 +1,6 @@
 <?php
 
-namespace Pz\ORMs;
+namespace Pz\ORM;
 
 
 class ORM extends \Pz\Entities\Content

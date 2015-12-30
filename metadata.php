@@ -1,5 +1,5 @@
 <?php
-$CMS_FIELDS_ALIAS = array(
+$CMS_FIELDS = array(
     'title' => 'text1',
     'subtitle' => 'text2',
     'shortdescription' => 'text3',
@@ -72,7 +72,7 @@ $CMS_FIELDS_ALIAS = array(
     'date15' => 'date20'
 );
 
-$CMS_FIELDS_META = array(
+$CMS_METAS = array(
     'id',
     'slug',
     'modelId',

@@ -3,7 +3,7 @@
 {% block extraHead %}
     <style>
         .dataTables_wrapper { padding-bottom: 0; }
-        .table #columns td { vertical-align: middle; cursor: move; }
+        #columns td { vertical-align: middle; cursor: move; }
         input + label, .i-checks label { margin-left: .3em; }
     </style>
 {% endblock %}
@@ -69,22 +69,21 @@
 
                         <div class="row form-group">
                             <div class="col-md-4">
-                                <select id="fields" class="chosen-select form-control"></select>
+                                <select id="fields" class="chosen-select form-control" data-placeholder="Add a field"></select>
                             </div>
 
                             <div class="col-md-12">
                                 <div>&nbsp;</div>
-                                <table class="table table-striped table-bordered table-hover">
+                                <table id="columns" class="table table-striped table-bordered table-hover">
                                     <thead>
-                                    <tr>
-                                        <th width="20%">Widget</th>
-                                        <th width="35%">Label</th>
-                                        <th width="30%">Field</th>
-                                        <th width="10%">Column</th>
-                                        <th width="5%"></th>
-                                    </tr>
+                                        <tr>
+                                            <th width="20%">Widget</th>
+                                            <th width="35%">Label</th>
+                                            <th width="30%">Field</th>
+                                            <th width="10%">Column</th>
+                                            <th width="5%"></th>
+                                        </tr>
                                     </thead>
-                                    <tbody id="columns"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -151,28 +150,62 @@
                     },
                     widgets: _widgets,
                 }));
+
+                updateColumns();
                 renderFields();
-                updateColumns();
+                renderDefaultSortBy();
             });
 
-
-            $(document).on('change', '#columns input, #columns select', function(ev) {
-                updateColumns();
-            });
-
-            $(document).on('click', '#columns .js-delete', function(ev) {
-                $(this).closest('tr.column').remove();
-                updateColumns();
-            });
 
             renderColumns();
             renderFields();
+            renderDefaultSortBy();
             if (_columns.length == 0) {
                 $('#fields').val('text1').change();
             }
 
+            //
+            $(document).on('change', '#columns input, #columns textarea', function(ev) {
+                updateColumns();
+                renderDefaultSortBy();
+            });
+
+            //
+            $(document).on('change', '#columns select', function(ev) {
+                if ($(this).val() == 'choice') {
+                    $('#sql' + $(this).closest('tbody').find('.id').val()).show();
+                } else {
+                    $('#sql' + $(this).closest('tbody').find('.id').val()).hide();
+                }
+                updateColumns();
+            });
+
+            //
+            $(document).on('click', '#columns .js-delete', function(ev) {
+                $(this).closest('tbody').remove();
+                updateColumns();
+                renderFields();
+                renderDefaultSortBy();
+            });
+
 
         });
+
+        function renderDefaultSortBy() {
+            $('#form_defaultSortBy').empty();
+            for (var idx in _metas) {
+                var itm = _metas[idx];
+                $('#form_defaultSortBy').append('<option value="' + itm + '">' + itm + '</option>');
+            }
+
+            for (var idx in _columns) {
+                var itm = _columns[idx];
+                $('#form_defaultSortBy').append('<option value="' + itm.column + '">' + itm.field + '</option>');
+            }
+
+            $('#form_defaultSortBy').val('{{ form.defaultSortBy.vars.value }}');
+
+        };
 
         function renderFields() {
             $('#fields').empty();
@@ -200,7 +233,6 @@
         };
 
         function renderColumns() {
-            $('#columns').empty();
             for (var idx in _columns) {
                 var itm = _columns[idx];
                 var template = Handlebars.compile(_fieldSource);
@@ -209,20 +241,13 @@
                     widgets: _widgets,
                 }));
             }
-            $.each($('#columns td'), function (key, value) {
-                $(value).css('width', $(value).outerWidth() + 'px');
-            });
-            $('#columns').sortable({
-                stop: function(event, ui) {
-                    updateColumns();
-                }
-            });
+            updateColumns();
         };
 
         function updateColumns() {
             _columns = [];
 
-            $.each($('#columns tr.column'), function(key, elem) {
+            $.each($('#columns tbody'), function(key, elem) {
                 if ( $(elem).find('.id').length > 0) {
                     _columns.push({
                         id: $(elem).find('.id').val(),
@@ -233,6 +258,26 @@
                         sql: $('#sql' + $(elem).find('.id').val() + ' textarea').val(),
                     });
                 }
+            });
+
+
+            $('#columns').sortable({
+                items: 'tbody',
+                stop: function(event, ui) {
+                    updateColumns();
+                },
+                placeholder: {
+                    element: function(currentItem) {
+                        return $('<tr><td colspan="5" style="height: ' + $(currentItem).height() + 'px">&nbsp;</td></tr>')[0];
+                    },
+                    update: function(container, p) {
+                        return;
+                    }
+                }
+            });
+
+            $.each($('#columns td'), function (key, value) {
+                $(value).css('width', $(value).outerWidth() + 'px');
             });
 
             $('#form_columnsJson').val(JSON.stringify(_columns));

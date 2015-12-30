@@ -6,6 +6,7 @@ use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ControllerCollection;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,8 +21,8 @@ class Model implements ControllerProviderInterface
 
         $controllers = $app['controllers_factory'];
         $controllers->match('/', array($this, 'models'));
-        $controllers->match('/detail/{type}/{returnURL}/', array($this, 'model'))->bind('add-model');
-        $controllers->match('/detail/{type}/{returnURL}/{id}/', array($this, 'model'))->bind('edit-model');
+        $controllers->match('/detail/{modelType}/{returnURL}/', array($this, 'model'))->bind('add-model');
+        $controllers->match('/detail/{modelType}/{returnURL}/{id}/', array($this, 'model'))->bind('edit-model');
         $controllers->match('/sort/', array($this, 'sort'));
         return $controllers;
 
@@ -42,27 +43,55 @@ class Model implements ControllerProviderInterface
 
     }
 
-    public function model(Application $app, Request $request, $type, $returnURL, $id = null)
+    public function model(Application $app, Request $request, $modelType, $returnURL, $id = null)
     {
-        global $CMS_FIELDS_ALIAS, $CMS_FIELDS_META, $CMS_WIDGETS;
+        global $CMS_FIELDS, $CMS_METAS, $CMS_WIDGETS;
 
-        ksort($CMS_FIELDS_ALIAS, SORT_NATURAL);
+        ksort($CMS_FIELDS, SORT_NATURAL);
+        sort($CMS_METAS, SORT_NATURAL);
         asort($CMS_WIDGETS, SORT_NATURAL);
 
-        $model = new \Pz\Entities\Model();
-        $model->setLabel('New models');
-        $model->setClassName('NewModel');
+        if ($id) {
+            $repo = $app['em']->getRepository('\Pz\Entities\Model');
+            $model = $repo->find($id);
+        } else {
+            $model = new \Pz\Entities\Model();
+            $model->setLabel('New models');
+            $model->setClassName('NewModel');
+            $model->setModelType($modelType);
+            $model->setDataType(0);
+            $model->setListType(1);
+            $model->setNumberPerPage(25);
+            $model->setDefaultSortBy('id');
+            $model->setDefaultOrder(0);
+        }
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
 
-        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Model(), $model, array());
+
+        $allColumns = array_merge(array_values($CMS_FIELDS), $CMS_METAS);
+        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Model(), $model, array(
+            'defaultSortByOptions' => array_combine($allColumns, $allColumns),
+        ));
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            
+//            var_dump($model->getDefaultSortBy());exit;
+            $model->setRank(1);
+            $app['em']->persist($model);
+            $app['em']->flush();
+            return $app->redirect($app->url('edit-model', array(
+                'modelType' => $model->getModelType(),
+                'returnURL' => $returnURL,
+                'id' => $model->getId(),
+            )));
         }
+
         return $app['twig']->render("model.twig", array(
             'form' => $form->createView(),
-            'fields' => $CMS_FIELDS_ALIAS,
-            'metas' => $CMS_FIELDS_META,
+            'fields' => $CMS_FIELDS,
+            'metas' => $CMS_METAS,
             'widgets' => $CMS_WIDGETS,
         ));
     }
