@@ -3,7 +3,11 @@
 namespace Pz\ORM;
 
 
-class ORM extends \Pz\Entities\Content
+abstract class ORM extends \Pz\Entities\Content implements ORMInterface
 {
+    public function data($db, $options) {
 
+    }
+
+    abstract function getFieldMap();
 }
