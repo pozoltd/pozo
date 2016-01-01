@@ -5,6 +5,7 @@
         .dataTables_wrapper { padding-bottom: 0; }
         #columns td { vertical-align: middle; cursor: move; }
         input + label, .i-checks label { margin-left: .3em; }
+        .or { padding: .5em }
     </style>
 {% endblock %}
 
@@ -17,7 +18,7 @@
         <div class="col-lg-7">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h1>New Model</h1>
+                    <h1>{% if id %}{{ form.label.vars.value }}{% else %}New Model{% endif %}</h1>
                 </div>
                 <div class="ibox-content">
                     <form method="post" autocomplete="off" novalidate>
@@ -96,13 +97,17 @@
 
                         <div class="form-group">
                             {{ form_widget(form._token) }}
-                            <button class="btn btn-primary">
+                            <button class="btn btn-primary" name='submit' value='save'>
                                 <i class="icon"></i>
-                                <span class="txt">Add model</span>
+                                <span class="txt">Save</span>
                             </button>
-                            <button class="btn">
-                                <span class="txt">or Cancel</span>
+                            <button class="btn btn-success" name='submit' value='apply'>
+                                <i class="icon"></i>
+                                <span class="txt">Apply</span>
                             </button>
+                            <a href="{{ returnURL }}" class="btn">
+                                <span class="txt">Cancel</span>
+                            </a>
                         </div>
                     </form>
                 </div>

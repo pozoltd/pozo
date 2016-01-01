@@ -40,6 +40,7 @@ $CMS_FIELDS = array(
     'price' => 'text38',
     'saleprice' => 'text39',
     'features' => 'text40',
+    'password' => 'text50',
     'extra1' => 'text41',
     'extra2' => 'text42',
     'extra3' => 'text43',
@@ -49,7 +50,6 @@ $CMS_FIELDS = array(
     'extra7' => 'text47',
     'extra8' => 'text48',
     'extra9' => 'text49',
-    'extra10' => 'text50',
     'startdate' => 'date1',
     'enddate' => 'date2',
     'date' => 'date3',
@@ -84,11 +84,12 @@ $CMS_METAS = array(
 );
 
 $CMS_WIDGETS = array(
-    'email' => 'email',
-    'text' => 'text',
-    'textarea' => 'textarea',
-    'choice' => 'choice',
-    'checkbox' => 'checkbox',
-    'date' => 'date',
+    'email' => 'Email',
+    'text' => 'Text',
+    'textarea' => 'Textarea',
+    'choice' => 'Choice',
+    'checkbox' => 'Checkbox',
+    'date' => 'Date',
+    'password' => 'Password',
 );
 ?>

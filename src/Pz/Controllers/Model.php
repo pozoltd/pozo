@@ -23,28 +23,30 @@ class Model implements ControllerProviderInterface
         $controllers->match('/', array($this, 'models'));
         $controllers->match('/detail/{modelType}/{returnURL}/', array($this, 'model'))->bind('add-model');
         $controllers->match('/detail/{modelType}/{returnURL}/{id}/', array($this, 'model'))->bind('edit-model');
-        $controllers->match('/sort/', array($this, 'sort'));
+        $controllers->match('/sort/', array($this, 'sort'))->bind('sort-models');
+        $controllers->match('/{modelType}/', array($this, 'models'));
         return $controllers;
 
     }
 
-    public function models(Application $app, $type = 0)
+    public function models(Application $app, $modelType = 0)
     {
-
-        $models = $app['em']->createQueryBuilder()
-            ->from('Pz\Entities\Model', 'entity')
-            ->select('entity')
-            ->where('entity.type = :v1')
-            ->setParameter('v1', $type)
-            ->orderBy('entity.rank', 'ASC')
-            ->getQuery()
-            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $app['twig']->render("models.twig", array('models' => $models, 'type' => $type, 'returnURL' => \Pz\Common\Utils::getURL()));
+        $repo = $app['em']->getRepository('\Pz\Entities\Model');
+        $models = $repo->findBy(array(
+            'modelType' => $modelType,
+        ));
+        return $app['twig']->render("models.twig", array(
+            'models' => $models,
+            'modelType' => $modelType,
+            'returnURL' => 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}",
+        ));
 
     }
 
     public function model(Application $app, Request $request, $modelType, $returnURL, $id = null)
     {
+        $returnURL = urldecode($returnURL);
+
         global $CMS_FIELDS, $CMS_METAS, $CMS_WIDGETS;
 
         ksort($CMS_FIELDS, SORT_NATURAL);
@@ -63,7 +65,7 @@ class Model implements ControllerProviderInterface
             $model->setListType(1);
             $model->setNumberPerPage(25);
             $model->setDefaultSortBy('id');
-            $model->setDefaultOrder(0);
+            $model->setDefaultOrder(1);
         }
         if (!$model) {
             throw new NotFoundHttpException();
@@ -77,15 +79,22 @@ class Model implements ControllerProviderInterface
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-//            var_dump($model->getDefaultSortBy());exit;
-            $model->setRank(1);
             $app['em']->persist($model);
             $app['em']->flush();
-            return $app->redirect($app->url('edit-model', array(
-                'modelType' => $model->getModelType(),
-                'returnURL' => $returnURL,
-                'id' => $model->getId(),
-            )));
+            $model->setRank(0 - $model->getId());
+            $app['em']->persist($model);
+            $app['em']->flush();
+
+            if ($request->get('submit') == 'apply') {
+                return $app->redirect($app->url('edit-model', array(
+                    'modelType' => $model->getModelType(),
+                    'returnURL' => urlencode($returnURL),
+                    'id' => $model->getId(),
+                )));
+            } else if ($request->get('submit') == 'save') {
+                return $app->redirect($returnURL);
+            }
+
         }
 
         return $app['twig']->render("model.twig", array(
@@ -93,6 +102,8 @@ class Model implements ControllerProviderInterface
             'fields' => $CMS_FIELDS,
             'metas' => $CMS_METAS,
             'widgets' => $CMS_WIDGETS,
+            'id' => $id,
+            'returnURL' => $returnURL,
         ));
     }
 
@@ -101,7 +112,7 @@ class Model implements ControllerProviderInterface
 
         $request = $app['request'];
         $data = json_decode($request->get('data'));
-        $repo = $app['em']->getRepository('CMS\Entities\Model');
+        $repo = $app['em']->getRepository('Pz\Entities\Model');
         foreach ($data as $idx => $itm) {
             $entity = $repo->find($itm);
             if ($entity) {
