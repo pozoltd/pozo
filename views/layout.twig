@@ -1,7 +1,7 @@
 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 
 {# {% set user = app['user'].getUser() %} #}
-{# {% set models = app.generic.data('Model', 'entity.visible = 1', {}, { sort: 'rank', order: 'ASC' }) %}#}
+{% set myModels = app.generic.models() %}
 
 {# {% if model is defined and model.name == 'Page' %}#}
 {# 	{% set _menu = 'pages' %}#}
@@ -57,7 +57,7 @@
     {% block extraHead %}{% endblock %}
 </head>
 
-<body class="{{ bodyClass is defined ? bodyClass : 'pace-done' }} {{ app.request.cookies.get('bodyClass') }}">
+<body class="{{ bodyClass is defined ? bodyClass : 'pace-done' }} {% if app.request.cookies.get('miniNavbar') == 1 %}mini-navbar{% endif %}">
 
 {% block wrapper %}
     <div id="wrapper">
@@ -87,33 +87,55 @@
                     </li>
 
                     <li class="">
-                        <a href="#">
-                            <i class="fa fa-database"></i>
-                            <span class="nav-label">Data</span>
-                            <span class="fa arrow"></span>
-                        </a>
-                        <ul class="nav nav-second-level">
-                            {# custom model here... #}
-                        </ul>
-                    </li>
-
-                    <li class="">
                         <a href="">
                             <i class="fa fa-file-image-o"></i>
                             <span class="nav-label">Assets</span>
                         </a>
                     </li>
 
+
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-folder"></i>
+                            <span class="nav-label">User data</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            {# custom model here... #}
+                            {% for itm in myModels if itm.dataType == 0 %}
+                                <li>
+                                    <a href="/pz/content/{{ itm.id }}">{{ itm.label }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+
+
                     {% if user is defined and user.admin == 1 or true %}
-                        <li {% if '/pz/models/' in currentPath %}class="active"{% endif %}>
+                        <li>
                             <a href="#">
-                                <i class="fa fa-cog"></i>
-                                <span class="nav-label">Admin</span>
+                                <i class="fa fa-folder-o"></i>
+                                <span class="nav-label">Admin data</span>
                                 <span class="fa arrow"></span>
                             </a>
                             <ul class="nav nav-second-level">
-                                <li {% if '/pz/models/0/' in currentPath or '/pz/models/detail/0/' in currentPath %}class="active"{% endif %}><a href="/pz/models/0/">Customised models</a></li>
-                                <li {% if '/pz/models/1/' in currentPath or '/pz/models/detail/1/' in currentPath %}class="active"{% endif %}><a href="/pz/models/1/">Built-in models</a></li>
+                                {% for itm in myModels if itm.dataType == 1 %}
+                                    <li>
+                                        <a href="/pz/content/{{ itm.id }}">{{ itm.label }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+
+                        <li {% if '/pz/model/' in currentPath %}class="active"{% endif %}>
+                            <a href="#">
+                                <i class="fa fa-cog"></i>
+                                <span class="nav-label">Models</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li {% if '/pz/model/0/' in currentPath or '/pz/model/detail/0/' in currentPath %}class="active"{% endif %}><a href="/pz/model/0/">Customised</a></li>
+                                <li {% if '/pz/model/1/' in currentPath or '/pz/model/detail/1/' in currentPath %}class="active"{% endif %}><a href="/pz/model/1/">Built-in</a></li>
                             </ul>
                         </li>
                     {% endif %}
@@ -146,6 +168,7 @@
             </div>
         </div>
 
+        {#  #}
         <div id="confirm-dialog" style="display: none;" class="fancybox">
             <div class="form-group">
                 Are you sure?
@@ -165,14 +188,12 @@
         $(document).on('click', '.navbar-minimalize', function(ev) {
             $('body').toggleClass('mini-navbar');
             if ($('body').hasClass('mini-navbar')) {
-                Cookies.set('bodyClass', 'mini-navbar');
+                Cookies.set('miniNavbar', 1);
             } else {
-                Cookies.remove('bodyClass');
+                Cookies.remove('miniNavbar');
             }
             return false;
         });
-
-
     })
 </script>
 {% block extraFooter %}{% endblock %}

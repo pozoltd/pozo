@@ -2,16 +2,12 @@
 
 namespace Pz\Controllers;
 
-use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
-use Silex\ControllerCollection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-
-use Pz\Common\Utils;
 
 class Model implements ControllerProviderInterface
 {
@@ -21,8 +17,8 @@ class Model implements ControllerProviderInterface
 
         $controllers = $app['controllers_factory'];
         $controllers->match('/', array($this, 'models'));
-        $controllers->match('/detail/{modelType}/{returnURL}/', array($this, 'model'))->bind('add-model');
-        $controllers->match('/detail/{modelType}/{returnURL}/{id}/', array($this, 'model'))->bind('edit-model');
+        $controllers->match('/{modelType}/{returnURL}/', array($this, 'model'))->bind('add-model');
+        $controllers->match('/{modelType}/{returnURL}/{id}/', array($this, 'model'))->bind('edit-model');
         $controllers->match('/sort/', array($this, 'sort'))->bind('sort-models');
         $controllers->match('/{modelType}/', array($this, 'models'));
         return $controllers;
@@ -31,6 +27,7 @@ class Model implements ControllerProviderInterface
 
     public function models(Application $app, $modelType = 0)
     {
+//        var_dump(\Pz\DAOs\Model::data($app['em']));exit;
         $repo = $app['em']->getRepository('\Pz\Entities\Model');
         $models = $repo->findBy(array(
             'modelType' => $modelType,
@@ -62,7 +59,7 @@ class Model implements ControllerProviderInterface
             $model->setClassName('NewModel');
             $model->setModelType($modelType);
             $model->setDataType(0);
-            $model->setListType(1);
+            $model->setListType(0);
             $model->setNumberPerPage(25);
             $model->setDefaultSortBy('id');
             $model->setDefaultOrder(1);

@@ -5,7 +5,7 @@
     <div class="col-lg-7">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h1>{% if modelType == 1 %}Built-in{% else %}Customised{% endif %} Models</h1>
+                <h1>{% if modelType == 1 %}Built-in{% else %}Customised{% endif %} models</h1>
             </div>
             <div class="ibox-content">
                 <a href="{{ path('add-model', { modelType: modelType, returnURL: returnURL|url_encode }) }}">

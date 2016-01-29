@@ -43,15 +43,15 @@ class Model extends AbstractType
             'choices' => array(
                 0 => 'User',
                 1 => 'Admin',
-                2 => 'Invisible',
+                2 => 'Customised',
             )
         ))->add('listType', 'choice', array(
             'label' => 'Listing type:',
             'expanded' => true,
             'choices' => array(
+                0 => 'Pagination',
                 1 => 'Full list',
                 2 => 'Nested tree',
-                0 => 'Pagination',
             )
         ))->add('numberPerPage', 'text', array(
             'label' => 'Page size:',
