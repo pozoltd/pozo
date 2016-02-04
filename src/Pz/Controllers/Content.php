@@ -17,55 +17,86 @@ class Content implements ControllerProviderInterface
 
     public function connect(Application $app)
     {
-
         $controllers = $app['controllers_factory'];
-        $controllers->match('/{modelId}/', array($this, 'data'));
+        $controllers->match('/{modelId}/', array($this, 'contents'));
+        $controllers->match('/add/{modelId}/{returnURL}/', array($this, 'content'))->bind('add-content');
+        $controllers->match('/edit/{modelId}/{returnURL}/{id}/', array($this, 'content'))->bind('edit-content');
         return $controllers;
     }
 
-    public function data(Application $app, $modelId)
+    public function contents(Application $app, Request $request, $modelId)
     {
-//        var_dump(new \Site\Entities\User());exit;
-
-        $conn = $app['em']->getConnection();
-        $sql = "SELECT * FROM contents WHERE modelId = 2";
-        $stmt = $conn->query($sql);
-
-        while ($row = $stmt->fetch()) {
-            echo $row['text1'] . '<br>';
+        $model = \Pz\DAOs\Model::findById($app['em'], $modelId);
+        if (!$model) {
+            throw new NotFoundHttpException();
         }
-        exit;
 
-        $user = new \Site\Entities\User();
-        $user->setText1('a');
-        $user->setText2('b');
-        $user->setSlug('a');
-        $user->setModelId(1);
-        $user->setActive(1);
-        $user->setRank(1);
-        $user->setParentId(0);
-        $user->setAdded(new \DateTime('now'));
-        $user->setModified(new \DateTime('now'));
-        $app['em']->persist($user);
-        $app['em']->flush();
-
-
-        $test = new \Site\Entities\Test();
-        $test->setText1('test');
-        $test->setSlug('test');
-        $test->setModelId(2);
-        $test->setActive(1);
-        $test->setRank(1);
-        $test->setParentId(0);
-        $test->setAdded(new \DateTime('now'));
-        $test->setModified(new \DateTime('now'));
-        $app['em']->persist($test);
-        $app['em']->flush();
-
-        $repo =$app['em']->getRepository('\Site\Entities\Test');
-        var_dump($repo->findBy(array('modelId' => 2)));
-        exit;
-        return $app['twig']->render("contents.twig", array());
+        $daoClass = DEFAULT_NAMESPACE . '\\DAOs\\' . $model->className;
+        $daos = $daoClass::data($app['em'], array(
+            'sort' => 'entity.' . ($request->get('sort') ?: $model->defaultSortBy),
+            'order' => $request->get('order') ?: $model->defaultOrder == 1 ? 'DESC' : 'ASC',
+        ));
+        return $app['twig']->render("contents.twig", array(
+            'model' => $model,
+            'contents' => $daos,
+            'returnURL' => 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}",
+        ));
     }
 
+    public function content(Application $app, Request $request, $modelId, $returnURL, $id = null)
+    {
+        $model = \Pz\DAOs\Model::findById($app['em'], $modelId);
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+
+        $daoClass = DEFAULT_NAMESPACE . '\\DAOs\\' . $model->className;
+        $content = new $daoClass($app['em']);
+        if ($id) {
+            $content = $daoClass::findById($app['em'], $id);
+            if (!$content) {
+                throw new NotFoundHttpException();
+            }
+        }
+
+        $form = $app['form.factory']->createBuilder('form', $content);
+        $model->columnsJson = json_decode($model->columnsJson);
+        foreach ($model->columnsJson as $itm) {
+            $widget = $itm->widget;
+            if (strpos($itm->widget, '\\') !==  FALSE) {
+                $wgtClass = $itm->widget;
+                $widget = new $wgtClass();
+            }
+            $form->add($itm->field, $widget, array(
+                'label' => $itm->label,
+            ));
+        }
+        $form = $form->getForm();
+
+        if ($request->isMethod("POST")) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                if (!$content->id) {
+                    $content->modelId = $model->id;
+                    $content->active = 1;
+                    $content->added = new \DateTime('now');
+                }
+                $content->modified = new \DateTime('now');
+                $content->save();
+
+                if ($request->request->get('submit') == 'Save') {
+                    return $app->redirect(urldecode($returnURL));
+                } else {
+                    return $app->redirect($app->url('edit-content', array('modelId' => $modelId, 'returnURL' => $returnURL, 'id' => $content->id)));
+                }
+            }
+        }
+
+        return $app['twig']->render("content.twig", array(
+            'form' => $form->createView(),
+            'model' => $model,
+            'content' => $content,
+            'returnURL' => urldecode($returnURL),
+        ));
+    }
 }

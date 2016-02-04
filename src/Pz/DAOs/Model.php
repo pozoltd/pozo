@@ -4,8 +4,9 @@ namespace Pz\DAOs;
 
 use Doctrine\ORM\Mapping as ORM;
 
-class Model extends \Pz\DAOs\DAO {
-    static function getFieldMap() {
+class Model extends \Pz\DAOs\DoctrineDAO {
+
+    public function getFieldMap() {
         return array(
             'id' => 'id',
             'rank' => 'rank',
@@ -21,9 +22,12 @@ class Model extends \Pz\DAOs\DAO {
         );
     }
 
-    function getClass() {
+    public function getORMClass() {
         return 'Pz\Entities\Model';
     }
 
+    public function getBaseQuery() {
+        return null;
+    }
 
 }

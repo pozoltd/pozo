@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * {TIMESTAMP}
+ */
+namespace {NAMESPACE}\DAOs\Generated;
+
+class {CLASSNAME} extends \Pz\DAOs\DoctrineDAO {
+
+    function getFieldMap() {
+        global $CMS_METAS;
+        return array_merge(array(
+            {MAPPING}
+        ), array_combine($CMS_METAS, $CMS_METAS));
+    }
+
+    function getORMClass() {
+        return 'Pz\Entities\Content';
+    }
+
+    function getBaseQuery() {
+        return 'entity.modelId = {MODELID}';
+    }
+}

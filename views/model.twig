@@ -6,6 +6,7 @@
         #columns td { vertical-align: middle; cursor: move; }
         input + label, .i-checks label { margin-left: .3em; }
         .or { padding: .5em }
+        label { padding-right: .5em; }
     </style>
 {% endblock %}
 
@@ -225,7 +226,7 @@
                     }
                 }
                 if (!exist) {
-                    $('#fields').append('<option value="' + itm + '">' + idx.toLowerCase().replace(/\b[a-z]/g, function (letter) {
+                    $('#fields').append('<option value="' + itm + '">' + itm.toLowerCase().replace(/\b[a-z]/g, function (letter) {
                                 return letter.toUpperCase();
                             }) + '</option>');
                 }

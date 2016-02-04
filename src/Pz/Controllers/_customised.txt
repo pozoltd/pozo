@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * {TIMESTAMP}
+ */
+namespace {NAMESPACE}\DAOs;
+
+class {CLASSNAME} extends \{NAMESPACE}\DAOs\Generated\{CLASSNAME} {
+
+
+}

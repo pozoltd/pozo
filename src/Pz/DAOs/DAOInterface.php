@@ -1,13 +1,13 @@
 <?php
 
-namespace Pz\ORMs;
+namespace Pz\DAOs;
 
 
 interface DAOInterface
 {
     public static function data($db, $options);
-
-    public static function getFieldMap();
-
-    public function getClass();
+    public function save();
+    public function getFieldMap();
+    public function getORMClass();
+    public function getBaseQuery();
 }

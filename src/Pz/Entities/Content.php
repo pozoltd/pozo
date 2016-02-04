@@ -5,6 +5,7 @@ namespace Pz\Entities;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Entity
  * @ORM\Table(name="contents")
  */
 class Content {
@@ -16,7 +17,7 @@ class Content {
 	protected $id;
 
 	/**
-	 * @ORM\Column(type="string", length=256)
+	 * @ORM\Column(type="string", length=256, nullable=true)
 	 */
 	protected $slug;
 	
@@ -31,12 +32,12 @@ class Content {
 	protected $active;
 	
 	/**
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	protected $rank;
 	
 	/**
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	protected $parentId;
 	
@@ -50,6 +51,31 @@ class Content {
 	 */
 	protected $modified;
 	
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	protected $startdate;
+
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	protected $enddate;
+
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	protected $date;
+
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	protected $firstdate;
+
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	protected $lastdate;
+
 	/**
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
@@ -74,7 +100,7 @@ class Content {
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	protected $date5;
-	
+
 	/**
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
@@ -124,283 +150,296 @@ class Content {
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	protected $date15;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date16;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date17;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date18;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date19;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date20;
-	
-	/**
-	 * @ORM\Column(type="text")
-	 */
-	protected $text1;
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text2;
+	protected $title;
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text3;
+	protected $subtitle;
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text4;
+	protected $shortdescription;
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text5;
+	protected $description;
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text6;
+	protected $content;
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text7;
+	protected $category;
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text8;
+	protected $subcategory;
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text9;
+	protected $phone;
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text10;
+	protected $mobile;
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text11;
+	protected $fax;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	protected $email;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text12;
+	protected $facebook;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text13;
+	protected $twitter;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text14;
+	protected $pinterest;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text15;
+	protected $linkedIn;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text16;
+	protected $instagram;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text17;
+	protected $qq;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text18;
+	protected $weico;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text19;
+	protected $address;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text20;
+	protected $website;
 	
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text21;
+	protected $author;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text22;
+	protected $authorbio;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text23;
+	protected $url;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text24;
+	protected $value;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text25;
+	protected $image;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text26;
+	protected $gallery;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text27;
+	protected $thumbnail;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text28;
+	protected $lastname;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text29;
+	protected $firstname;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text30;
+	protected $name;
 	
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text31;
+	protected $region;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text32;
+	protected $destination;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text33;
+	protected $excerpts;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text34;
+	protected $about;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text35;
+	protected $latitude;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text36;
-	
-	/**
-	 * @ORM\Column(type="text")
-	 */
-	protected $text37;
-	
-	/**
-	 * @ORM\Column(type="text")
-	 */
-	protected $text38;
-	
-	/**
-	 * @ORM\Column(type="text")
-	 */
-	protected $text39;
-	
-	/**
-	 * @ORM\Column(type="text")
-	 */
-	protected $text40;
+	protected $longitude;
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text41;
+	protected $price;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text42;
+	protected $saleprice;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text43;
+	protected $features;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	protected $account;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	protected $username;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	protected $password;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	protected $extra1;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text44;
+	protected $extra2;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text45;
+	protected $extra3;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text46;
+	protected $extra4;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text47;
+	protected $extra5;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text48;
+	protected $extra6;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text49;
+	protected $extra7;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $text50;
+	protected $extra8;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	protected $extra9;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	protected $extra10;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	protected $extra11;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	protected $extra12;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	protected $extra13;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	protected $extra14;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	protected $extra15;
+
+	
+
 
 
     /**
@@ -572,6 +611,121 @@ class Content {
     public function getModified()
     {
         return $this->modified;
+    }
+
+    /**
+     * Set startdate
+     *
+     * @param \DateTime $startdate
+     * @return Content
+     */
+    public function setStartdate($startdate)
+    {
+        $this->startdate = $startdate;
+    
+        return $this;
+    }
+
+    /**
+     * Get startdate
+     *
+     * @return \DateTime 
+     */
+    public function getStartdate()
+    {
+        return $this->startdate;
+    }
+
+    /**
+     * Set enddate
+     *
+     * @param \DateTime $enddate
+     * @return Content
+     */
+    public function setEnddate($enddate)
+    {
+        $this->enddate = $enddate;
+    
+        return $this;
+    }
+
+    /**
+     * Get enddate
+     *
+     * @return \DateTime 
+     */
+    public function getEnddate()
+    {
+        return $this->enddate;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return Content
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime 
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set firstdate
+     *
+     * @param \DateTime $firstdate
+     * @return Content
+     */
+    public function setFirstdate($firstdate)
+    {
+        $this->firstdate = $firstdate;
+    
+        return $this;
+    }
+
+    /**
+     * Get firstdate
+     *
+     * @return \DateTime 
+     */
+    public function getFirstdate()
+    {
+        return $this->firstdate;
+    }
+
+    /**
+     * Set lastdate
+     *
+     * @param \DateTime $lastdate
+     * @return Content
+     */
+    public function setLastdate($lastdate)
+    {
+        $this->lastdate = $lastdate;
+    
+        return $this;
+    }
+
+    /**
+     * Get lastdate
+     *
+     * @return \DateTime 
+     */
+    public function getLastdate()
+    {
+        return $this->lastdate;
     }
 
     /**
@@ -920,1267 +1074,1313 @@ class Content {
     }
 
     /**
-     * Set date16
+     * Set title
      *
-     * @param \DateTime $date16
+     * @param string $title
      * @return Content
      */
-    public function setDate16($date16)
+    public function setTitle($title)
     {
-        $this->date16 = $date16;
+        $this->title = $title;
     
         return $this;
     }
 
     /**
-     * Get date16
-     *
-     * @return \DateTime 
-     */
-    public function getDate16()
-    {
-        return $this->date16;
-    }
-
-    /**
-     * Set date17
-     *
-     * @param \DateTime $date17
-     * @return Content
-     */
-    public function setDate17($date17)
-    {
-        $this->date17 = $date17;
-    
-        return $this;
-    }
-
-    /**
-     * Get date17
-     *
-     * @return \DateTime 
-     */
-    public function getDate17()
-    {
-        return $this->date17;
-    }
-
-    /**
-     * Set date18
-     *
-     * @param \DateTime $date18
-     * @return Content
-     */
-    public function setDate18($date18)
-    {
-        $this->date18 = $date18;
-    
-        return $this;
-    }
-
-    /**
-     * Get date18
-     *
-     * @return \DateTime 
-     */
-    public function getDate18()
-    {
-        return $this->date18;
-    }
-
-    /**
-     * Set date19
-     *
-     * @param \DateTime $date19
-     * @return Content
-     */
-    public function setDate19($date19)
-    {
-        $this->date19 = $date19;
-    
-        return $this;
-    }
-
-    /**
-     * Get date19
-     *
-     * @return \DateTime 
-     */
-    public function getDate19()
-    {
-        return $this->date19;
-    }
-
-    /**
-     * Set date20
-     *
-     * @param \DateTime $date20
-     * @return Content
-     */
-    public function setDate20($date20)
-    {
-        $this->date20 = $date20;
-    
-        return $this;
-    }
-
-    /**
-     * Get date20
-     *
-     * @return \DateTime 
-     */
-    public function getDate20()
-    {
-        return $this->date20;
-    }
-
-    /**
-     * Set text1
-     *
-     * @param string $text1
-     * @return Content
-     */
-    public function setText1($text1)
-    {
-        $this->text1 = $text1;
-    
-        return $this;
-    }
-
-    /**
-     * Get text1
+     * Get title
      *
      * @return string 
      */
-    public function getText1()
+    public function getTitle()
     {
-        return $this->text1;
+        return $this->title;
     }
 
     /**
-     * Set text2
+     * Set subtitle
      *
-     * @param string $text2
+     * @param string $subtitle
      * @return Content
      */
-    public function setText2($text2)
+    public function setSubtitle($subtitle)
     {
-        $this->text2 = $text2;
+        $this->subtitle = $subtitle;
     
         return $this;
     }
 
     /**
-     * Get text2
+     * Get subtitle
      *
      * @return string 
      */
-    public function getText2()
+    public function getSubtitle()
     {
-        return $this->text2;
+        return $this->subtitle;
     }
 
     /**
-     * Set text3
+     * Set shortdescription
      *
-     * @param string $text3
+     * @param string $shortdescription
      * @return Content
      */
-    public function setText3($text3)
+    public function setShortdescription($shortdescription)
     {
-        $this->text3 = $text3;
+        $this->shortdescription = $shortdescription;
     
         return $this;
     }
 
     /**
-     * Get text3
+     * Get shortdescription
      *
      * @return string 
      */
-    public function getText3()
+    public function getShortdescription()
     {
-        return $this->text3;
+        return $this->shortdescription;
     }
 
     /**
-     * Set text4
+     * Set description
      *
-     * @param string $text4
+     * @param string $description
      * @return Content
      */
-    public function setText4($text4)
+    public function setDescription($description)
     {
-        $this->text4 = $text4;
+        $this->description = $description;
     
         return $this;
     }
 
     /**
-     * Get text4
+     * Get description
      *
      * @return string 
      */
-    public function getText4()
+    public function getDescription()
     {
-        return $this->text4;
+        return $this->description;
     }
 
     /**
-     * Set text5
+     * Set content
      *
-     * @param string $text5
+     * @param string $content
      * @return Content
      */
-    public function setText5($text5)
+    public function setContent($content)
     {
-        $this->text5 = $text5;
+        $this->content = $content;
     
         return $this;
     }
 
     /**
-     * Get text5
+     * Get content
      *
      * @return string 
      */
-    public function getText5()
+    public function getContent()
     {
-        return $this->text5;
+        return $this->content;
     }
 
     /**
-     * Set text6
+     * Set category
      *
-     * @param string $text6
+     * @param string $category
      * @return Content
      */
-    public function setText6($text6)
+    public function setCategory($category)
     {
-        $this->text6 = $text6;
+        $this->category = $category;
     
         return $this;
     }
 
     /**
-     * Get text6
+     * Get category
      *
      * @return string 
      */
-    public function getText6()
+    public function getCategory()
     {
-        return $this->text6;
+        return $this->category;
     }
 
     /**
-     * Set text7
+     * Set subcategory
      *
-     * @param string $text7
+     * @param string $subcategory
      * @return Content
      */
-    public function setText7($text7)
+    public function setSubcategory($subcategory)
     {
-        $this->text7 = $text7;
+        $this->subcategory = $subcategory;
     
         return $this;
     }
 
     /**
-     * Get text7
+     * Get subcategory
      *
      * @return string 
      */
-    public function getText7()
+    public function getSubcategory()
     {
-        return $this->text7;
+        return $this->subcategory;
     }
 
     /**
-     * Set text8
+     * Set phone
      *
-     * @param string $text8
+     * @param string $phone
      * @return Content
      */
-    public function setText8($text8)
+    public function setPhone($phone)
     {
-        $this->text8 = $text8;
+        $this->phone = $phone;
     
         return $this;
     }
 
     /**
-     * Get text8
+     * Get phone
      *
      * @return string 
      */
-    public function getText8()
+    public function getPhone()
     {
-        return $this->text8;
+        return $this->phone;
     }
 
     /**
-     * Set text9
+     * Set mobile
      *
-     * @param string $text9
+     * @param string $mobile
      * @return Content
      */
-    public function setText9($text9)
+    public function setMobile($mobile)
     {
-        $this->text9 = $text9;
+        $this->mobile = $mobile;
     
         return $this;
     }
 
     /**
-     * Get text9
+     * Get mobile
      *
      * @return string 
      */
-    public function getText9()
+    public function getMobile()
     {
-        return $this->text9;
+        return $this->mobile;
     }
 
     /**
-     * Set text10
+     * Set fax
      *
-     * @param string $text10
+     * @param string $fax
      * @return Content
      */
-    public function setText10($text10)
+    public function setFax($fax)
     {
-        $this->text10 = $text10;
+        $this->fax = $fax;
     
         return $this;
     }
 
     /**
-     * Get text10
+     * Get fax
      *
      * @return string 
      */
-    public function getText10()
+    public function getFax()
     {
-        return $this->text10;
+        return $this->fax;
     }
 
     /**
-     * Set text11
+     * Set email
      *
-     * @param string $text11
+     * @param string $email
      * @return Content
      */
-    public function setText11($text11)
+    public function setEmail($email)
     {
-        $this->text11 = $text11;
+        $this->email = $email;
     
         return $this;
     }
 
     /**
-     * Get text11
+     * Get email
      *
      * @return string 
      */
-    public function getText11()
+    public function getEmail()
     {
-        return $this->text11;
+        return $this->email;
     }
 
     /**
-     * Set text12
+     * Set facebook
      *
-     * @param string $text12
+     * @param string $facebook
      * @return Content
      */
-    public function setText12($text12)
+    public function setFacebook($facebook)
     {
-        $this->text12 = $text12;
+        $this->facebook = $facebook;
     
         return $this;
     }
 
     /**
-     * Get text12
+     * Get facebook
      *
      * @return string 
      */
-    public function getText12()
+    public function getFacebook()
     {
-        return $this->text12;
+        return $this->facebook;
     }
 
     /**
-     * Set text13
+     * Set twitter
      *
-     * @param string $text13
+     * @param string $twitter
      * @return Content
      */
-    public function setText13($text13)
+    public function setTwitter($twitter)
     {
-        $this->text13 = $text13;
+        $this->twitter = $twitter;
     
         return $this;
     }
 
     /**
-     * Get text13
+     * Get twitter
      *
      * @return string 
      */
-    public function getText13()
+    public function getTwitter()
     {
-        return $this->text13;
+        return $this->twitter;
     }
 
     /**
-     * Set text14
+     * Set pinterest
      *
-     * @param string $text14
+     * @param string $pinterest
      * @return Content
      */
-    public function setText14($text14)
+    public function setPinterest($pinterest)
     {
-        $this->text14 = $text14;
+        $this->pinterest = $pinterest;
     
         return $this;
     }
 
     /**
-     * Get text14
+     * Get pinterest
      *
      * @return string 
      */
-    public function getText14()
+    public function getPinterest()
     {
-        return $this->text14;
+        return $this->pinterest;
     }
 
     /**
-     * Set text15
+     * Set linkedIn
      *
-     * @param string $text15
+     * @param string $linkedIn
      * @return Content
      */
-    public function setText15($text15)
+    public function setLinkedIn($linkedIn)
     {
-        $this->text15 = $text15;
+        $this->linkedIn = $linkedIn;
     
         return $this;
     }
 
     /**
-     * Get text15
+     * Get linkedIn
      *
      * @return string 
      */
-    public function getText15()
+    public function getLinkedIn()
     {
-        return $this->text15;
+        return $this->linkedIn;
     }
 
     /**
-     * Set text16
+     * Set instagram
      *
-     * @param string $text16
+     * @param string $instagram
      * @return Content
      */
-    public function setText16($text16)
+    public function setInstagram($instagram)
     {
-        $this->text16 = $text16;
+        $this->instagram = $instagram;
     
         return $this;
     }
 
     /**
-     * Get text16
+     * Get instagram
      *
      * @return string 
      */
-    public function getText16()
+    public function getInstagram()
     {
-        return $this->text16;
+        return $this->instagram;
     }
 
     /**
-     * Set text17
+     * Set qq
      *
-     * @param string $text17
+     * @param string $qq
      * @return Content
      */
-    public function setText17($text17)
+    public function setQq($qq)
     {
-        $this->text17 = $text17;
+        $this->qq = $qq;
     
         return $this;
     }
 
     /**
-     * Get text17
+     * Get qq
      *
      * @return string 
      */
-    public function getText17()
+    public function getQq()
     {
-        return $this->text17;
+        return $this->qq;
     }
 
     /**
-     * Set text18
+     * Set weico
      *
-     * @param string $text18
+     * @param string $weico
      * @return Content
      */
-    public function setText18($text18)
+    public function setWeico($weico)
     {
-        $this->text18 = $text18;
+        $this->weico = $weico;
     
         return $this;
     }
 
     /**
-     * Get text18
+     * Get weico
      *
      * @return string 
      */
-    public function getText18()
+    public function getWeico()
     {
-        return $this->text18;
+        return $this->weico;
     }
 
     /**
-     * Set text19
+     * Set address
      *
-     * @param string $text19
+     * @param string $address
      * @return Content
      */
-    public function setText19($text19)
+    public function setAddress($address)
     {
-        $this->text19 = $text19;
+        $this->address = $address;
     
         return $this;
     }
 
     /**
-     * Get text19
+     * Get address
      *
      * @return string 
      */
-    public function getText19()
+    public function getAddress()
     {
-        return $this->text19;
+        return $this->address;
     }
 
     /**
-     * Set text20
+     * Set website
      *
-     * @param string $text20
+     * @param string $website
      * @return Content
      */
-    public function setText20($text20)
+    public function setWebsite($website)
     {
-        $this->text20 = $text20;
+        $this->website = $website;
     
         return $this;
     }
 
     /**
-     * Get text20
+     * Get website
      *
      * @return string 
      */
-    public function getText20()
+    public function getWebsite()
     {
-        return $this->text20;
+        return $this->website;
     }
 
     /**
-     * Set text21
+     * Set author
      *
-     * @param string $text21
+     * @param string $author
      * @return Content
      */
-    public function setText21($text21)
+    public function setAuthor($author)
     {
-        $this->text21 = $text21;
+        $this->author = $author;
     
         return $this;
     }
 
     /**
-     * Get text21
+     * Get author
      *
      * @return string 
      */
-    public function getText21()
+    public function getAuthor()
     {
-        return $this->text21;
+        return $this->author;
     }
 
     /**
-     * Set text22
+     * Set authorbio
      *
-     * @param string $text22
+     * @param string $authorbio
      * @return Content
      */
-    public function setText22($text22)
+    public function setAuthorbio($authorbio)
     {
-        $this->text22 = $text22;
+        $this->authorbio = $authorbio;
     
         return $this;
     }
 
     /**
-     * Get text22
+     * Get authorbio
      *
      * @return string 
      */
-    public function getText22()
+    public function getAuthorbio()
     {
-        return $this->text22;
+        return $this->authorbio;
     }
 
     /**
-     * Set text23
+     * Set url
      *
-     * @param string $text23
+     * @param string $url
      * @return Content
      */
-    public function setText23($text23)
+    public function setUrl($url)
     {
-        $this->text23 = $text23;
+        $this->url = $url;
     
         return $this;
     }
 
     /**
-     * Get text23
+     * Get url
      *
      * @return string 
      */
-    public function getText23()
+    public function getUrl()
     {
-        return $this->text23;
+        return $this->url;
     }
 
     /**
-     * Set text24
+     * Set value
      *
-     * @param string $text24
+     * @param string $value
      * @return Content
      */
-    public function setText24($text24)
+    public function setValue($value)
     {
-        $this->text24 = $text24;
+        $this->value = $value;
     
         return $this;
     }
 
     /**
-     * Get text24
+     * Get value
      *
      * @return string 
      */
-    public function getText24()
+    public function getValue()
     {
-        return $this->text24;
+        return $this->value;
     }
 
     /**
-     * Set text25
+     * Set image
      *
-     * @param string $text25
+     * @param string $image
      * @return Content
      */
-    public function setText25($text25)
+    public function setImage($image)
     {
-        $this->text25 = $text25;
+        $this->image = $image;
     
         return $this;
     }
 
     /**
-     * Get text25
+     * Get image
      *
      * @return string 
      */
-    public function getText25()
+    public function getImage()
     {
-        return $this->text25;
+        return $this->image;
     }
 
     /**
-     * Set text26
+     * Set gallery
      *
-     * @param string $text26
+     * @param string $gallery
      * @return Content
      */
-    public function setText26($text26)
+    public function setGallery($gallery)
     {
-        $this->text26 = $text26;
+        $this->gallery = $gallery;
     
         return $this;
     }
 
     /**
-     * Get text26
+     * Get gallery
      *
      * @return string 
      */
-    public function getText26()
+    public function getGallery()
     {
-        return $this->text26;
+        return $this->gallery;
     }
 
     /**
-     * Set text27
+     * Set thumbnail
      *
-     * @param string $text27
+     * @param string $thumbnail
      * @return Content
      */
-    public function setText27($text27)
+    public function setThumbnail($thumbnail)
     {
-        $this->text27 = $text27;
+        $this->thumbnail = $thumbnail;
     
         return $this;
     }
 
     /**
-     * Get text27
+     * Get thumbnail
      *
      * @return string 
      */
-    public function getText27()
+    public function getThumbnail()
     {
-        return $this->text27;
+        return $this->thumbnail;
     }
 
     /**
-     * Set text28
+     * Set lastname
      *
-     * @param string $text28
+     * @param string $lastname
      * @return Content
      */
-    public function setText28($text28)
+    public function setLastname($lastname)
     {
-        $this->text28 = $text28;
+        $this->lastname = $lastname;
     
         return $this;
     }
 
     /**
-     * Get text28
+     * Get lastname
      *
      * @return string 
      */
-    public function getText28()
+    public function getLastname()
     {
-        return $this->text28;
+        return $this->lastname;
     }
 
     /**
-     * Set text29
+     * Set firstname
      *
-     * @param string $text29
+     * @param string $firstname
      * @return Content
      */
-    public function setText29($text29)
+    public function setFirstname($firstname)
     {
-        $this->text29 = $text29;
+        $this->firstname = $firstname;
     
         return $this;
     }
 
     /**
-     * Get text29
+     * Get firstname
      *
      * @return string 
      */
-    public function getText29()
+    public function getFirstname()
     {
-        return $this->text29;
+        return $this->firstname;
     }
 
     /**
-     * Set text30
+     * Set name
      *
-     * @param string $text30
+     * @param string $name
      * @return Content
      */
-    public function setText30($text30)
+    public function setName($name)
     {
-        $this->text30 = $text30;
+        $this->name = $name;
     
         return $this;
     }
 
     /**
-     * Get text30
+     * Get name
      *
      * @return string 
      */
-    public function getText30()
+    public function getName()
     {
-        return $this->text30;
+        return $this->name;
     }
 
     /**
-     * Set text31
+     * Set region
      *
-     * @param string $text31
+     * @param string $region
      * @return Content
      */
-    public function setText31($text31)
+    public function setRegion($region)
     {
-        $this->text31 = $text31;
+        $this->region = $region;
     
         return $this;
     }
 
     /**
-     * Get text31
+     * Get region
      *
      * @return string 
      */
-    public function getText31()
+    public function getRegion()
     {
-        return $this->text31;
+        return $this->region;
     }
 
     /**
-     * Set text32
+     * Set destination
      *
-     * @param string $text32
+     * @param string $destination
      * @return Content
      */
-    public function setText32($text32)
+    public function setDestination($destination)
     {
-        $this->text32 = $text32;
+        $this->destination = $destination;
     
         return $this;
     }
 
     /**
-     * Get text32
+     * Get destination
      *
      * @return string 
      */
-    public function getText32()
+    public function getDestination()
     {
-        return $this->text32;
+        return $this->destination;
     }
 
     /**
-     * Set text33
+     * Set excerpts
      *
-     * @param string $text33
+     * @param string $excerpts
      * @return Content
      */
-    public function setText33($text33)
+    public function setExcerpts($excerpts)
     {
-        $this->text33 = $text33;
+        $this->excerpts = $excerpts;
     
         return $this;
     }
 
     /**
-     * Get text33
+     * Get excerpts
      *
      * @return string 
      */
-    public function getText33()
+    public function getExcerpts()
     {
-        return $this->text33;
+        return $this->excerpts;
     }
 
     /**
-     * Set text34
+     * Set about
      *
-     * @param string $text34
+     * @param string $about
      * @return Content
      */
-    public function setText34($text34)
+    public function setAbout($about)
     {
-        $this->text34 = $text34;
+        $this->about = $about;
     
         return $this;
     }
 
     /**
-     * Get text34
+     * Get about
      *
      * @return string 
      */
-    public function getText34()
+    public function getAbout()
     {
-        return $this->text34;
+        return $this->about;
     }
 
     /**
-     * Set text35
+     * Set latitude
      *
-     * @param string $text35
+     * @param string $latitude
      * @return Content
      */
-    public function setText35($text35)
+    public function setLatitude($latitude)
     {
-        $this->text35 = $text35;
+        $this->latitude = $latitude;
     
         return $this;
     }
 
     /**
-     * Get text35
+     * Get latitude
      *
      * @return string 
      */
-    public function getText35()
+    public function getLatitude()
     {
-        return $this->text35;
+        return $this->latitude;
     }
 
     /**
-     * Set text36
+     * Set longitude
      *
-     * @param string $text36
+     * @param string $longitude
      * @return Content
      */
-    public function setText36($text36)
+    public function setLongitude($longitude)
     {
-        $this->text36 = $text36;
+        $this->longitude = $longitude;
     
         return $this;
     }
 
     /**
-     * Get text36
+     * Get longitude
      *
      * @return string 
      */
-    public function getText36()
+    public function getLongitude()
     {
-        return $this->text36;
+        return $this->longitude;
     }
 
     /**
-     * Set text37
+     * Set price
      *
-     * @param string $text37
+     * @param string $price
      * @return Content
      */
-    public function setText37($text37)
+    public function setPrice($price)
     {
-        $this->text37 = $text37;
+        $this->price = $price;
     
         return $this;
     }
 
     /**
-     * Get text37
+     * Get price
      *
      * @return string 
      */
-    public function getText37()
+    public function getPrice()
     {
-        return $this->text37;
+        return $this->price;
     }
 
     /**
-     * Set text38
+     * Set saleprice
      *
-     * @param string $text38
+     * @param string $saleprice
      * @return Content
      */
-    public function setText38($text38)
+    public function setSaleprice($saleprice)
     {
-        $this->text38 = $text38;
+        $this->saleprice = $saleprice;
     
         return $this;
     }
 
     /**
-     * Get text38
+     * Get saleprice
      *
      * @return string 
      */
-    public function getText38()
+    public function getSaleprice()
     {
-        return $this->text38;
+        return $this->saleprice;
     }
 
     /**
-     * Set text39
+     * Set features
      *
-     * @param string $text39
+     * @param string $features
      * @return Content
      */
-    public function setText39($text39)
+    public function setFeatures($features)
     {
-        $this->text39 = $text39;
+        $this->features = $features;
     
         return $this;
     }
 
     /**
-     * Get text39
+     * Get features
      *
      * @return string 
      */
-    public function getText39()
+    public function getFeatures()
     {
-        return $this->text39;
+        return $this->features;
     }
 
     /**
-     * Set text40
+     * Set account
      *
-     * @param string $text40
+     * @param string $account
      * @return Content
      */
-    public function setText40($text40)
+    public function setAccount($account)
     {
-        $this->text40 = $text40;
+        $this->account = $account;
     
         return $this;
     }
 
     /**
-     * Get text40
+     * Get account
      *
      * @return string 
      */
-    public function getText40()
+    public function getAccount()
     {
-        return $this->text40;
+        return $this->account;
     }
 
     /**
-     * Set text41
+     * Set username
      *
-     * @param string $text41
+     * @param string $username
      * @return Content
      */
-    public function setText41($text41)
+    public function setUsername($username)
     {
-        $this->text41 = $text41;
+        $this->username = $username;
     
         return $this;
     }
 
     /**
-     * Get text41
+     * Get username
      *
      * @return string 
      */
-    public function getText41()
+    public function getUsername()
     {
-        return $this->text41;
+        return $this->username;
     }
 
     /**
-     * Set text42
+     * Set password
      *
-     * @param string $text42
+     * @param string $password
      * @return Content
      */
-    public function setText42($text42)
+    public function setPassword($password)
     {
-        $this->text42 = $text42;
+        $this->password = $password;
     
         return $this;
     }
 
     /**
-     * Get text42
+     * Get password
      *
      * @return string 
      */
-    public function getText42()
+    public function getPassword()
     {
-        return $this->text42;
+        return $this->password;
     }
 
     /**
-     * Set text43
+     * Set extra1
      *
-     * @param string $text43
+     * @param string $extra1
      * @return Content
      */
-    public function setText43($text43)
+    public function setExtra1($extra1)
     {
-        $this->text43 = $text43;
+        $this->extra1 = $extra1;
     
         return $this;
     }
 
     /**
-     * Get text43
+     * Get extra1
      *
      * @return string 
      */
-    public function getText43()
+    public function getExtra1()
     {
-        return $this->text43;
+        return $this->extra1;
     }
 
     /**
-     * Set text44
+     * Set extra2
      *
-     * @param string $text44
+     * @param string $extra2
      * @return Content
      */
-    public function setText44($text44)
+    public function setExtra2($extra2)
     {
-        $this->text44 = $text44;
+        $this->extra2 = $extra2;
     
         return $this;
     }
 
     /**
-     * Get text44
+     * Get extra2
      *
      * @return string 
      */
-    public function getText44()
+    public function getExtra2()
     {
-        return $this->text44;
+        return $this->extra2;
     }
 
     /**
-     * Set text45
+     * Set extra3
      *
-     * @param string $text45
+     * @param string $extra3
      * @return Content
      */
-    public function setText45($text45)
+    public function setExtra3($extra3)
     {
-        $this->text45 = $text45;
+        $this->extra3 = $extra3;
     
         return $this;
     }
 
     /**
-     * Get text45
+     * Get extra3
      *
      * @return string 
      */
-    public function getText45()
+    public function getExtra3()
     {
-        return $this->text45;
+        return $this->extra3;
     }
 
     /**
-     * Set text46
+     * Set extra4
      *
-     * @param string $text46
+     * @param string $extra4
      * @return Content
      */
-    public function setText46($text46)
+    public function setExtra4($extra4)
     {
-        $this->text46 = $text46;
+        $this->extra4 = $extra4;
     
         return $this;
     }
 
     /**
-     * Get text46
+     * Get extra4
      *
      * @return string 
      */
-    public function getText46()
+    public function getExtra4()
     {
-        return $this->text46;
+        return $this->extra4;
     }
 
     /**
-     * Set text47
+     * Set extra5
      *
-     * @param string $text47
+     * @param string $extra5
      * @return Content
      */
-    public function setText47($text47)
+    public function setExtra5($extra5)
     {
-        $this->text47 = $text47;
+        $this->extra5 = $extra5;
     
         return $this;
     }
 
     /**
-     * Get text47
+     * Get extra5
      *
      * @return string 
      */
-    public function getText47()
+    public function getExtra5()
     {
-        return $this->text47;
+        return $this->extra5;
     }
 
     /**
-     * Set text48
+     * Set extra6
      *
-     * @param string $text48
+     * @param string $extra6
      * @return Content
      */
-    public function setText48($text48)
+    public function setExtra6($extra6)
     {
-        $this->text48 = $text48;
+        $this->extra6 = $extra6;
     
         return $this;
     }
 
     /**
-     * Get text48
+     * Get extra6
      *
      * @return string 
      */
-    public function getText48()
+    public function getExtra6()
     {
-        return $this->text48;
+        return $this->extra6;
     }
 
     /**
-     * Set text49
+     * Set extra7
      *
-     * @param string $text49
+     * @param string $extra7
      * @return Content
      */
-    public function setText49($text49)
+    public function setExtra7($extra7)
     {
-        $this->text49 = $text49;
+        $this->extra7 = $extra7;
     
         return $this;
     }
 
     /**
-     * Get text49
+     * Get extra7
      *
      * @return string 
      */
-    public function getText49()
+    public function getExtra7()
     {
-        return $this->text49;
+        return $this->extra7;
     }
 
     /**
-     * Set text50
+     * Set extra8
      *
-     * @param string $text50
+     * @param string $extra8
      * @return Content
      */
-    public function setText50($text50)
+    public function setExtra8($extra8)
     {
-        $this->text50 = $text50;
+        $this->extra8 = $extra8;
     
         return $this;
     }
 
     /**
-     * Get text50
+     * Get extra8
      *
      * @return string 
      */
-    public function getText50()
+    public function getExtra8()
     {
-        return $this->text50;
+        return $this->extra8;
+    }
+
+    /**
+     * Set extra9
+     *
+     * @param string $extra9
+     * @return Content
+     */
+    public function setExtra9($extra9)
+    {
+        $this->extra9 = $extra9;
+    
+        return $this;
+    }
+
+    /**
+     * Get extra9
+     *
+     * @return string 
+     */
+    public function getExtra9()
+    {
+        return $this->extra9;
+    }
+
+    /**
+     * Set extra10
+     *
+     * @param string $extra10
+     * @return Content
+     */
+    public function setExtra10($extra10)
+    {
+        $this->extra10 = $extra10;
+    
+        return $this;
+    }
+
+    /**
+     * Get extra10
+     *
+     * @return string 
+     */
+    public function getExtra10()
+    {
+        return $this->extra10;
+    }
+
+    /**
+     * Set extra11
+     *
+     * @param string $extra11
+     * @return Content
+     */
+    public function setExtra11($extra11)
+    {
+        $this->extra11 = $extra11;
+    
+        return $this;
+    }
+
+    /**
+     * Get extra11
+     *
+     * @return string 
+     */
+    public function getExtra11()
+    {
+        return $this->extra11;
+    }
+
+    /**
+     * Set extra12
+     *
+     * @param string $extra12
+     * @return Content
+     */
+    public function setExtra12($extra12)
+    {
+        $this->extra12 = $extra12;
+    
+        return $this;
+    }
+
+    /**
+     * Get extra12
+     *
+     * @return string 
+     */
+    public function getExtra12()
+    {
+        return $this->extra12;
+    }
+
+    /**
+     * Set extra13
+     *
+     * @param string $extra13
+     * @return Content
+     */
+    public function setExtra13($extra13)
+    {
+        $this->extra13 = $extra13;
+    
+        return $this;
+    }
+
+    /**
+     * Get extra13
+     *
+     * @return string 
+     */
+    public function getExtra13()
+    {
+        return $this->extra13;
+    }
+
+    /**
+     * Set extra14
+     *
+     * @param string $extra14
+     * @return Content
+     */
+    public function setExtra14($extra14)
+    {
+        $this->extra14 = $extra14;
+    
+        return $this;
+    }
+
+    /**
+     * Get extra14
+     *
+     * @return string 
+     */
+    public function getExtra14()
+    {
+        return $this->extra14;
+    }
+
+    /**
+     * Set extra15
+     *
+     * @param string $extra15
+     * @return Content
+     */
+    public function setExtra15($extra15)
+    {
+        $this->extra15 = $extra15;
+    
+        return $this;
+    }
+
+    /**
+     * Get extra15
+     *
+     * @return string 
+     */
+    public function getExtra15()
+    {
+        return $this->extra15;
     }
 }
