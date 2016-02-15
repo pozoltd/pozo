@@ -1,9 +1,8 @@
 <?php
 namespace Pz\Twig;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use \Twig_Extension;
-use Secret\Common\Utils;
+use Pz\Common\Utils;
 
 class Extension extends Twig_Extension {
 

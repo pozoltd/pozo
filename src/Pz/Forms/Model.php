@@ -41,16 +41,16 @@ class Model extends AbstractType
             'label' => 'Data type:',
             'expanded' => true,
             'choices' => array(
-                0 => 'User',
+                0 => 'Database',
                 1 => 'Admin',
-                2 => 'Customised',
+                2 => 'None',
             )
         ))->add('listType', 'choice', array(
             'label' => 'Listing type:',
             'expanded' => true,
             'choices' => array(
                 0 => 'Pagination',
-                1 => 'Full list',
+                1 => 'Drag & Drop',
                 2 => 'Nested tree',
             )
         ))->add('numberPerPage', 'text', array(

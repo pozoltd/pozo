@@ -82,6 +82,8 @@ class Model implements ControllerProviderInterface
         $form->handleRequest($request);
         if ($form->isValid()) {
             $model->save();
+            $model->rank = $model->id + 1;
+            $model->save();
 
             $generated = HOME_DIR . '/src/' . DEFAULT_NAMESPACE . '/DAOs/Generated/' . $model->className . '.php';
             $customised = HOME_DIR . '/src/' . DEFAULT_NAMESPACE . '/DAOs/' . $model->className . '.php';
@@ -93,7 +95,7 @@ class Model implements ControllerProviderInterface
             $mappings = array_map(function($value) {
                 return "'{$value->field}' => '{$value->column}', ";
             }, $model->columnsJson);
-            $str = file_get_contents(__DIR__ . '/_generated.txt');
+            $str = file_get_contents(__DIR__ . '/templates/generated.txt');
             $str = str_replace('{TIMESTAMP}', date('Y-m-d H:i:s'), $str);
             $str = str_replace('{NAMESPACE}', DEFAULT_NAMESPACE, $str);
             $str = str_replace('{CLASSNAME}', $model->className, $str);
@@ -102,7 +104,7 @@ class Model implements ControllerProviderInterface
             file_put_contents($generated, $str);
 
             if (!file_exists($customised)) {
-                $str = file_get_contents(__DIR__ . '/_customised.txt');
+                $str = file_get_contents(__DIR__ . '/templates/customised.txt');
                 $str = str_replace('{TIMESTAMP}', date('Y-m-d H:i:s'), $str);
                 $str = str_replace('{NAMESPACE}', DEFAULT_NAMESPACE, $str);
                 $str = str_replace('{CLASSNAME}', $model->className, $str);

@@ -5,14 +5,14 @@
 		<div class="col-lg-7">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
-						<h5>{{ model.label }}</h5>
+					<h5>{{ model.label }}</h5>
 				</div>
 				<div class="ibox-content">
 					<form method="POST" novalidate {{ form_enctype(form) }} autocomplete="off">
 						{{ form_widget(form) }}
 						<div style="clear: both;"></div>
 						<div>&nbsp;</div>
-						<div>
+						<div class="submit-container">
 							<a class="btn btn-white" href="{{ returnURL }}"><i class="fa fa-arrow-left"></i> &nbsp;Back</a>
 							<input class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit" value="Save" name="submit" />
 							<input class="btn btn-sm btn-success pull-right m-t-n-xs" type="submit" value="Apply" name="submit" />

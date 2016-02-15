@@ -41,18 +41,26 @@ abstract class DoctrineDAO implements DAOInterface
         }
 
         $reflectionObj = new ReflectionObject($m);
-        foreach ($this->getFieldMap() as $key => $value) {
-            if (property_exists($this, $key)) {
-                if ($value == 'id') {
+        foreach ($this->getFieldMap() as $idx => $itm) {
+            if (property_exists($this, $idx)) {
+                if ($itm == 'id') {
                     continue;
                 }
-                $reflectionMethod = $reflectionObj->getMethod('set' . ucfirst($value));
-                $reflectionMethod->invoke($m, $this->{$key});
+                $reflectionMethod = $reflectionObj->getMethod('set' . ucfirst($itm));
+
+                $value = $this->{$idx};
+                if (strpos($itm, 'date') !== false && $this->{$idx}) {
+                    $date = new \DateTime();
+                    $date->setTimestamp(strtotime($this->{$idx}));
+                    $value = $date;
+                }
+                $reflectionMethod->invoke($m, $value);
             }
         }
 
         $this->db->persist($m);
         $this->db->flush();
+        return $m->getId();
     }
 
     public static function findByTitle($db, $title) {
@@ -85,12 +93,12 @@ abstract class DoctrineDAO implements DAOInterface
         $params = isset($options['params']) ? $options['params'] : array();
         $page = isset($options['page']) ? $options['page'] : null;
         $limit = isset($options['limit']) ? $options['limit'] : null;
-        $sort = isset($options['sort']) ? $options['sort'] : null;
-        $order = isset($options['order']) ? $options['order'] : null;
+        $sort = isset($options['sort']) ? $options['sort'] : 'entity.rank';
+        $order = isset($options['order']) ? $options['order'] : 'ASC';
         $groupBy = isset($options['groupBy']) ? $options['groupBy'] : null;
         $jt = isset($options['jt']) ? $options['jt'] : null;
 
-        $whereSql = static::mapSql($m, $whereSql);
+        $whereSql = static::convert($m, $whereSql);
 //        foreach ($params as $idx => $itm) {
 //            foreach ($model['columnsJson'] as $itm2) {
 //                if ($idx == $itm2['field']) {
@@ -100,7 +108,7 @@ abstract class DoctrineDAO implements DAOInterface
 //            }
 //        }
 
-        $sort = static::mapSql($m, $sort);
+        $sort = static::convert($m, $sort);
 
 
         $qb = $db->createQueryBuilder()->from($m->getORMClass(), $select);
@@ -160,10 +168,13 @@ abstract class DoctrineDAO implements DAOInterface
 
     }
 
-    public static function mapSql($m, $sql) {
+    public static function convert($m, $sql) {
         $fieldMap = $m->getFieldMap();
+        uasort($fieldMap, function($a, $b) {
+            return strlen($b) - strlen($a);
+        });
         foreach ($fieldMap as $idx => $itm) {
-            $sql = str_replace($idx . ' ', $itm . ' ', $sql);
+            $sql = str_replace($idx, $itm, $sql);
         }
         return $sql;
     }

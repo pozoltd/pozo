@@ -8,444 +8,441 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="contents")
  */
-class Content {
-	/**
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="AUTO")
-	 */
-	protected $id;
+class Content
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
 
-	/**
-	 * @ORM\Column(type="string", length=256, nullable=true)
-	 */
-	protected $slug;
-	
-	/**
-	 * @ORM\Column(type="integer")
-	 */
-	protected $modelId;
-	
-	/**
-	 * @ORM\Column(type="integer")
-	 */
-	protected $active;
-	
-	/**
-	 * @ORM\Column(type="integer", nullable=true)
-	 */
-	protected $rank;
-	
-	/**
-	 * @ORM\Column(type="integer", nullable=true)
-	 */
-	protected $parentId;
-	
-	/**
-	 * @ORM\Column(type="datetime")
-	 */
-	protected $added;
-	
-	/**
-	 * @ORM\Column(type="datetime")
-	 */
-	protected $modified;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $startdate;
+    /**
+     * @ORM\Column(type="string", length=256, nullable=true)
+     */
+    protected $slug;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $enddate;
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $modelId;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date;
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $active;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $firstdate;
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $rank;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $lastdate;
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $parentId;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date1;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $added;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date2;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $modified;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date3;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $startdate;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date4;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $enddate;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date5;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date6;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date7;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date8;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date9;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date10;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $firstdate;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date11;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date12;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date13;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date14;
-	
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	protected $date15;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $lastdate;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $title;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date1;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $subtitle;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date2;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $shortdescription;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date3;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $description;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date4;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $content;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date5;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $category;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date6;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $subcategory;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date7;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $phone;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date8;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $mobile;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date9;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $fax;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date10;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $email;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $facebook;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $twitter;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $pinterest;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $linkedIn;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $instagram;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $qq;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $weico;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $address;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $website;
-	
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date11;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $author;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $authorbio;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $url;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $value;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $image;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $gallery;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $thumbnail;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $lastname;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $firstname;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $name;
-	
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date12;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $region;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $destination;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $excerpts;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $about;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $latitude;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $longitude;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date13;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $price;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $saleprice;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $features;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date14;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $account;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $date15;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $username;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $title;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $password;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $subtitle;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra1;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra2;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra3;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra4;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra5;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra6;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra7;
-	
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra8;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $shortdescription;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra9;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $description;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra10;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $content;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra11;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $category;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra12;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $subcategory;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra13;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $phone;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra14;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $mobile;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $extra15;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $fax;
 
-	
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $email;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $facebook;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $twitter;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $pinterest;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $linkedIn;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $instagram;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $qq;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $weico;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $address;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $website;
 
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $author;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $authorbio;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $url;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $value;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $image;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $gallery;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $thumbnail;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $lastname;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $firstname;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $name;
+
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $region;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $destination;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $excerpts;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $about;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $latitude;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $longitude;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $price;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $saleprice;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $features;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $account;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $username;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $password;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra1;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra2;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra3;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra4;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra5;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra6;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra7;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra8;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra9;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra10;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra11;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra12;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra13;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra14;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $extra15;
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -461,14 +458,14 @@ class Content {
     public function setSlug($slug)
     {
         $this->slug = $slug;
-    
+
         return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
@@ -484,14 +481,14 @@ class Content {
     public function setModelId($modelId)
     {
         $this->modelId = $modelId;
-    
+
         return $this;
     }
 
     /**
      * Get modelId
      *
-     * @return integer 
+     * @return integer
      */
     public function getModelId()
     {
@@ -507,14 +504,14 @@ class Content {
     public function setActive($active)
     {
         $this->active = $active;
-    
+
         return $this;
     }
 
     /**
      * Get active
      *
-     * @return integer 
+     * @return integer
      */
     public function getActive()
     {
@@ -530,14 +527,14 @@ class Content {
     public function setRank($rank)
     {
         $this->rank = $rank;
-    
+
         return $this;
     }
 
     /**
      * Get rank
      *
-     * @return integer 
+     * @return integer
      */
     public function getRank()
     {
@@ -553,14 +550,14 @@ class Content {
     public function setParentId($parentId)
     {
         $this->parentId = $parentId;
-    
+
         return $this;
     }
 
     /**
      * Get parentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getParentId()
     {
@@ -576,14 +573,14 @@ class Content {
     public function setAdded($added)
     {
         $this->added = $added;
-    
+
         return $this;
     }
 
     /**
      * Get added
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getAdded()
     {
@@ -599,14 +596,14 @@ class Content {
     public function setModified($modified)
     {
         $this->modified = $modified;
-    
+
         return $this;
     }
 
     /**
      * Get modified
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getModified()
     {
@@ -622,14 +619,14 @@ class Content {
     public function setStartdate($startdate)
     {
         $this->startdate = $startdate;
-    
+
         return $this;
     }
 
     /**
      * Get startdate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getStartdate()
     {
@@ -645,14 +642,14 @@ class Content {
     public function setEnddate($enddate)
     {
         $this->enddate = $enddate;
-    
+
         return $this;
     }
 
     /**
      * Get enddate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEnddate()
     {
@@ -668,14 +665,14 @@ class Content {
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -691,14 +688,14 @@ class Content {
     public function setFirstdate($firstdate)
     {
         $this->firstdate = $firstdate;
-    
+
         return $this;
     }
 
     /**
      * Get firstdate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFirstdate()
     {
@@ -714,14 +711,14 @@ class Content {
     public function setLastdate($lastdate)
     {
         $this->lastdate = $lastdate;
-    
+
         return $this;
     }
 
     /**
      * Get lastdate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastdate()
     {
@@ -737,14 +734,14 @@ class Content {
     public function setDate1($date1)
     {
         $this->date1 = $date1;
-    
+
         return $this;
     }
 
     /**
      * Get date1
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate1()
     {
@@ -760,14 +757,14 @@ class Content {
     public function setDate2($date2)
     {
         $this->date2 = $date2;
-    
+
         return $this;
     }
 
     /**
      * Get date2
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate2()
     {
@@ -783,14 +780,14 @@ class Content {
     public function setDate3($date3)
     {
         $this->date3 = $date3;
-    
+
         return $this;
     }
 
     /**
      * Get date3
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate3()
     {
@@ -806,14 +803,14 @@ class Content {
     public function setDate4($date4)
     {
         $this->date4 = $date4;
-    
+
         return $this;
     }
 
     /**
      * Get date4
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate4()
     {
@@ -829,14 +826,14 @@ class Content {
     public function setDate5($date5)
     {
         $this->date5 = $date5;
-    
+
         return $this;
     }
 
     /**
      * Get date5
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate5()
     {
@@ -852,14 +849,14 @@ class Content {
     public function setDate6($date6)
     {
         $this->date6 = $date6;
-    
+
         return $this;
     }
 
     /**
      * Get date6
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate6()
     {
@@ -875,14 +872,14 @@ class Content {
     public function setDate7($date7)
     {
         $this->date7 = $date7;
-    
+
         return $this;
     }
 
     /**
      * Get date7
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate7()
     {
@@ -898,14 +895,14 @@ class Content {
     public function setDate8($date8)
     {
         $this->date8 = $date8;
-    
+
         return $this;
     }
 
     /**
      * Get date8
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate8()
     {
@@ -921,14 +918,14 @@ class Content {
     public function setDate9($date9)
     {
         $this->date9 = $date9;
-    
+
         return $this;
     }
 
     /**
      * Get date9
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate9()
     {
@@ -944,14 +941,14 @@ class Content {
     public function setDate10($date10)
     {
         $this->date10 = $date10;
-    
+
         return $this;
     }
 
     /**
      * Get date10
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate10()
     {
@@ -967,14 +964,14 @@ class Content {
     public function setDate11($date11)
     {
         $this->date11 = $date11;
-    
+
         return $this;
     }
 
     /**
      * Get date11
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate11()
     {
@@ -990,14 +987,14 @@ class Content {
     public function setDate12($date12)
     {
         $this->date12 = $date12;
-    
+
         return $this;
     }
 
     /**
      * Get date12
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate12()
     {
@@ -1013,14 +1010,14 @@ class Content {
     public function setDate13($date13)
     {
         $this->date13 = $date13;
-    
+
         return $this;
     }
 
     /**
      * Get date13
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate13()
     {
@@ -1036,14 +1033,14 @@ class Content {
     public function setDate14($date14)
     {
         $this->date14 = $date14;
-    
+
         return $this;
     }
 
     /**
      * Get date14
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate14()
     {
@@ -1059,14 +1056,14 @@ class Content {
     public function setDate15($date15)
     {
         $this->date15 = $date15;
-    
+
         return $this;
     }
 
     /**
      * Get date15
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate15()
     {
@@ -1082,14 +1079,14 @@ class Content {
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -1105,14 +1102,14 @@ class Content {
     public function setSubtitle($subtitle)
     {
         $this->subtitle = $subtitle;
-    
+
         return $this;
     }
 
     /**
      * Get subtitle
      *
-     * @return string 
+     * @return string
      */
     public function getSubtitle()
     {
@@ -1128,14 +1125,14 @@ class Content {
     public function setShortdescription($shortdescription)
     {
         $this->shortdescription = $shortdescription;
-    
+
         return $this;
     }
 
     /**
      * Get shortdescription
      *
-     * @return string 
+     * @return string
      */
     public function getShortdescription()
     {
@@ -1151,14 +1148,14 @@ class Content {
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -1174,14 +1171,14 @@ class Content {
     public function setContent($content)
     {
         $this->content = $content;
-    
+
         return $this;
     }
 
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -1197,14 +1194,14 @@ class Content {
     public function setCategory($category)
     {
         $this->category = $category;
-    
+
         return $this;
     }
 
     /**
      * Get category
      *
-     * @return string 
+     * @return string
      */
     public function getCategory()
     {
@@ -1220,14 +1217,14 @@ class Content {
     public function setSubcategory($subcategory)
     {
         $this->subcategory = $subcategory;
-    
+
         return $this;
     }
 
     /**
      * Get subcategory
      *
-     * @return string 
+     * @return string
      */
     public function getSubcategory()
     {
@@ -1243,14 +1240,14 @@ class Content {
     public function setPhone($phone)
     {
         $this->phone = $phone;
-    
+
         return $this;
     }
 
     /**
      * Get phone
      *
-     * @return string 
+     * @return string
      */
     public function getPhone()
     {
@@ -1266,14 +1263,14 @@ class Content {
     public function setMobile($mobile)
     {
         $this->mobile = $mobile;
-    
+
         return $this;
     }
 
     /**
      * Get mobile
      *
-     * @return string 
+     * @return string
      */
     public function getMobile()
     {
@@ -1289,14 +1286,14 @@ class Content {
     public function setFax($fax)
     {
         $this->fax = $fax;
-    
+
         return $this;
     }
 
     /**
      * Get fax
      *
-     * @return string 
+     * @return string
      */
     public function getFax()
     {
@@ -1312,14 +1309,14 @@ class Content {
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -1335,14 +1332,14 @@ class Content {
     public function setFacebook($facebook)
     {
         $this->facebook = $facebook;
-    
+
         return $this;
     }
 
     /**
      * Get facebook
      *
-     * @return string 
+     * @return string
      */
     public function getFacebook()
     {
@@ -1358,14 +1355,14 @@ class Content {
     public function setTwitter($twitter)
     {
         $this->twitter = $twitter;
-    
+
         return $this;
     }
 
     /**
      * Get twitter
      *
-     * @return string 
+     * @return string
      */
     public function getTwitter()
     {
@@ -1381,14 +1378,14 @@ class Content {
     public function setPinterest($pinterest)
     {
         $this->pinterest = $pinterest;
-    
+
         return $this;
     }
 
     /**
      * Get pinterest
      *
-     * @return string 
+     * @return string
      */
     public function getPinterest()
     {
@@ -1404,14 +1401,14 @@ class Content {
     public function setLinkedIn($linkedIn)
     {
         $this->linkedIn = $linkedIn;
-    
+
         return $this;
     }
 
     /**
      * Get linkedIn
      *
-     * @return string 
+     * @return string
      */
     public function getLinkedIn()
     {
@@ -1427,14 +1424,14 @@ class Content {
     public function setInstagram($instagram)
     {
         $this->instagram = $instagram;
-    
+
         return $this;
     }
 
     /**
      * Get instagram
      *
-     * @return string 
+     * @return string
      */
     public function getInstagram()
     {
@@ -1450,14 +1447,14 @@ class Content {
     public function setQq($qq)
     {
         $this->qq = $qq;
-    
+
         return $this;
     }
 
     /**
      * Get qq
      *
-     * @return string 
+     * @return string
      */
     public function getQq()
     {
@@ -1473,14 +1470,14 @@ class Content {
     public function setWeico($weico)
     {
         $this->weico = $weico;
-    
+
         return $this;
     }
 
     /**
      * Get weico
      *
-     * @return string 
+     * @return string
      */
     public function getWeico()
     {
@@ -1496,14 +1493,14 @@ class Content {
     public function setAddress($address)
     {
         $this->address = $address;
-    
+
         return $this;
     }
 
     /**
      * Get address
      *
-     * @return string 
+     * @return string
      */
     public function getAddress()
     {
@@ -1519,14 +1516,14 @@ class Content {
     public function setWebsite($website)
     {
         $this->website = $website;
-    
+
         return $this;
     }
 
     /**
      * Get website
      *
-     * @return string 
+     * @return string
      */
     public function getWebsite()
     {
@@ -1542,14 +1539,14 @@ class Content {
     public function setAuthor($author)
     {
         $this->author = $author;
-    
+
         return $this;
     }
 
     /**
      * Get author
      *
-     * @return string 
+     * @return string
      */
     public function getAuthor()
     {
@@ -1565,14 +1562,14 @@ class Content {
     public function setAuthorbio($authorbio)
     {
         $this->authorbio = $authorbio;
-    
+
         return $this;
     }
 
     /**
      * Get authorbio
      *
-     * @return string 
+     * @return string
      */
     public function getAuthorbio()
     {
@@ -1588,14 +1585,14 @@ class Content {
     public function setUrl($url)
     {
         $this->url = $url;
-    
+
         return $this;
     }
 
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -1611,14 +1608,14 @@ class Content {
     public function setValue($value)
     {
         $this->value = $value;
-    
+
         return $this;
     }
 
     /**
      * Get value
      *
-     * @return string 
+     * @return string
      */
     public function getValue()
     {
@@ -1634,14 +1631,14 @@ class Content {
     public function setImage($image)
     {
         $this->image = $image;
-    
+
         return $this;
     }
 
     /**
      * Get image
      *
-     * @return string 
+     * @return string
      */
     public function getImage()
     {
@@ -1657,14 +1654,14 @@ class Content {
     public function setGallery($gallery)
     {
         $this->gallery = $gallery;
-    
+
         return $this;
     }
 
     /**
      * Get gallery
      *
-     * @return string 
+     * @return string
      */
     public function getGallery()
     {
@@ -1680,14 +1677,14 @@ class Content {
     public function setThumbnail($thumbnail)
     {
         $this->thumbnail = $thumbnail;
-    
+
         return $this;
     }
 
     /**
      * Get thumbnail
      *
-     * @return string 
+     * @return string
      */
     public function getThumbnail()
     {
@@ -1703,14 +1700,14 @@ class Content {
     public function setLastname($lastname)
     {
         $this->lastname = $lastname;
-    
+
         return $this;
     }
 
     /**
      * Get lastname
      *
-     * @return string 
+     * @return string
      */
     public function getLastname()
     {
@@ -1726,14 +1723,14 @@ class Content {
     public function setFirstname($firstname)
     {
         $this->firstname = $firstname;
-    
+
         return $this;
     }
 
     /**
      * Get firstname
      *
-     * @return string 
+     * @return string
      */
     public function getFirstname()
     {
@@ -1749,14 +1746,14 @@ class Content {
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -1772,14 +1769,14 @@ class Content {
     public function setRegion($region)
     {
         $this->region = $region;
-    
+
         return $this;
     }
 
     /**
      * Get region
      *
-     * @return string 
+     * @return string
      */
     public function getRegion()
     {
@@ -1795,14 +1792,14 @@ class Content {
     public function setDestination($destination)
     {
         $this->destination = $destination;
-    
+
         return $this;
     }
 
     /**
      * Get destination
      *
-     * @return string 
+     * @return string
      */
     public function getDestination()
     {
@@ -1818,14 +1815,14 @@ class Content {
     public function setExcerpts($excerpts)
     {
         $this->excerpts = $excerpts;
-    
+
         return $this;
     }
 
     /**
      * Get excerpts
      *
-     * @return string 
+     * @return string
      */
     public function getExcerpts()
     {
@@ -1841,14 +1838,14 @@ class Content {
     public function setAbout($about)
     {
         $this->about = $about;
-    
+
         return $this;
     }
 
     /**
      * Get about
      *
-     * @return string 
+     * @return string
      */
     public function getAbout()
     {
@@ -1864,14 +1861,14 @@ class Content {
     public function setLatitude($latitude)
     {
         $this->latitude = $latitude;
-    
+
         return $this;
     }
 
     /**
      * Get latitude
      *
-     * @return string 
+     * @return string
      */
     public function getLatitude()
     {
@@ -1887,14 +1884,14 @@ class Content {
     public function setLongitude($longitude)
     {
         $this->longitude = $longitude;
-    
+
         return $this;
     }
 
     /**
      * Get longitude
      *
-     * @return string 
+     * @return string
      */
     public function getLongitude()
     {
@@ -1910,14 +1907,14 @@ class Content {
     public function setPrice($price)
     {
         $this->price = $price;
-    
+
         return $this;
     }
 
     /**
      * Get price
      *
-     * @return string 
+     * @return string
      */
     public function getPrice()
     {
@@ -1933,14 +1930,14 @@ class Content {
     public function setSaleprice($saleprice)
     {
         $this->saleprice = $saleprice;
-    
+
         return $this;
     }
 
     /**
      * Get saleprice
      *
-     * @return string 
+     * @return string
      */
     public function getSaleprice()
     {
@@ -1956,14 +1953,14 @@ class Content {
     public function setFeatures($features)
     {
         $this->features = $features;
-    
+
         return $this;
     }
 
     /**
      * Get features
      *
-     * @return string 
+     * @return string
      */
     public function getFeatures()
     {
@@ -1979,14 +1976,14 @@ class Content {
     public function setAccount($account)
     {
         $this->account = $account;
-    
+
         return $this;
     }
 
     /**
      * Get account
      *
-     * @return string 
+     * @return string
      */
     public function getAccount()
     {
@@ -2002,14 +1999,14 @@ class Content {
     public function setUsername($username)
     {
         $this->username = $username;
-    
+
         return $this;
     }
 
     /**
      * Get username
      *
-     * @return string 
+     * @return string
      */
     public function getUsername()
     {
@@ -2025,14 +2022,14 @@ class Content {
     public function setPassword($password)
     {
         $this->password = $password;
-    
+
         return $this;
     }
 
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -2048,14 +2045,14 @@ class Content {
     public function setExtra1($extra1)
     {
         $this->extra1 = $extra1;
-    
+
         return $this;
     }
 
     /**
      * Get extra1
      *
-     * @return string 
+     * @return string
      */
     public function getExtra1()
     {
@@ -2071,14 +2068,14 @@ class Content {
     public function setExtra2($extra2)
     {
         $this->extra2 = $extra2;
-    
+
         return $this;
     }
 
     /**
      * Get extra2
      *
-     * @return string 
+     * @return string
      */
     public function getExtra2()
     {
@@ -2094,14 +2091,14 @@ class Content {
     public function setExtra3($extra3)
     {
         $this->extra3 = $extra3;
-    
+
         return $this;
     }
 
     /**
      * Get extra3
      *
-     * @return string 
+     * @return string
      */
     public function getExtra3()
     {
@@ -2117,14 +2114,14 @@ class Content {
     public function setExtra4($extra4)
     {
         $this->extra4 = $extra4;
-    
+
         return $this;
     }
 
     /**
      * Get extra4
      *
-     * @return string 
+     * @return string
      */
     public function getExtra4()
     {
@@ -2140,14 +2137,14 @@ class Content {
     public function setExtra5($extra5)
     {
         $this->extra5 = $extra5;
-    
+
         return $this;
     }
 
     /**
      * Get extra5
      *
-     * @return string 
+     * @return string
      */
     public function getExtra5()
     {
@@ -2163,14 +2160,14 @@ class Content {
     public function setExtra6($extra6)
     {
         $this->extra6 = $extra6;
-    
+
         return $this;
     }
 
     /**
      * Get extra6
      *
-     * @return string 
+     * @return string
      */
     public function getExtra6()
     {
@@ -2186,14 +2183,14 @@ class Content {
     public function setExtra7($extra7)
     {
         $this->extra7 = $extra7;
-    
+
         return $this;
     }
 
     /**
      * Get extra7
      *
-     * @return string 
+     * @return string
      */
     public function getExtra7()
     {
@@ -2209,14 +2206,14 @@ class Content {
     public function setExtra8($extra8)
     {
         $this->extra8 = $extra8;
-    
+
         return $this;
     }
 
     /**
      * Get extra8
      *
-     * @return string 
+     * @return string
      */
     public function getExtra8()
     {
@@ -2232,14 +2229,14 @@ class Content {
     public function setExtra9($extra9)
     {
         $this->extra9 = $extra9;
-    
+
         return $this;
     }
 
     /**
      * Get extra9
      *
-     * @return string 
+     * @return string
      */
     public function getExtra9()
     {
@@ -2255,14 +2252,14 @@ class Content {
     public function setExtra10($extra10)
     {
         $this->extra10 = $extra10;
-    
+
         return $this;
     }
 
     /**
      * Get extra10
      *
-     * @return string 
+     * @return string
      */
     public function getExtra10()
     {
@@ -2278,14 +2275,14 @@ class Content {
     public function setExtra11($extra11)
     {
         $this->extra11 = $extra11;
-    
+
         return $this;
     }
 
     /**
      * Get extra11
      *
-     * @return string 
+     * @return string
      */
     public function getExtra11()
     {
@@ -2301,14 +2298,14 @@ class Content {
     public function setExtra12($extra12)
     {
         $this->extra12 = $extra12;
-    
+
         return $this;
     }
 
     /**
      * Get extra12
      *
-     * @return string 
+     * @return string
      */
     public function getExtra12()
     {
@@ -2324,14 +2321,14 @@ class Content {
     public function setExtra13($extra13)
     {
         $this->extra13 = $extra13;
-    
+
         return $this;
     }
 
     /**
      * Get extra13
      *
-     * @return string 
+     * @return string
      */
     public function getExtra13()
     {
@@ -2347,14 +2344,14 @@ class Content {
     public function setExtra14($extra14)
     {
         $this->extra14 = $extra14;
-    
+
         return $this;
     }
 
     /**
      * Get extra14
      *
-     * @return string 
+     * @return string
      */
     public function getExtra14()
     {
@@ -2370,14 +2367,14 @@ class Content {
     public function setExtra15($extra15)
     {
         $this->extra15 = $extra15;
-    
+
         return $this;
     }
 
     /**
      * Get extra15
      *
-     * @return string 
+     * @return string
      */
     public function getExtra15()
     {

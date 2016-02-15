@@ -51,9 +51,6 @@
     <link href="{{ constant('CDN') }}/chosen.css" rel="stylesheet">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.4.5/jquery.datetimepicker.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.4.5/jquery.datetimepicker.min.js"></script>
 
@@ -112,8 +109,8 @@
                     </li>
 
 
-                    <li class="">
-                        <a href="">
+                    <li {% if '/pz/asset/' in currentPath %}class="active"{% endif %}>
+                        <a href="/pz/asset/">
                             <i class="fa fa-file-image-o"></i>
                             <span class="nav-label">Assets</span>
                         </a>

@@ -1,0 +1,246 @@
+{% extends 'layout.twig' %} 
+
+{% block extraHead %}
+<style>
+.tile a { color: #fff; }
+.tile a:hover { color: #ddd; }
+.tile .image img { width: 100%; height: 100%; }
+.badge { background: #FAF7AA; width: 20px; text-align: center; }
+.progress-bar { margin-top: 5px; }
+.ui-dialog-titlebar { display: none; }
+.assets_navbar { margin-left: 0 !important; margin-bottom: 10px !important; }
+.loading { background: #000 url('http://desandro.github.io/imagesloaded/assets/loading.gif') no-repeat center; }
+.loading img { visibility: hidden; }
+{% block extraStyle %}.asset { cursor: move !important; }{% endblock %}
+</style>
+{% endblock %} 
+
+{% block menuBar %}
+	{{ parent() }}
+{% endblock %} 
+
+{% block content %}
+<input id="fileupload" type="file" name="files[]" multiple style="display: none;">
+	
+	
+<div class="progress progress-striped" style="display: none; width: 950px;">
+	<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+	</div>
+</div>
+
+{# 	<div class="progress-bar progress-bar-warning" data-value="0" data-role="progress-bar" data-color="bg-amber" style="display: none; width: 950px;">#}
+{# 		<div class="bar"></div>#}
+{# 	</div>#}
+
+<div style="clear: both;"></div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title assets-header">
+				<button class="btn btn-w-m btn-info" onclick="$('#fileupload').click();">
+					<i class="fa fa-upload"></i>&nbsp;&nbsp;Upload new files
+				</button>
+				
+				<button id="add_folder" class="btn btn-w-m" data-toggle="modal" data-target="#dialog">
+					<i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add new folder
+				</button>
+				
+				<div class="split">&nbsp;</div>
+				
+				{% if ancestors|length > 0 %}
+					<nav>
+						<oi class="breadcrumb assets_navbar">
+							<li>Location:</li>
+							<li class="home"><a href="{{ path('assets') }}?view={{ view }}&CKEditorFuncNum={{ CKEditorFuncNum }}"><i class="fa fa-home fa-1.5x"></i></a></li>
+							{% for itm in ancestors %}
+								<li {% if loop.index == ancestors|length %}class="active"{% endif %}><a title="{{ itm.name }}" href="{{ path('assets-by-folder', { id: itm.id }) }}?view={{ view }}&CKEditorFuncNum={{ CKEditorFuncNum }}">{{ itm.name }}</a></li>
+							{% endfor %}
+						</oi>
+					</nav>
+				{% endif %}
+			</div>
+			
+			<div class="ibox-content clearfix">
+				{% if ancestors|length > 1 %} 
+					<div class="my-folder">
+						<h3>&nbsp;</h3>
+						<div class="m-b-sm">
+							<a href="{{ path('assets-by-folder', { id: ancestors[ancestors|length - 2].id }) }}?view={{ view }}&CKEditorFuncNum={{ CKEditorFuncNum }}">
+								<i class="back fa fa-undo fa-4x"></i>
+							</a>
+						</div>
+						<div>&nbsp;</div>
+					</div>
+				{% elseif currentId != 0 %}
+					<div class="my-folder">
+						<h3>&nbsp;</h3>
+						<div class="m-b-sm">
+							<a href="{{ path('assets') }}?view={{ view }}&CKEditorFuncNum={{ CKEditorFuncNum }}">
+								<i class="back fa fa-undo fa-4x"></i>
+							</a>
+						</div>
+						<div>&nbsp;</div>
+					</div>
+				{% endif %} 
+				<span id="assets_folders"></span> 
+				<span id="assets_files"></span>
+			</div>
+			</div>
+	</div>
+</div>
+
+<div id="dialog" class="modal inmodal fade in" aria-hidden="true" role="dialog" tabindex="-1" >
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content animated flipInY">
+			<form id="add-folder" method="POST" autocomplete="off" novalidate>
+				<div class="modal-body">
+					{{ form_label(form.title) }}
+					{{ form_widget(form.title, {attr: {class: 'form-control', 'aria-required': 'true'}}) }}
+					{#{{ form_errors(form.title) }}#}
+				</div>
+				<div class="modal-footer">
+					{{ form_widget(form._token) }}
+					<button type="submit" class="btn btn-sm pull-right m-t-n-xs" data-dismiss="modal" ><strong>Close</strong></button>
+					<button type="submit" class="btn btn-sm btn-primary pull-right m-t-n-xs"><strong>Add</strong></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %} 
+
+{% block extraFooter %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.iframe-transport.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.fileupload.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.0.4/jquery.imagesloaded.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.min.js"></script>
+<script>
+	var _folders = {{ folders|json_encode|raw }};
+	var _files = {{ files|json_encode|raw }};
+
+	$(function() {
+		$("#add-folder").validate();
+
+		var pb = $('.progress-bar').progressbar();
+		
+		var url = '{{ path('upload-assets') }}';
+		$('#fileupload').fileupload({
+				url: url,
+				dataType: 'json',
+// 				acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+// 				maxFileSize: 5000000, // 5 MB
+				sequentialUploads: true,
+				formData: {
+					parentId: {{ currentId }}
+				},
+				add: function(e, data) {
+					var uploadErrors = [];
+// 					var acceptFileTypes = /^image\/(gif|jpe?g|png)$/i;
+// 					if(data.files[0]['type'] == '' || !acceptFileTypes.test(data.files[0]['type'])) {
+// 						uploadErrors.push('Not an accepted file type');
+// 					}
+					if(data.files[0]['size'] == '' || data.files[0]['size'] > 5000000) {
+						uploadErrors.push('File size is too big');
+					}
+					if(uploadErrors.length > 0) {
+						alert(uploadErrors.join("\n"));
+					} else {
+						$('.progress').show();
+						data.submit();
+					}
+				},
+				done: function (e, data) {
+					_files.push(data.result);
+					repaint();
+				},
+				progressall: function (e, data) {
+					var progress = parseInt(data.loaded / data.total * 100, 10);
+					$('.progress-bar').css('width', progress + '%');
+				},
+				stop: function (e) {
+					$('.progress').fadeOut(3000);
+				}
+		}).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+		repaint();
+	});
+
+	function repaint() {
+		$('#assets_folders').html('<span id="assets_folders_container" />');
+		$('#assets_files').html('<span id="assets_files_container" />');
+		
+		for (var idx in _folders) {
+			var itm = _folders[idx];
+			$('#assets_folders_container').append(
+				'<div class="my-folder" data-id="' + itm.id + '">' +
+					'<div class="text-center">' +
+						'<h4 title="' + itm.name + '" class="btn btn-xs btn-default">' + itm.name + '</h4>' +
+					'</div>' +
+					'<div>&nbsp</div>' +
+					'<div class="m-b-sm"><a href="/secret/assets/folder/' + itm.id + '?view={{ view }}&CKEditorFuncNum={{ CKEditorFuncNum }}"><i class="fa fa-folder fa-4x"></i></a></div>' +
+					'<div class="child btn btn-outline btn-default">' + itm._childNum + '</div>' +
+					'<a href="#"><div class="remove btn btn-danger"><i class="fa fa-times"></i></div></a>' +
+					'<a href="/secret/contents/detail/Asset/' + (itm.slug != '' ? itm.slug : encodeURIComponent(itm['id'])) + '/' + encodeURIComponent('{{ returnURL|url_encode }}') + '/"><div class="edit btn btn-default"><i class="fa fa-pencil"></i></div></a>' +
+				'</div>'
+			);
+		}
+
+		for (var idx in _files) {
+			var itm = _files[idx];
+			$('#assets_files_container').append(
+				'<div class="my-file" data-id="' + itm.id + '" style="background-image: url(/secret/assets/image/' + itm.id + '/290/)">' +
+					'<div class="text-center">' +
+						'<h4 title="' + itm.name + '" class="btn btn-xs btn-default">' + itm.name + '<h4>' +
+					'</div>' +
+					'<a href="#"><div class="remove btn btn-danger"><i class="fa fa-times"></i></div></a>' +
+					'<a href="/secret/contents/detail/Asset/' + (itm.slug != '' ? itm.slug : encodeURIComponent(itm['id'])) + '/' + encodeURIComponent('{{ returnURL|url_encode }}') + '/"><div class="edit btn btn-default"><i class="fa fa-pencil"></i></div></a>' +
+				'</div>'
+			);
+		}
+
+// 		var imgLoad = imagesLoaded( document.querySelector('#assets_files_container'));
+// 		imgLoad.on('progress', function ( imgLoad, image ) {
+// 				image.img.parentNode.className = image.isLoaded ? image.img.parentNode.className.replace('loading', '') : '';
+// 		});
+
+		$('.my-folder .remove, .my-file .remove').click(function(ev) {
+			$this = $(this);
+			$.fancybox.open({
+				padding : 0,
+				href:'#confirm-dialog',
+				type: 'inline',
+				width: '800',
+				height: '1200',
+			});
+
+			$('#confirm-ok').off();
+			$('#confirm-ok').click(function() {
+				$.fancybox.close();
+				$.ajax({
+					type: 'POST',
+					url: '',
+					data: 'data=' + $(ev.target).parents('.my-file,.my-folder').attr('data-id') + '&modelName=Asset',
+					success : function(msg) {
+						location.reload();
+						
+					}
+				});
+			});
+			return false;
+		});
+		
+		var func = function( event, ui ) {
+			$.ajax({
+				type: 'POST',
+				url: '',
+				data: 'data=' + encodeURIComponent(JSON.stringify($(ui.item[0]).parent().sortable("toArray", { attribute: 'data-id' }))),
+				success : function(msg) {}
+			});
+		};
+		$('#assets_folders_container').sortable({ stop: func });
+		$('#assets_files_container').sortable({ stop: func });
+	};
+</script>
+{% endblock %}

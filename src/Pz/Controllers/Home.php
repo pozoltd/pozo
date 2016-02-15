@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\HttpFoundation\Response;
 
-class HomeCSP implements ControllerProviderInterface {
+class Home implements ControllerProviderInterface {
 
 	public function connect(Application $app) {
 		$content = array();

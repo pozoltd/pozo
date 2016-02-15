@@ -66,22 +66,18 @@ class Content implements ControllerProviderInterface
             if (strpos($itm->widget, '\\') !==  FALSE) {
                 $wgtClass = $itm->widget;
                 $widget = new $wgtClass();
+
             }
             $form->add($itm->field, $widget, array(
                 'label' => $itm->label,
             ));
+
         }
         $form = $form->getForm();
 
         if ($request->isMethod("POST")) {
             $form->bind($request);
             if ($form->isValid()) {
-                if (!$content->id) {
-                    $content->modelId = $model->id;
-                    $content->active = 1;
-                    $content->added = new \DateTime('now');
-                }
-                $content->modified = new \DateTime('now');
                 $content->save();
 
                 if ($request->request->get('submit') == 'Save') {

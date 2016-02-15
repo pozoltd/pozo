@@ -17,7 +17,7 @@ class Model {
 	protected $id;
 	
 	/**
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	protected $rank;
 	

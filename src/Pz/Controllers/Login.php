@@ -5,7 +5,7 @@ use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class LoginCSP implements ControllerProviderInterface
+class Login implements ControllerProviderInterface
 {
 
     public function connect(Application $app)

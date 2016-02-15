@@ -2,7 +2,7 @@
 
 {% block form_row %}
     {% spaceless %}
-        <div class="box">
+        <div class="box {{ block_prefixes[block_prefixes|length - 2] }}">
             {{ form_label(form) }}
             {{ form_widget(form) }}
             {{ form_errors(form) }}
@@ -11,12 +11,13 @@
 {% endblock form_row %}
 
 {% block datepicker_widget -%}
-    <input type="text" {{ block('widget_attributes') }} value="{{ value ? value|join('-')|date('Y-m-d') : '' }}"/>
+    <input type="text" {{ block('widget_attributes') }} value="{{ value ? value|date('Y-m-d') : '' }}"/>
     <script>
-        $(function() {
+        $(function () {
             $('#{{ id }}').datetimepicker({
-                timepicker:false,
-                format:'Y-m-d'
+                timepicker: false,
+                format: 'Y-m-d',
+                scrollInput: false,
             });
         });
     </script>
