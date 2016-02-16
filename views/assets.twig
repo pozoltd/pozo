@@ -176,13 +176,13 @@
 			$('#assets_folders_container').append(
 				'<div class="my-folder" data-id="' + itm.id + '">' +
 					'<div class="text-center">' +
-						'<h4 title="' + itm.name + '" class="btn btn-xs btn-default">' + itm.name + '</h4>' +
+						'<h4 title="' + itm.name + '" class="btn btn-xs btn-default">' + itm.title + '</h4>' +
 					'</div>' +
 					'<div>&nbsp</div>' +
-					'<div class="m-b-sm"><a href="/secret/assets/folder/' + itm.id + '?view={{ view }}&CKEditorFuncNum={{ CKEditorFuncNum }}"><i class="fa fa-folder fa-4x"></i></a></div>' +
+					'<div class="m-b-sm"><a href="/pz/assets/folder/' + itm.id + '/"><i class="fa fa-folder fa-4x"></i></a></div>' +
 					'<div class="child btn btn-outline btn-default">' + itm._childNum + '</div>' +
 					'<a href="#"><div class="remove btn btn-danger"><i class="fa fa-times"></i></div></a>' +
-					'<a href="/secret/contents/detail/Asset/' + (itm.slug != '' ? itm.slug : encodeURIComponent(itm['id'])) + '/' + encodeURIComponent('{{ returnURL|url_encode }}') + '/"><div class="edit btn btn-default"><i class="fa fa-pencil"></i></div></a>' +
+					'<a href="/pz/content/edit/' + itm.modelId + '/' + encodeURIComponent('{{ returnURL|url_encode }}') + '/' + itm.id + '/"><div class="edit btn btn-default"><i class="fa fa-pencil"></i></div></a>' +
 				'</div>'
 			);
 		}
@@ -190,12 +190,12 @@
 		for (var idx in _files) {
 			var itm = _files[idx];
 			$('#assets_files_container').append(
-				'<div class="my-file" data-id="' + itm.id + '" style="background-image: url(/secret/assets/image/' + itm.id + '/290/)">' +
+				'<div class="my-file" data-id="' + itm.id + '" style="background-image: url(/pz/asset/image/' + itm.id + '/cms-list/)">' +
 					'<div class="text-center">' +
-						'<h4 title="' + itm.name + '" class="btn btn-xs btn-default">' + itm.name + '<h4>' +
+						'<h4 title="' + itm.name + '" class="btn btn-xs btn-default">' + itm.title + '<h4>' +
 					'</div>' +
 					'<a href="#"><div class="remove btn btn-danger"><i class="fa fa-times"></i></div></a>' +
-					'<a href="/secret/contents/detail/Asset/' + (itm.slug != '' ? itm.slug : encodeURIComponent(itm['id'])) + '/' + encodeURIComponent('{{ returnURL|url_encode }}') + '/"><div class="edit btn btn-default"><i class="fa fa-pencil"></i></div></a>' +
+					'<a href="/pz/content/edit/' + itm.modelId + '/' + encodeURIComponent('{{ returnURL|url_encode }}') + '/' + itm.id + '/"><div class="edit btn btn-default"><i class="fa fa-pencil"></i></div></a>' +
 				'</div>'
 			);
 		}

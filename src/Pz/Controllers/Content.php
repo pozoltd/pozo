@@ -58,7 +58,7 @@ class Content implements ControllerProviderInterface
                 throw new NotFoundHttpException();
             }
         }
-
+//Utils::dump($content);exit;
         $form = $app['form.factory']->createBuilder('form', $content);
         $model->columnsJson = json_decode($model->columnsJson);
         foreach ($model->columnsJson as $itm) {

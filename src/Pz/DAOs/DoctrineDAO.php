@@ -60,7 +60,7 @@ abstract class DoctrineDAO implements DAOInterface
 
         $this->db->persist($m);
         $this->db->flush();
-        return $m->getId();
+        $this->id = $m->getId();
     }
 
     public static function findByTitle($db, $title) {
@@ -78,6 +78,16 @@ abstract class DoctrineDAO implements DAOInterface
             'whereSql' => 'entity.id = :v1',
             'params' => array(
                 'v1' => $id,
+            )
+        ));
+        return array_pop($daos);
+    }
+
+    public static function findByField($db, $field, $value) {
+        $daos = static::data($db, array(
+            'whereSql' => 'entity.' . $field . ' = :v1',
+            'params' => array(
+                'v1' => $value,
             )
         ));
         return array_pop($daos);
