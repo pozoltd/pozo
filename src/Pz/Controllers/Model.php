@@ -54,8 +54,10 @@ class Model implements ControllerProviderInterface
             }
 
             $myClass = "\\" . DEFAULT_NAMESPACE . "\\DAOS\\" . $model->className;
-            $m = new $myClass($app['em']);
-            $fields = $app['em']->getClassMetadata($m->getORMClass())->getFieldNames();
+            if (class_exists($myClass)) {
+                $m = new $myClass($app['em']);
+                $fields = $app['em']->getClassMetadata($m->getORMClass())->getFieldNames();
+            }
 
         } else {
             $model = new \Pz\DAOs\Model($app['em']);
@@ -84,33 +86,6 @@ class Model implements ControllerProviderInterface
             $model->save();
             $model->rank = $model->id + 1;
             $model->save();
-
-            $generated = HOME_DIR . '/src/' . DEFAULT_NAMESPACE . '/DAOs/Generated/' . $model->className . '.php';
-            $customised = HOME_DIR . '/src/' . DEFAULT_NAMESPACE . '/DAOs/' . $model->className . '.php';
-            if (file_exists($generated)) {
-                unlink($generated);
-            }
-
-            $model->columnsJson = json_decode($model->columnsJson);
-            $mappings = array_map(function($value) {
-                return "'{$value->field}' => '{$value->column}', ";
-            }, $model->columnsJson);
-            $str = file_get_contents(__DIR__ . '/templates/generated.txt');
-            $str = str_replace('{TIMESTAMP}', date('Y-m-d H:i:s'), $str);
-            $str = str_replace('{NAMESPACE}', DEFAULT_NAMESPACE, $str);
-            $str = str_replace('{CLASSNAME}', $model->className, $str);
-            $str = str_replace('{MODELID}', $model->id, $str);
-            $str = str_replace('{MAPPING}', join("\n\t\t\t", $mappings), $str);
-            file_put_contents($generated, $str);
-
-            if (!file_exists($customised)) {
-                $str = file_get_contents(__DIR__ . '/templates/customised.txt');
-                $str = str_replace('{TIMESTAMP}', date('Y-m-d H:i:s'), $str);
-                $str = str_replace('{NAMESPACE}', DEFAULT_NAMESPACE, $str);
-                $str = str_replace('{CLASSNAME}', $model->className, $str);
-                file_put_contents($customised, $str);
-            }
-
 
             if ($request->get('submit') == 'apply') {
                 return $app->redirect($app->url('edit-model', array(

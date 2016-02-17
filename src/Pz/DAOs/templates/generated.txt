@@ -21,4 +21,6 @@ class {CLASSNAME} extends \Pz\DAOs\Content {
     function getBaseQuery() {
         return 'entity.modelId = {MODELID}';
     }
+
+    {EXTRAS}
 }

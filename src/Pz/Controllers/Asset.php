@@ -117,7 +117,6 @@ class Asset implements ControllerProviderInterface
             $result = $uploader->post(false);
 
             $newFile->fileLocation = $newFile->id . '.' . $ext;
-            $newFile->fileExtension = $ext;
             $newFile->fileType = $result['files'][0]->type;
             $newFile->fileSize = $result['files'][0]->size;
             $newFile->save();
@@ -159,7 +158,7 @@ class Asset implements ControllerProviderInterface
                 if (!file_exists($cache)) {
                     mkdir($cache, 0777, true);
                 }
-                $thumbnail = $cache . md5($asset->id . '-' . $size->id . '-' . $size->width) . (('application/pdf' == $fileType) ? '.jpg' : '.' . $asset->fileExtension);
+                $thumbnail = $cache . md5($asset->id . '-' . $size->id . '-' . $size->width) . (('application/pdf' == $fileType) ? '.jpg' : '.' . pathinfo($asset->fileName, PATHINFO_EXTENSION));
                 if (!file_exists($thumbnail)) {
                     if ('application/pdf' == $fileType) {
                         $image = new imagick($file . '[0]');
