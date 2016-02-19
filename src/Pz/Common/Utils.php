@@ -163,4 +163,16 @@ class Utils
     public static function encodeURL($url) {
         return urlencode(urlencode($url));
     }
+
+    public static function withChildIds($node, $id, $status = 0) {
+        $result = array();
+        if ($node->id == $id || $status == 1) {
+            $result[] = $node->id;
+            $status = 1;
+        }
+        foreach ($node->_c as $itm) {
+            $result = array_merge($result, static::withChildIds($itm, $id, $status));
+        }
+        return $result;
+    }
 }

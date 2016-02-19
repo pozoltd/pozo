@@ -75,7 +75,7 @@ class Page implements ControllerProviderInterface {
 		$id = $request->request->get('id');
 		$repo = $app['em']->getRepository('Secret\Entities\Content');
 		$result = $repo->data('Page', '', array(), array('sort' => 'rank', 'order' => 'ASC'));
-		$root = Utils::buildTree(array('id' => 0), $result['_data']);
+		$root = Utils::buildTree(array('id' => 0), $result);
 		$ids = Utils::withChildIds($root, $id);
 		foreach ($ids as $itm) {
 			$entity = $repo->find($itm);
@@ -109,109 +109,109 @@ class Page implements ControllerProviderInterface {
 		return new Response(json_encode($counter));
 	}
 	
-//	public function change(Application $app, Request $request) {
-//		$repo = $app['em']->getRepository('Secret\Entities\Content');
-//
-//
-//		$result = $repo->data('Page', '', array(), array());
-//		$pages = array();
-//		foreach ($result['_data'] as $itm) {
-//			$itm->categoryRank = ((empty($itm->categoryRank) || !$itm->categoryRank)) ? array() : (array)json_decode($itm->categoryRank);
-//			$itm->categoryParent = ((empty($itm->categoryParent) || !$itm->categoryParent)) ? array() : (array)json_decode($itm->categoryParent);
-//			$itm->category = ((empty($itm->category) || !$itm->category)) ? array() : (array)json_decode($itm->category);
-//
-//			$itm['rank'] = isset($itm['catRank']['cat' . $request->get('oldCat')]) ? $itm['catRank']['cat' . $request->get('oldCat')] : 0;
-//			$itm['parentId'] = isset($itm['catParent']['cat' . $request->get('oldCat')]) ? $itm['catParent']['cat' . $request->get('oldCat')] : 0;
-//			if ($request->get('oldCat') == -1 && count($itm['category']) == 0) {
-//				$pages[] = $itm;
-//			} else if (in_array($request->get('oldCat'), $itm['category'])){
-//				$pages[] = $itm;
-//			}
-//		}
-//		$root = Utils::buildTree(array('id' => 0), $pages);
-//
-//		$result = $repo->data('Page', '', array(), array());
-//		$ids = Utils::withChildIds($root, $request->get('id'));
-//		foreach ($ids as $itm) {
-//			if ($itm != $request->get('id')) {
-//				foreach ($result['_data'] as &$itm2) {
-//					$itm2['catRank'] = ((empty($itm2['catRank']) || !$itm2['catRank'])) ? array() : (array)json_decode($itm2['catRank']);
-//					$itm2['catParent'] = ((empty($itm2['catParent']) || !$itm2['catParent'])) ? array() : (array)json_decode($itm2['catParent']);
-//					$itm2['category'] = (empty($itm2['category']) || !$itm2['category']) ? array() : json_decode($itm2['category']);
-//
-//					if ($itm2['id'] == $itm) {
-//						$itm2['catRank']['cat' . $request->get('newCat')] = $itm2['catRank']['cat' . $request->get('oldCat')];
-//						$itm2['catParent']['cat' . $request->get('newCat')] = $itm2['catParent']['cat' . $request->get('oldCat')];
-//
-//						$categories = array();
-//						foreach ($itm2['category'] as $itm3) {
-//							if ($request->get('oldCat') != $itm3) {
-//								$categories[] = $itm3;
-//							}
-//						}
-//						$itm2['category'] = $categories;
-//						if (!in_array($request->get('newCat'), $itm2['category'])) {
-//							$itm2['category'][] = $request->get('newCat');
-//						}
-//					}
-//
-//					$itm2['catRank'] = json_encode($itm2['catRank']);
-//					$itm2['catParent'] = json_encode($itm2['catParent']);
-//					$itm2['category'] = json_encode($itm2['category']);
-//				}
-//			}
-//		}
-//		$repo->save($result);
-//
-//		$result = $repo->data('Page', 'entity.id = :v1', array('v1' => $request->get('id')), array());
-//		if (count($result['_data']) == 1) {
-//			$result['_data'][0]['category'] = (empty($result['_data'][0]['category']) || !$result['_data'][0]['category']) ? array() : json_decode($result['_data'][0]['category']);
-//			$categories = array();
-//			foreach ($result['_data'][0]['category'] as $itm) {
-//				if ($request->get('oldCat') != $itm) {
-//					$categories[] = $itm;
-//				}
-//			}
-//			$result['_data'][0]['category'] = $categories;
-//			if (!in_array($request->get('newCat'), $result['_data'][0]['category'])) {
-//				$result['_data'][0]['category'][] = $request->get('newCat');
-//			}
-//
-//			$result['_data'][0]['catRank'] = ((empty($result['_data'][0]['catRank']) || !$result['_data'][0]['catRank'])) ? array() : (array)json_decode($result['_data'][0]['catRank']);
-//			$result['_data'][0]['catParent'] = ((empty($result['_data'][0]['catParent']) || !$result['_data'][0]['catParent'])) ? array() : (array)json_decode($result['_data'][0]['catParent']);
-//
-//			$result['_data'][0]['catRank']['cat' . $request->get('newCat')] = 0;
-//			$result['_data'][0]['catParent']['cat' . $request->get('newCat')] = 0;
-//
-//			$result['_data'][0]['catRank'] = json_encode($result['_data'][0]['catRank']);
-//			$result['_data'][0]['catParent'] = json_encode($result['_data'][0]['catParent']);
-//
-//			$repo->save($result);
-//		}
-//		return new Response('OK');
-//	}
+	public function change(Application $app, Request $request) {
+
+		$result = \Site\DAOs\Page::data($app['em']);
+		$pages = array();
+		foreach ($result as $itm) {
+			$itm->categoryRank = ((empty($itm->categoryRank) || !$itm->categoryRank)) ? array() : (array)json_decode($itm->categoryRank);
+			$itm->categoryParent = ((empty($itm->categoryParent) || !$itm->categoryParent)) ? array() : (array)json_decode($itm->categoryParent);
+			$itm->category = ((empty($itm->category) || !$itm->category)) ? array() : (array)json_decode($itm->category);
+
+			$itm->rank = isset($itm->categoryRank['cat' . $request->get('oldCat')]) ? $itm->categoryRank['cat' . $request->get('oldCat')] : 0;
+			$itm->parentId = isset($itm->categoryParent['cat' . $request->get('oldCat')]) ? $itm->categoryParent['cat' . $request->get('oldCat')] : 0;
+			if ($request->get('oldCat') == -1 && count($itm->category) == 0) {
+				$pages[] = $itm;
+			} else if (in_array($request->get('oldCat'), $itm->category)){
+				$pages[] = $itm;
+			}
+		}
+		$root = new \stdClass();
+		$root->id = 0;
+		$root = Utils::buildTree($root, $pages);
+
+		$result = \Site\DAOs\Page::data($app['em']);
+		$ids = Utils::withChildIds($root, $request->get('id'));
+		foreach ($ids as $itm) {
+			if ($itm != $request->get('id')) {
+				foreach ($result as &$itm2) {
+					$itm2->categoryRank = ((empty($itm2->categoryRank) || !$itm2->categoryRank)) ? array() : (array)json_decode($itm2->categoryRank);
+					$itm2->categoryParent = ((empty($itm2->categoryParent) || !$itm2->categoryParent)) ? array() : (array)json_decode($itm2->categoryParent);
+					$itm2->category = (empty($itm2->category) || !$itm2->category) ? array() : json_decode($itm2->category);
+
+					if ($itm2->id == $itm) {
+						$itm2->categoryRank['cat' . $request->get('newCat')] = $itm2->categoryRank['cat' . $request->get('oldCat')];
+						$itm2->categoryParent['cat' . $request->get('newCat')] = $itm2->categoryParent['cat' . $request->get('oldCat')];
+
+						$categories = array();
+						foreach ($itm2->category as $itm3) {
+							if ($request->get('oldCat') != $itm3) {
+								$categories[] = $itm3;
+							}
+						}
+						$itm2->category = $categories;
+						if (!in_array($request->get('newCat'), $itm2->category)) {
+							$itm2->category[] = $request->get('newCat');
+						}
+					}
+
+					$itm2->categoryRank = json_encode($itm2->categoryRank);
+					$itm2->categoryParent = json_encode($itm2->categoryParent);
+					$itm2->category = json_encode($itm2->category);
+					$itm2->save();
+				}
+			}
+		}
+
+		$result = \Site\DAOs\Page::findById($app['em'], $request->get('id'));
+		if ($result) {
+			$result->category = (empty($result->category) || !$result->category) ? array() : json_decode($result->category);
+			$categories = array();
+			foreach ($result->category as $itm) {
+				if ($request->get('oldCat') != $itm) {
+					$categories[] = $itm;
+				}
+			}
+			$result->category = $categories;
+			if (!in_array($request->get('newCat'), $result->category)) {
+				$result->category[] = $request->get('newCat');
+			}
+
+			$result->categoryRank = ((empty($result->categoryRank) || !$result->categoryRank)) ? array() : (array)json_decode($result->categoryRank);
+			$result->categoryParent = ((empty($result->categoryParent) || !$result->categoryParent)) ? array() : (array)json_decode($result->categoryParent);
+
+			$result->categoryRank['cat' . $request->get('newCat')] = 0;
+			$result->categoryParent['cat' . $request->get('newCat')] = 0;
+
+			$result->categoryRank = json_encode($result->categoryRank);
+			$result->categoryParent = json_encode($result->categoryParent);
+			$result->category = json_encode($result->category);
+			$result->save();
+		}
+
+		return new Response('OK');
+	}
 	
 
-//	public function sort(Application $app, Request $request) {
-//		$repo = $app['em']->getRepository('Secret\Entities\Content');
-//		$result = $repo->data('Page', '', array(), array());
-//		$data = json_decode($request->get('data'));
-//		foreach ($result['_data'] as &$itm) {
-//			$itm['catRank'] = ((empty($itm['catRank']) || !$itm['catRank'])) ? array() : (array)json_decode($itm['catRank']);
-//			$itm['catParent'] = ((empty($itm['catParent']) || !$itm['catParent'])) ? array() : (array)json_decode($itm['catParent']);
-//			$itm['category'] = ((empty($itm['category']) || !$itm['category'])) ? array() : (array)json_decode($itm['category']);
-//			foreach ($data as $itm2) {
-//				$itm2 = (array)$itm2;
-//				if ($itm['id'] == $itm2['id']) {
-//					$itm['catRank']['cat' . $request->get('cat')] = $itm2['rank'];
-//					$itm['catParent']['cat' . $request->get('cat')] = $itm2['parentId'];
-//				}
-//			}
-//			$itm['catRank'] = json_encode($itm['catRank']);
-//			$itm['catParent'] = json_encode($itm['catParent']);
-//			$itm['category'] = json_encode($itm['category']);
-//		}
-//		$repo->save($result);
-//		return new Response('OK');
-//	}
+	public function sort(Application $app, Request $request) {
+		$result = \Site\DAOs\Page::data($app['em']);
+		$data = json_decode($request->get('data'));
+		foreach ($result as &$itm) {
+			$itm->categoryRank = ((empty($itm->categoryRank) || !$itm->categoryRank)) ? array() : (array)json_decode($itm->categoryRank);
+			$itm->categoryParent = ((empty($itm->categoryParent) || !$itm->categoryParent)) ? array() : (array)json_decode($itm->categoryParent);
+			$itm->category = ((empty($itm->category) || !$itm->category)) ? array() : (array)json_decode($itm->category);
+			foreach ($data as $itm2) {
+				$itm2 = (object)$itm2;
+				if ($itm->id == $itm2->id) {
+					$itm->categoryRank['cat' . $request->get('cat')] = $itm2->rank;
+					$itm->categoryParent['cat' . $request->get('cat')] = $itm2->parentId;
+				}
+			}
+			$itm->categoryRank = json_encode($itm->categoryRank);
+			$itm->categoryParent = json_encode($itm->categoryParent);
+			$itm->category = json_encode($itm->category);
+			$itm->save();
+		}
+		return new Response('OK');
+	}
 }
