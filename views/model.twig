@@ -80,9 +80,10 @@
                                     <thead>
                                         <tr>
                                             <th width="20%">Widget</th>
-                                            <th width="35%">Label</th>
-                                            <th width="30%">Field</th>
+                                            <th width="30%">Label</th>
+                                            <th width="25%">Field</th>
                                             <th width="10%">Column</th>
+                                            <th width="10%">Required</th>
                                             <th width="5%"></th>
                                         </tr>
                                     </thead>
@@ -178,7 +179,7 @@
 
             //
             $(document).on('change', '#columns select', function(ev) {
-                if ($(this).val() == 'choice') {
+                if ($(this).val() == 'choice' || $(this).val() == '\\Pz\\Twig\\Types\\ChoiceMultiJson') {
                     $('#sql' + $(this).closest('tbody').find('.id').val()).show();
                 } else {
                     $('#sql' + $(this).closest('tbody').find('.id').val()).hide();
@@ -261,6 +262,7 @@
                         widget: $(elem).find('.wgt').val(),
                         label: $(elem).find('.lbl').val(),
                         field: $(elem).find('.fld').val(),
+                        required: $(elem).find('.req').is(':checked') ? 1 : 0,
                         sql: $('#sql' + $(elem).find('.id').val() + ' textarea').val(),
                     });
                 }

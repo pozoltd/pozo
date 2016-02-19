@@ -133,4 +133,34 @@ class Utils
                 }
         echo "</pre>\n";
     }
+
+    public static function buildTree($node, $arr) {
+        if (!isset($node->_c)) {
+            $node->_c = array();
+        }
+        foreach ($arr as $itm) {
+            if ($itm->parentId == $node->id) {
+                $node->_c[] = static::buildTree($itm, $arr);
+            }
+        }
+        return $node;
+    }
+
+    public static function getURL() {
+        $pageURL = 'http';
+        if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {
+            $pageURL .= "s";
+        }
+        $pageURL .= "://";
+        if ($_SERVER["SERVER_PORT"] != "80") {
+            $pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
+        } else {
+            $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+        }
+        return $pageURL;
+    }
+
+    public static function encodeURL($url) {
+        return urlencode(urlencode($url));
+    }
 }

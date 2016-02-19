@@ -46,7 +46,7 @@ class Model extends \Pz\DAOs\DoctrineDAO {
         $extras = array_map(function($value) {
             if ($value->widget == 'checkbox') {
                 $txt = "\n\tpublic function get" . ucfirst($value->field) . "() {\n";
-                $txt .= "\t\t \$this->{$value->field} == 1 ? true : false;";
+                $txt .= "\t\treturn \$this->{$value->field} == 1 ? true : false;";
                 $txt .= "\n\t}\n";
                 return $txt;
             }

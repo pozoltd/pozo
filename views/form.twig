@@ -22,3 +22,30 @@
         });
     </script>
 {%- endblock datepicker_widget %}
+
+{% block choice_multi_json_widget -%}
+    <input type="hidden" {{ block('widget_attributes') }} value="{{ value }}"/>
+    <select id="{{ id }}_select" multiple>
+        {% for choice in choices %}
+            <option value="{{ choice.value }}" {% if '"' ~ choice.value ~ '"' in value %}selected{% endif %}>{{ choice.label }}</option>
+        {% endfor %}
+    </select>
+    <script>
+        $(function() {
+            $(document).on('change', '#{{ id }}_select', function() {
+                $('#{{ id }}').val(JSON.stringify($(this).val()));
+            });
+        });
+    </script>
+{%- endblock choice_multi_json_widget %}
+
+{# error #}
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <ul class="errors">
+            {%- for error in errors -%}
+                <li class="error">{{ error.message }}</li>
+            {%- endfor -%}
+        </ul>
+    {%- endif -%}
+{%- endblock form_errors -%}

@@ -30,11 +30,6 @@ class Content
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $active;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
     protected $rank;
 
     /**
@@ -156,6 +151,11 @@ class Content
      * @ORM\Column(type="text", nullable=true)
      */
     protected $title;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $isactive;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -496,26 +496,26 @@ class Content
     }
 
     /**
-     * Set active
+     * Set isactive
      *
-     * @param integer $active
+     * @param string $isactive
      * @return Content
      */
-    public function setActive($active)
+    public function setIsactive($isactive)
     {
-        $this->active = $active;
+        $this->isactive = $isactive;
 
         return $this;
     }
 
     /**
-     * Get active
+     * Get isactive
      *
-     * @return integer
+     * @return string
      */
-    public function getActive()
+    public function getIsactive()
     {
-        return $this->active;
+        return $this->isactive;
     }
 
     /**

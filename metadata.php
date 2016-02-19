@@ -4,7 +4,6 @@ $CMS_METAS = array(
     'id',
     'slug',
     'modelId',
-    'active',
     'rank',
     'parentId',
     'added',
@@ -16,8 +15,9 @@ $CMS_WIDGETS = array(
     'text' => 'Text',
     'textarea' => 'Textarea',
     'choice' => 'Choice',
+    '\\Pz\\Twig\\Types\\ChoiceMultiJson' => 'Choice Multi JSON',
     'checkbox' => 'Checkbox',
-    '\Pz\Twig\Types\DatePicker' => 'Date picker',
+    '\\Pz\\Twig\\Types\\DatePicker' => 'Date picker',
     'password' => 'Password',
     'hidden' => 'Hidden',
 );

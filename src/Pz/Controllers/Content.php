@@ -58,7 +58,8 @@ class Content implements ControllerProviderInterface
                 throw new NotFoundHttpException();
             }
         }
-//Utils::dump($content);exit;
+//        Utils::dump($content->active);exit;
+
         $form = $app['form.factory']->createBuilder('form', $content);
         $model->columnsJson = json_decode($model->columnsJson);
         foreach ($model->columnsJson as $itm) {
@@ -68,12 +69,30 @@ class Content implements ControllerProviderInterface
                 $widget = new $wgtClass();
 
             }
-            $form->add($itm->field, $widget, array(
+            $options = array(
                 'label' => $itm->label,
-            ));
+            );
+            if ($itm->widget == 'choice' || $itm->widget == '\\Pz\\Twig\\Types\\ChoiceMultiJson') {
+                $conn = $app['em']->getConnection();
+                $stmt = $conn->executeQuery($itm->sql);
+                $stmt->execute();
+                $choices = array();
+                foreach ($stmt->fetchAll() as $key => $val) {
+                    $choices[$val['key']] = $val['value'];
+                }
+                $options['choices'] = $choices;
+
+            }
+            if ($itm->required == 1) {
+                $options['constraints'] = array(
+                    new Assert\NotBlank(),
+                );
+            }
+            $form->add($itm->field, $widget, $options);
 
         }
         $form = $form->getForm();
+//        Utils::dump($form);exit;
 
         if ($request->isMethod("POST")) {
             $form->bind($request);
