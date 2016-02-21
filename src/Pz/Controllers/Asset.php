@@ -2,6 +2,7 @@
 namespace Pz\Controllers;
 
 use Imagick;
+use Pz\Common\Utils;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ControllerCollection;
@@ -17,42 +18,41 @@ class Asset implements ControllerProviderInterface
         $controllers = $app['controllers_factory'];
         $controllers->match('/', array($this, 'assets'))->bind('assets');
 
-        $controllers->match('/folder/info/{id}/', array($this, 'folder'))->bind('find-by-folder-id');
-
         $controllers->match('/upload/', array($this, 'upload'))->bind('upload-assets');
-        $controllers->match('/image/{imageAsset}/{imageSize}/', array($this, 'image'))->bind('image');
         $controllers->match('/image/{imageAsset}/', array($this, 'image'))->bind('image-original');
+        $controllers->match('/image/{imageAsset}/{imageSize}/', array($this, 'image'))->bind('image');
         $controllers->match('/download/{imageAsset}/', array($this, 'download'))->bind('download-assets');
+        $controllers->match('/json/{id}/', array($this, 'json'))->bind('assets-json');
         $controllers->match('/{id}/', array($this, 'assets'))->bind('assets-folder');
 
         return $controllers;
     }
+//
+//    private function _ancestors($all, $currentId, &$result)
+//    {
+//        foreach ($all['_data'] as $itm) {
+//            if ($currentId == $itm['id']) {
+//                array_unshift($result, $itm);
+//                $this->_ancestors($all, $itm['parentId'], $result);
+//            }
+//        }
+//    }
+//
+//    public function folder(Application $app, Request $request, $id)
+//    {
+//        $repo = $app['em']->getRepository('Secret\Entities\Content');
+//        $folders = $repo->data('Asset', 'entity.id = :v1', array(
+//            'v1' => $id
+//        ));
+//        if (count($folders['_data']) > 0) {
+//            $images = $repo->data('Asset', 'entity.parentId = :v1', array(
+//                'v1' => $folders['_data'][0]['id']
+//            ));
+//        }
+//        return json_encode(array($folders, $images));
+//    }
 
-    private function _ancestors($all, $currentId, &$result)
-    {
-        foreach ($all['_data'] as $itm) {
-            if ($currentId == $itm['id']) {
-                array_unshift($result, $itm);
-                $this->_ancestors($all, $itm['parentId'], $result);
-            }
-        }
-    }
-
-    public function folder(Application $app, Request $request, $id)
-    {
-        $repo = $app['em']->getRepository('Secret\Entities\Content');
-        $folders = $repo->data('Asset', 'entity.id = :v1', array(
-            'v1' => $id
-        ));
-        if (count($folders['_data']) > 0) {
-            $images = $repo->data('Asset', 'entity.parentId = :v1', array(
-                'v1' => $folders['_data'][0]['id']
-            ));
-        }
-        return json_encode(array($folders, $images));
-    }
-
-    public function assets(Application $app, Request $request, $id = 0, $view = '')
+    public function assets(Application $app, Request $request, $id = 0)
     {
         $newFolder = new \Site\DAOs\Asset($app['em']);
         $newFolder->isFolder = 1;
@@ -64,6 +64,21 @@ class Asset implements ControllerProviderInterface
             $newFolder->save();
             return $app->redirect($app->url('assets-folder', array('id' => $newFolder->id)));
         }
+
+        $json = $this->json($app, $request, $id);
+        $json = json_decode($json->getContent());
+        return $app['twig']->render('assets.twig', array(
+            'form' => $form->createView(),
+            'currentId' => $id,
+            'folders' => $json[0],
+            'files' => $json[1],
+			'ancestors' => array(),
+			'returnURL' => '123',
+        ));
+
+    }
+
+    public function json(Application $app, Request $request, $id) {
 
         $folders = \Site\DAOs\Asset::data($app['em'], array(
             'whereSql' => 'entity.parentId = :v1 AND entity.isFolder = 1',
@@ -79,19 +94,9 @@ class Asset implements ControllerProviderInterface
             ),
         ));
 
-        return $app['twig']->render('assets.twig', array(
-            'form' => $form->createView(),
-
-            'currentId' => $id,
-            'folders' => $folders,
-            'files' => $files,
-			'ancestors' => array(),
-			'view' => $view,
-			'returnURL' => '123',
-			'CKEditorFuncNum' => $request->request->get('CKEditorFuncNum') ? $request->request->get('CKEditorFuncNum') : $request->get('CKEditorFuncNum')
-        ));
-
+        return $app->json(array($folders, $files));
     }
+
 
     public function upload(Application $app, Request $request)
     {

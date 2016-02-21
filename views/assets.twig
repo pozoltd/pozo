@@ -24,8 +24,7 @@
 	
 	
 <div class="progress progress-striped" style="display: none; width: 950px;">
-	<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-	</div>
+	<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
 </div>
 
 {# 	<div class="progress-bar progress-bar-warning" data-value="0" data-role="progress-bar" data-color="bg-amber" style="display: none; width: 950px;">#}
@@ -39,11 +38,11 @@
 		<div class="ibox float-e-margins">
 			<div class="ibox-title assets-header">
 				<button class="btn btn-w-m btn-info" onclick="$('#fileupload').click();">
-					<i class="fa fa-upload"></i>&nbsp;&nbsp;Upload new files
+					<i class="fa fa-upload"></i>&nbsp;&nbsp;Upload files
 				</button>
 				
-				<button id="add_folder" class="btn btn-w-m" data-toggle="modal" data-target="#dialog">
-					<i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add new folder
+				<button class="btn btn-w-m" data-toggle="modal" data-target="#dialog">
+					<i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add folder
 				</button>
 				
 				<div class="split">&nbsp;</div>
@@ -76,7 +75,7 @@
 					<div class="my-folder">
 						<h3>&nbsp;</h3>
 						<div class="m-b-sm">
-							<a href="{{ path('assets') }}?view={{ view }}&CKEditorFuncNum={{ CKEditorFuncNum }}">
+							<a href="{{ path('assets') }}">
 								<i class="back fa fa-undo fa-4x"></i>
 							</a>
 						</div>
@@ -179,7 +178,7 @@
 						'<h4 title="' + itm.name + '" class="btn btn-xs btn-default">' + itm.title + '</h4>' +
 					'</div>' +
 					'<div>&nbsp</div>' +
-					'<div class="m-b-sm"><a href="/pz/assets/folder/' + itm.id + '/"><i class="fa fa-folder fa-4x"></i></a></div>' +
+					'<div class="m-b-sm"><a href="/pz/asset/' + itm.id + '/"><i class="fa fa-folder fa-4x"></i></a></div>' +
 					'<div class="child btn btn-outline btn-default">' + itm._childNum + '</div>' +
 					'<a href="#"><div class="remove btn btn-danger"><i class="fa fa-times"></i></div></a>' +
 					'<a href="/pz/content/edit/' + itm.modelId + '/' + encodeURIComponent('{{ returnURL|url_encode }}') + '/' + itm.id + '/"><div class="edit btn btn-default"><i class="fa fa-pencil"></i></div></a>' +

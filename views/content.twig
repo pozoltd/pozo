@@ -1,4 +1,8 @@
-{% extends 'layout.twig' %} 
+{% extends 'layout.twig' %}
+
+{% block extraHead %}
+	<link rel="stylesheet" type="text/css" href="{{ constant('CDN') }}/redactor/redactor/redactor.css" />
+{% endblock %}
 
 {% block content %}
 	<div class="row">
@@ -23,14 +27,126 @@
 			</div>
 		</div>
 	</div>
+
+	<div id="redactor_filePicker" style="display: none;" class="">
+		<div class="inner content" style="display: none;">
+			<div class="modal-head">
+
+			</div>
+			<div class="modal-body">
+
+			</div>
+		</div>
+		<div class="inner load">
+			<div class="modal-body">
+				<div class="sk-spinner sk-spinner-wave">
+					<div class="sk-rect1"></div>
+					<div class="sk-rect2"></div>
+					<div class="sk-rect3"></div>
+					<div class="sk-rect4"></div>
+					<div class="sk-rect5"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 
 {% block extraFooter %}
+	<script id="folder-source" type="text/x-handlebars-template">{% include 'handlebars/model/folder.twig' %}</script>
+	<script id="file-source" type="text/x-handlebars-template">{% include 'handlebars/model/file.twig' %}</script>
+
+
+	<script type="text/javascript" src="{{ constant('CDN') }}/redactor/redactor/redactor.min.js"></script>
+	<script type="text/javascript" src="{{ constant('CDN') }}/redactor/plugins/table.js"></script>
+	<script type="text/javascript" src="{{ constant('CDN') }}/redactor/plugins/video.js"></script>
+	<script type="text/javascript" src="{{ constant('CDN') }}/redactor/plugins/imagemanager.js"></script>
 
 	<script>
+		var _folderSource = $("#folder-source").html();
+		var _fileSource = $("#file-source").html();
+
 		$(function() {
+			$('.wysiwyg textarea').redactor({
+				plugins: ['filePicker', 'video', 'table'],
+			});
+
 			$('select').chosen();
 		});
+
+		$.Redactor.prototype.filePicker = function()
+		{
+			return {
+				init: function()
+				{
+					var button = this.button.add('image', 'File Picker');
+					this.button.addCallback(button, this.filePicker.show);
+				},
+				show: function()
+				{
+					filepicker();
+				}
+			};
+		};
+
+		function filepicker() {
+			$('#redactor_filePicker .content').hide();
+			$('#redactor_filePicker .load').show();
+			$.fancybox.open([
+				{
+					href : '#redactor_filePicker',
+					type : 'inline',
+					minWidth: 800,
+					maxWidth: 800,
+					minHeight: 600,
+					maxHeight: 600,
+				},
+			], {
+				padding : 0
+			});
+
+			files(0);
+		}
+
+		function files(parentId) {
+			$.ajax({
+				url: '/pz/asset/json/' + parentId + '/',
+				dataType: 'json',
+				beforeSend: function() {
+					$('#redactor_filePicker .content').fadeOut(400, function() {
+						$('#redactor_filePicker .load').fadeIn();
+					});
+//					$('#redactor_filePicker').html('loading...');
+				},
+			}).done(function(json) {
+				$('#redactor_filePicker .content .modal-body').empty();
+
+				var folderTemplate = Handlebars.compile(_folderSource);
+				for (var idx in json[0]) {
+					var itm = json[0][idx];
+					$('#redactor_filePicker .content .modal-body').append(folderTemplate({
+						itm: itm,
+					}));
+				}
+
+				var fileTemplate = Handlebars.compile(_fileSource);
+				for (var idx in json[1]) {
+					var itm = json[1][idx];
+					$('#redactor_filePicker .content .modal-body').append(fileTemplate({
+						itm: itm,
+					}));
+				}
+
+				$('#redactor_filePicker .my-folder a').click(function() {
+					files($(this).closest('div.my-folder').attr('data-id'));
+					return false;
+				});
+
+				$('#redactor_filePicker .load').fadeOut(400, function() {
+					$('#redactor_filePicker .content').fadeIn();
+				});
+
+			});
+		}
 	</script>
 {% endblock %}

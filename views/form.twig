@@ -10,6 +10,18 @@
     {% endspaceless %}
 {% endblock form_row %}
 
+
+{# error #}
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <ul class="formValidationErrors">
+            {%- for error in errors -%}
+                <li class="formValidationError">{{ error.message }}</li>
+            {%- endfor -%}
+        </ul>
+    {%- endif -%}
+{%- endblock form_errors -%}
+
 {% block datepicker_widget -%}
     <input type="text" {{ block('widget_attributes') }} value="{{ value ? value|date('Y-m-d') : '' }}"/>
     <script>
@@ -39,13 +51,19 @@
     </script>
 {%- endblock choice_multi_json_widget %}
 
-{# error #}
-{%- block form_errors -%}
-    {%- if errors|length > 0 -%}
-        <ul class="errors">
-            {%- for error in errors -%}
-                <li class="error">{{ error.message }}</li>
-            {%- endfor -%}
-        </ul>
-    {%- endif -%}
-{%- endblock form_errors -%}
+{% block wysiwyg_widget -%}
+    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+{%- endblock wysiwyg_widget -%}
+
+{% block assetpicker_widget -%}
+    <div class="widget style1" style="padding: 0; margin: 0;">
+        <div class="row">
+            <div class="col-xs-4 text-center" style="width: auto;">
+                <img src="/pz/asset/image/20/asset-picker-preview/" alt="image" style="height: 50px;">
+            </div>
+            <div class="col-xs-8 text-right" style="width: auto;">
+                <button class="btn btn-white btn-xs">Change</button>
+            </div>
+        </div>
+    </div>
+{%- endblock assetpicker_widget -%}
