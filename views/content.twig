@@ -6,7 +6,7 @@
 
 {% block content %}
 	<div class="row">
-		<div class="col-lg-7">
+		<div class="col-lg-8">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
 					<h5>{{ model.label }}</h5>
@@ -28,50 +28,71 @@
 		</div>
 	</div>
 
-	<div id="redactor_filePicker" style="display: none;" class="">
-		<div class="inner content" style="display: none;">
-			<div class="modal-head">
-
-			</div>
-			<div class="modal-body">
-
-			</div>
-		</div>
-		<div class="inner load">
-			<div class="modal-body">
-				<div class="sk-spinner sk-spinner-wave">
-					<div class="sk-rect1"></div>
-					<div class="sk-rect2"></div>
-					<div class="sk-rect3"></div>
-					<div class="sk-rect4"></div>
-					<div class="sk-rect5"></div>
-				</div>
-			</div>
-		</div>
-	</div>
+	{% include 'includes/popup-container.twig' %}
 {% endblock %}
 
 
 {% block extraFooter %}
-	<script id="folder-source" type="text/x-handlebars-template">{% include 'handlebars/model/folder.twig' %}</script>
-	<script id="file-source" type="text/x-handlebars-template">{% include 'handlebars/model/file.twig' %}</script>
+	<script id="folder-source" type="text/x-handlebars-template">{% include 'handlebars/folder.twig' %}</script>
+	<script id="file-source" type="text/x-handlebars-template">{% include 'handlebars/file.twig' %}</script>
 
 
 	<script type="text/javascript" src="{{ constant('CDN') }}/redactor/redactor/redactor.min.js"></script>
 	<script type="text/javascript" src="{{ constant('CDN') }}/redactor/plugins/table.js"></script>
 	<script type="text/javascript" src="{{ constant('CDN') }}/redactor/plugins/video.js"></script>
-	<script type="text/javascript" src="{{ constant('CDN') }}/redactor/plugins/imagemanager.js"></script>
 
+	<script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.iframe-transport.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.fileupload.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.0.4/jquery.imagesloaded.min.js"></script>
 	<script>
 		var _folderSource = $("#folder-source").html();
 		var _fileSource = $("#file-source").html();
+		var _folders = [];
+		var _files = [];
 
 		$(function() {
+
 			$('.wysiwyg textarea').redactor({
 				plugins: ['filePicker', 'video', 'table'],
+				minHeight: 300,
 			});
 
 			$('select').chosen();
+
+			var pb = $('.progress-bar').progressbar();
+			var url = '{{ path('upload-assets') }}';
+			$('#fileupload').fileupload({
+				url: url,
+				dataType: 'json',
+				sequentialUploads: true,
+				formData: {
+					parentId: 0
+				},
+				add: function(e, data) {
+					var uploadErrors = [];
+					if(data.files[0]['size'] == '' || data.files[0]['size'] > 5000000) {
+						uploadErrors.push('File size is too big');
+					}
+					if(uploadErrors.length > 0) {
+						alert(uploadErrors.join("\n"));
+					} else {
+						$('.progress').show();
+						data.submit();
+					}
+				},
+				done: function (e, data) {
+					_files.push(data.result);
+					repaint();
+				},
+				progressall: function (e, data) {
+					var progress = parseInt(data.loaded / data.total * 100, 10);
+					$('.progress-bar').css('width', progress + '%');
+				},
+				stop: function (e) {
+					$('.progress').fadeOut(3000);
+				}
+			}).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');
+			
 		});
 
 		$.Redactor.prototype.filePicker = function()
@@ -84,69 +105,89 @@
 				},
 				show: function()
 				{
-					filepicker();
-				}
+					filepicker(this);
+				},
+				insert: function(e)
+				{
+					this.image.insert('<img src="' + $(e.target).attr('rel') + '" alt="' + $(e.target).attr('title') + '">');
+				},
 			};
 		};
 
-		function filepicker() {
-			$('#redactor_filePicker .content').hide();
-			$('#redactor_filePicker .load').show();
+		function filepicker(reactor) {
+			$('#popup-container .title').html('Choose an image');
+			$('#popup-container .content').hide();
+			$('#popup-container .load').show();
 			$.fancybox.open([
 				{
-					href : '#redactor_filePicker',
+					href : '#popup-container',
 					type : 'inline',
 					minWidth: 800,
-					maxWidth: 800,
 					minHeight: 600,
+					maxWidth: 800,
 					maxHeight: 600,
 				},
 			], {
 				padding : 0
 			});
 
-			files(0);
+			files(0, reactor);
 		}
 
-		function files(parentId) {
+		function files(parentId, reactor) {
 			$.ajax({
 				url: '/pz/asset/json/' + parentId + '/',
 				dataType: 'json',
 				beforeSend: function() {
-					$('#redactor_filePicker .content').fadeOut(400, function() {
-						$('#redactor_filePicker .load').fadeIn();
+					$('#popup-container .content').fadeOut(400, function() {
+						$('#popup-container .load').fadeIn();
 					});
-//					$('#redactor_filePicker').html('loading...');
 				},
 			}).done(function(json) {
-				$('#redactor_filePicker .content .modal-body').empty();
+				$('#popup-container .content .modal-body').empty();
 
-				var folderTemplate = Handlebars.compile(_folderSource);
-				for (var idx in json[0]) {
-					var itm = json[0][idx];
-					$('#redactor_filePicker .content .modal-body').append(folderTemplate({
-						itm: itm,
-					}));
-				}
+				_folders = json[0];
+				_files = json[1];
+				repaint();
 
-				var fileTemplate = Handlebars.compile(_fileSource);
-				for (var idx in json[1]) {
-					var itm = json[1][idx];
-					$('#redactor_filePicker .content .modal-body').append(fileTemplate({
-						itm: itm,
-					}));
-				}
-
-				$('#redactor_filePicker .my-folder a').click(function() {
-					files($(this).closest('div.my-folder').attr('data-id'));
+				$('#popup-container .my-folder a').off();
+				$('#popup-container .my-folder a').click(function() {
+					files($(this).closest('div.my-folder').attr('data-id'), reactor);
 					return false;
 				});
 
-				$('#redactor_filePicker .load').fadeOut(400, function() {
-					$('#redactor_filePicker .content').fadeIn();
+				$('#popup-container .my-file').off();
+				$('#popup-container .my-file').click(function() {
+					reactor.image.insert('<img src="/pz/asset/image/' + $(this).attr('data-id') + '/general/" alt="' + $(this).attr('data-title') + '">');
+					$.fancybox.close();
+					return false;
+				});
+
+				$('#popup-container .load').fadeOut(400, function() {
+					$('#popup-container .content').fadeIn();
 				});
 
 			});
+		};
+
+		function repaint() {
+			$('#popup-container .content .modal-body').empty();
+
+			var folderTemplate = Handlebars.compile(_folderSource);
+			for (var idx in _folders) {
+				var itm = _folders[idx];
+				$('#popup-container .content .modal-body').append(folderTemplate({
+					itm: itm,
+				}));
+			}
+
+			var fileTemplate = Handlebars.compile(_fileSource);
+			for (var idx in _files) {
+				var itm = _files[idx];
+				$('#popup-container .content .modal-body').append(fileTemplate({
+					itm: itm,
+				}));
+			}
 		}
 	</script>
 {% endblock %}
