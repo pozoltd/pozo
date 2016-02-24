@@ -17,7 +17,6 @@ class Asset implements ControllerProviderInterface
     {
         $controllers = $app['controllers_factory'];
         $controllers->match('/', array($this, 'assets'))->bind('assets');
-
         $controllers->match('/upload/', array($this, 'upload'))->bind('upload-assets');
         $controllers->match('/image/{imageAsset}/', array($this, 'image'))->bind('image-original');
         $controllers->match('/image/{imageAsset}/{imageSize}/', array($this, 'image'))->bind('image');
@@ -27,30 +26,16 @@ class Asset implements ControllerProviderInterface
 
         return $controllers;
     }
-//
-//    private function _ancestors($all, $currentId, &$result)
-//    {
-//        foreach ($all['_data'] as $itm) {
-//            if ($currentId == $itm['id']) {
-//                array_unshift($result, $itm);
-//                $this->_ancestors($all, $itm['parentId'], $result);
-//            }
-//        }
-//    }
-//
-//    public function folder(Application $app, Request $request, $id)
-//    {
-//        $repo = $app['em']->getRepository('Secret\Entities\Content');
-//        $folders = $repo->data('Asset', 'entity.id = :v1', array(
-//            'v1' => $id
-//        ));
-//        if (count($folders['_data']) > 0) {
-//            $images = $repo->data('Asset', 'entity.parentId = :v1', array(
-//                'v1' => $folders['_data'][0]['id']
-//            ));
-//        }
-//        return json_encode(array($folders, $images));
-//    }
+
+    private function _ancestors($all, $currentId, &$result)
+    {
+        foreach ($all as $itm) {
+            if ($currentId == $itm->id) {
+                array_unshift($result, $itm);
+                $this->_ancestors($all, $itm->parentId, $result);
+            }
+        }
+    }
 
     public function assets(Application $app, Request $request, $id = 0)
     {
@@ -80,6 +65,16 @@ class Asset implements ControllerProviderInterface
 
     public function json(Application $app, Request $request, $id) {
 
+        if ($id == -1) {
+            if ($app['session']->get('last-folder')) {
+                $id = $app['session']->get('last-folder');
+            } else {
+                $id = 0;
+            }
+        } else {
+            $app['session']->set('last-folder', $id);
+        }
+
         $folders = \Site\DAOs\Asset::data($app['em'], array(
             'whereSql' => 'entity.parentId = :v1 AND entity.isFolder = 1',
             'params' => array(
@@ -94,7 +89,12 @@ class Asset implements ControllerProviderInterface
             ),
         ));
 
-        return $app->json(array($folders, $files));
+        $ancestors = array();
+        $this->_ancestors(\Site\DAOs\Asset::data($app['em'], array(
+            'whereSql' => 'entity.isFolder = 1',
+        )), $id, $ancestors);
+
+        return $app->json(array($folders, $files, $ancestors, $id));
     }
 
 

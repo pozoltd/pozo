@@ -22,4 +22,10 @@ class Get implements ServiceProviderInterface
         $className = "\\{$namespace}\\DAOs\\{$className}";
         return $className::data($this->app['em'], $options);
     }
+
+    public function getById($className, $id, $namespace = 'Site')
+    {
+        $className = "\\{$namespace}\\DAOs\\{$className}";
+        return $className::findById($this->app['em'], $id);
+    }
 }

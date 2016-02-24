@@ -57,13 +57,37 @@
 
 {% block assetpicker_widget -%}
     <div class="widget style1" style="padding: 0; margin: 0;">
+        <input type="hidden" {{ block('widget_attributes') }} value="{{ value }}"/>
         <div class="row">
             <div class="col-xs-4 text-center" style="width: auto;">
-                <img src="/pz/asset/image/20/asset-picker-preview/" alt="image" style="height: 50px;">
+                <img id="{{ id }}-preview" src="/pz/asset/image/{{ value }}/asset-picker-preview/" alt="image" style="height: 50px; {% if not value %}visibility: hidden;{% endif %}">
             </div>
             <div class="col-xs-8 text-right" style="width: auto;">
-                <button class="btn btn-white btn-xs">Change</button>
+                <p>
+                    <button type="button" class="btn btn-default btn-sm dim change" data-id="#{{ id }}"><i class="fa fa-exchange"></i></button>
+                    <button type="button" class="btn btn-warning btn-sm dim delete" data-id="#{{ id }}"><i class="fa fa-times"></i></button>
+                </p>
+
             </div>
         </div>
     </div>
 {%- endblock assetpicker_widget -%}
+
+{% block assetfolderpicker_widget -%}
+    <div class="widget style1" style="padding: 0; margin: 0;">
+        <input type="hidden" {{ block('widget_attributes') }} value="{{ value }}"/>
+        <div class="row">
+            <div class="col-xs-4 text-center" style="width: auto;">
+                {% set folder = app.get.byId('Asset', value) %}
+                <h4 id="{{ id }}-title">{{ folder ? folder.title : 'Choose...' }}</h4>
+            </div>
+            <div class="col-xs-8 text-right" style="width: auto;">
+                <p>
+                    <button type="button" class="btn btn-default btn-sm dim change" data-id="#{{ id }}"><i class="fa fa-exchange"></i></button>
+                    <button type="button" class="btn btn-warning btn-sm dim delete" data-id="#{{ id }}"><i class="fa fa-times"></i></button>
+                </p>
+
+            </div>
+        </div>
+    </div>
+{%- endblock assetfolderpicker_widget -%}

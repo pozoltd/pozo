@@ -77,7 +77,7 @@
                     <li class="nav-header">
                         <div class="dropdown profile-element">
                             <span>
-                                <img alt="image" class="img-circle" src="/images/profile_small.jpg"/>
+                                <img style="height: 48px; width: 48px;" alt="image" class="img-circle" src="{% if app.user.image %}/pz/asset/image/{{ app.user.image }}/asset-picker-preview/{% else %}/images/profile_small.jpg{% endif %}"/>
                             </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
@@ -85,10 +85,10 @@
                                 </span>
                             </a>
                         </div>
-                        <div class="logo-element"><img style="width: 30px;" alt="image" class="img-circle" src="/images/profile_small.jpg"/></div>
+                        <div class="logo-element"><img style="width: 30px;" alt="image" class="img-circle" src="{% if app.user.image %}/pz/asset/image/{{ app.user.image }}/asset-picker-preview/{% else %}/images/profile_small.jpg{% endif %}"/></div>
                     </li>
 
-                    <li>
+                    <li {% if '/pz/page/' in currentPath %}class="active"{% endif %}>
                         <a href="/pz/page/">
                             <i class="fa fa-sitemap"></i>
                             <span class="nav-label">Pages</span>
