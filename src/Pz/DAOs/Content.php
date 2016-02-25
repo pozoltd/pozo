@@ -22,4 +22,8 @@ abstract class Content extends \Pz\DAOs\DoctrineDAO {
         $this->slug = Utils::slugify($this->title);
         return parent::save();
     }
+
+    public function getORMClass() {
+        return 'Pz\Entities\Content';
+    }
 }

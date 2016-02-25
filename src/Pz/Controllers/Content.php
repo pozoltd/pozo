@@ -18,9 +18,10 @@ class Content implements ControllerProviderInterface
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
-        $controllers->match('/{modelId}/', array($this, 'contents'));
         $controllers->match('/add/{modelId}/{returnURL}/', array($this, 'content'))->bind('add-content');
         $controllers->match('/edit/{modelId}/{returnURL}/{id}/', array($this, 'content'))->bind('edit-content');
+        $controllers->match('/remove/', array($this, 'remove'))->bind('remove-content');
+        $controllers->match('/{modelId}/', array($this, 'contents'));
         return $controllers;
     }
 
@@ -64,7 +65,7 @@ class Content implements ControllerProviderInterface
         $model->columnsJson = json_decode($model->columnsJson);
         foreach ($model->columnsJson as $itm) {
             $widget = $itm->widget;
-            if (strpos($itm->widget, '\\') !==  FALSE) {
+            if (strpos($itm->widget, '\\') !== FALSE) {
                 $wgtClass = $itm->widget;
                 $widget = new $wgtClass();
 
@@ -113,5 +114,17 @@ class Content implements ControllerProviderInterface
             'content' => $content,
             'returnURL' => urldecode($returnURL),
         ));
+    }
+
+    public function remove(Application $app, Request $request)
+    {
+        $contentId = $request->get('content');
+        $modelId = $request->get('model');
+        $model = \Pz\DAOs\Model::findById($app['em'], $modelId);
+        $className = "\\Site\\DAOs\\" . $model->className;
+        $content = $className::findById($app['em'], $contentId);
+        $content->delete();
+        return new Response('OK');
+
     }
 }

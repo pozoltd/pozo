@@ -14,10 +14,6 @@ class {CLASSNAME} extends \Pz\DAOs\Content {
         ), array_combine($CMS_METAS, $CMS_METAS));
     }
 
-    function getORMClass() {
-        return 'Pz\Entities\Content';
-    }
-
     function getBaseQuery() {
         return 'entity.modelId = {MODELID}';
     }

@@ -90,7 +90,7 @@
 
 
 			$('.wysiwyg textarea').redactor({
-				plugins: ['imagePicker', 'filePicker', 'video', 'table'],
+				plugins: ['filePicker', 'imagePicker', 'video', 'table'],
 				minHeight: 300,
 			});
 
@@ -145,8 +145,7 @@
 				{
 					window._redactor = this;
 					window._callback = function() {
-						window._redactor.file.insert('abc');
-//						window._redactor.file.insert.call(window._redactor, '<a href="/pz/asset/download/' + $(this).attr('data-id') + '/general/">' + $(this).attr('data-title') + '</a>');
+						window._redactor.file.insert.call(window._redactor, '<a href="/pz/asset/download/' + $(this).attr('data-id') + '/">' + $(this).attr('data-title') + '</a>');
 					};
 					filepicker();
 				}
@@ -186,6 +185,11 @@
 					minHeight: 600,
 					maxWidth: 400,
 					maxHeight: 600,
+					helpers: {
+						overlay: {
+							locked: false
+						}
+					}
 				},
 			], {
 				padding : 0
@@ -273,6 +277,11 @@
 					minHeight: 600,
 					maxWidth: 850,
 					maxHeight: 600,
+					helpers: {
+						overlay: {
+							locked: false
+						}
+					}
 				},
 			], {
 				padding : 0
@@ -296,8 +305,6 @@
 				_files = json[1];
 				_ancestors = json[2];
 				_parentId = json[3];
-
-				window._callback();
 				repaintAssetPicker();
 
 			});
@@ -333,7 +340,7 @@
 			});
 
 			$('#popup-container .my-file').off();
-			$('#popup-container .my-file').click(function() {
+			$('#popup-container .my-file').mousedown(function() {
 				window._callback.call(this);
 				$.fancybox.close();
 				return false;

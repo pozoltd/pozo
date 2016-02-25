@@ -31,6 +31,20 @@ abstract class DoctrineDAO implements DAOInterface
         return null;
     }
 
+    public function delete() {
+        $myClass = $this->getORMClass();
+        if ($this->id) {
+            $repo = $this->db->getRepository($myClass);
+            $m = $repo->find($this->id);
+            if ($m) {
+                $this->db->remove($m);
+                $this->db->flush();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function save() {
         $myClass = $this->getORMClass();
         if ($this->id) {
