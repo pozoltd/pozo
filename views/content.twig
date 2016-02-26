@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+	<script id="block-source" type="text/x-handlebars-template">{% include 'handlebars/block.twig' %}</script>
 	<div class="row">
 		<div class="col-lg-8">
 			<div class="ibox float-e-margins">
@@ -59,6 +60,12 @@
 		var _parentId = 0;
 
 		$(function() {
+			{% if app.request.get('cat') and not content.id %}
+				if ($('#form_category_select').length > 0) {
+					$('#form_category_select').val('{{ app.request.get('cat') }}');
+				}
+			{% endif %}
+
 			$(document).on('click', '.assetpicker .change', function(ev) {
 				var _this = this;
 				window._callback = function () {

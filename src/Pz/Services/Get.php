@@ -1,6 +1,7 @@
 <?php
 namespace Pz\Services;
 
+use Pz\Common\Utils;
 use Silex\ServiceProviderInterface;
 use Silex\Application;
 
@@ -15,6 +16,11 @@ class Get implements ServiceProviderInterface
     public function boot(Application $app)
     {
         $this->app = $app;
+    }
+
+    public function getEncodedURL()
+    {
+        return Utils::encodeURL(Utils::getURL());
     }
 
     public function data($className, $options = array(), $namespace = 'Site')

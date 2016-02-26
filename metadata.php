@@ -13,6 +13,7 @@ $CMS_METAS = array(
 $CMS_WIDGETS = array(
     '\\Pz\\Twig\\Types\\AssetPicker' => 'Asset picker',
     '\\Pz\\Twig\\Types\\AssetFolderPicker' => 'Asset folder picker',
+    '\\Pz\\Twig\\Types\\Blocks' => 'Blocks',
     'choice' => 'Choice',
     '\\Pz\\Twig\\Types\\ChoiceMultiJson' => 'Choice Multi JSON',
     'checkbox' => 'Checkbox',

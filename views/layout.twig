@@ -95,7 +95,7 @@
                         <div class="logo-element"><img style="width: 30px;" alt="image" class="img-circle" src="{% if app.user.image %}/pz/asset/image/{{ app.user.image }}/asset-picker-preview/{% else %}/images/profile_small.jpg{% endif %}"/></div>
                     </li>
 
-                    <li {% if '/pz/page/' in currentPath %}class="active"{% endif %}>
+                    <li {% if ('/pz/page/' in currentPath) or (model is defined and model.className == 'Page') %}class="active"{% endif %}>
                         <a href="/pz/page/">
                             <i class="fa fa-sitemap"></i>
                             <span class="nav-label">Pages</span>
@@ -103,7 +103,7 @@
                     </li>
 
 
-                    <li {% if '/pz/content/' in currentPath and model.modelType == 1 %}class="active"{% endif %}>
+                    <li {% if ('/pz/content/' in currentPath) and (model.modelType == 1 and model.className != 'Page' and model.className != 'Asset') %}class="active"{% endif %}>
                         <a href="#">
                             <i class="fa fa-database"></i>
                             <span class="nav-label">Database</span>
@@ -120,7 +120,7 @@
                     </li>
 
 
-                    <li {% if '/pz/asset/' in currentPath %}class="active"{% endif %}>
+                    <li {% if ('/pz/asset/' in currentPath) or (model is defined and model.className == 'Asset') %}class="active"{% endif %}>
                         <a href="/pz/asset/">
                             <i class="fa fa-file-image-o"></i>
                             <span class="nav-label">Files</span>
@@ -205,7 +205,7 @@
             var _this = this;
             swal({
                 title: "Are you sure?",
-                text: "You will not be able to recover this imaginary file!",
+                text: "You will not be able to recover this data!",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -220,7 +220,7 @@
                     success: function (msg) {
                         swal({
                             title: "Deleted",
-                            text: "Your imaginary file has been deleted.",
+                            text: "Your data has been deleted.",
                             type: "success",
                             showCancelButton: false,
                             confirmButtonText: "OK",

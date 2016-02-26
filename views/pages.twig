@@ -11,7 +11,7 @@
 	<div class="col-lg-7">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
-				<a href="/pz/content/add/7/1/">
+				<a href="/pz/content/add/7/{{ app.get.encodedURL }}/{% if cat %}?cat={{ cat }}{% endif %}">
 					<button class="btn btn-w-m btn-info">
 						<i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add new page
 					</button>

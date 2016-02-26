@@ -91,3 +91,87 @@
         </div>
     </div>
 {%- endblock assetfolderpicker_widget -%}
+
+{%- block blocks_widget -%}
+    <textarea style="display: none;" {{ block('widget_attributes') }}>{{ value ? value : '[]' }}</textarea>
+    <span id="{{ id }}_blocks"></span>
+    <button id="{{ id }}_add" type="button" class="btn btn-default btn-outline"><i class="fa fa-plus"></i>&nbsp;&nbsp;<span class="bold">Add Section</span></button>
+    <div>&nbsp;</div>
+
+    <script>
+        _block{{ id }} = $("#block-source").html();
+
+        $(function() {
+            $(document).on('keyup', '.block-widget', function(ev) {
+                assemble{{ id }}();
+            });
+
+            $(document).on('click', '#{{ id }}_blocks .delete', function(ev) {
+                json = JSON.parse($('#{{ id }}').val());
+                json.splice($(this).attr('data-idx'), 1);
+                $('#{{ id }}').val(JSON.stringify(json));
+
+                $(this).closest('.panel').remove();
+                return false;
+            });
+
+            $(document).on('click', '#{{ id }}_add', function(ev) {
+                var itm = {
+                    header: '',
+                    code: '',
+                    content: '',
+                };
+                json = JSON.parse($('#{{ id }}').val());
+                json.push(itm);
+                $('#{{ id }}').val(JSON.stringify(json));
+
+                repaint_add{{ id }}(itm, json.length - 1);
+                $('#{{ id }}_blocks').sortable({
+                    handle: ".panel-heading",
+                    stop: function (event, ui) {
+                        assemble{{ id }}();
+                    }
+                });
+            });
+
+            repaint{{ id }}();
+            $('#{{ id }}_blocks').sortable({
+                handle: ".panel-heading",
+                stop: function (event, ui) {
+                    assemble{{ id }}();
+                }
+            });
+        });
+
+        function repaint{{ id }}() {
+            $('#{{ id }}_blocks').empty();
+            var json = JSON.parse($('#{{ id }}').val());
+            for (var idx in json) {
+                var itm = json[idx];
+                repaint_add{{ id }}(itm, idx);
+            }
+        };
+
+        function repaint_add{{ id }}(itm, idx) {
+            var template = Handlebars.compile(_block{{ id }});
+            $('#{{ id }}_blocks').append(template($.extend(itm, {idx: idx})));
+            $('#{{ id }}_blocks .panel' + idx + ' .content').redactor({
+                plugins: ['filePicker', 'imagePicker', 'video', 'table'],
+                minHeight: 200,
+                changeCallback: assemble{{ id }},
+            });
+        };
+
+        function assemble{{ id }}() {
+            var json = [];
+            $.each($('#{{ id }}_blocks .panel'), function(key, value) {
+                json.push({
+                    header: $(value).find('.header').val(),
+                    code: $(value).find('.code').val(),
+                    content: $(value).find('.content').val(),
+                });
+            });
+            $('#{{ id }}').val(JSON.stringify(json));
+        };
+    </script>
+{%- endblock blocks_widget -%}
