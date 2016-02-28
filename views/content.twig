@@ -152,7 +152,7 @@
 				{
 					window._redactor = this;
 					window._callback = function() {
-						window._redactor.file.insert.call(window._redactor, '<a href="/pz/asset/download/' + $(this).attr('data-id') + '/">' + $(this).attr('data-title') + '</a>');
+						window._redactor.file.insert.call(window._redactor, '<a href="/asset/download/' + $(this).attr('data-id') + '/">' + $(this).attr('data-title') + '</a>');
 					};
 					filepicker();
 				}
@@ -171,7 +171,7 @@
 				{
 					window._redactor = this;
 					window._callback = function() {
-						window._redactor.image.insert.call(window._redactor, '<img src="/pz/asset/image/' + $(this).attr('data-id') + '/general/" alt="' + $(this).attr('data-title') + '">');
+						window._redactor.image.insert.call(window._redactor, '<img src="/asset/image/' + $(this).attr('data-id') + '/general/" alt="' + $(this).attr('data-title') + '">');
 					};
 					filepicker();
 				}

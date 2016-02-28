@@ -1,5 +1,9 @@
 {% extends 'layout.twig' %}
 
+{% block extraHead %}
+    <link href="{{ constant('CDN') }}/nestable.css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="col-lg-7">
@@ -15,28 +19,35 @@
                     </a>
                     <div>&nbsp;</div>
 
-                    {% if contents|length > 0 %}
-                        <table class="table table-striped table-bordered table-hover table-middle">
-                            <thead>
-                                <tr>
-                                    <th style="width: 40px;" class="text-left">ID</th>
-                                    <th class="text-left">Title</th>
-                                    <th style="width: 120px;" class="text-left">&nbsp;</th>
-                                </tr>
-                            </thead>
-                            <tbody id="columns">
-                                {% for itm in contents %}
-                                    <tr id="{{ itm.id }}" class="content-container">
-                                        <td>{{ itm.id }}</td>
-                                        <td>{{ itm.title }}</td>
-                                        <td>
-                                            <a href="{{ path('edit-content', { modelId: model.id, returnURL: returnURL|url_encode, id: itm.id }) }}"><i class="fa fa-pencil btn-xs btn-circle btn-primary"></i></a>
-                                            <a href="#" data-content="{{ itm.id }}" data-model="{{ itm.modelId }}" class="content-delete"><i class="fa fa-times btn-xs btn-circle btn-warning"></i></a>
-                                        </td>
+                    {% if model.listType != 2 %}
+                        {% if contents|length > 0 %}
+                            {% include 'includes/pagination.twig' %}
+                            <table class="table table-striped table-bordered table-hover table-middle">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 40px;" class="text-left">ID</th>
+                                        <th class="text-left">Title</th>
+                                        <th style="width: 120px;" class="text-left">&nbsp;</th>
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody id="columns">
+                                    {% for itm in contents %}
+                                        <tr id="{{ itm.id }}" class="content-container">
+                                            <td>{{ itm.id }}</td>
+                                            <td>{{ itm.title }}</td>
+                                            <td>
+                                                <a href="{{ path('edit-content', { modelId: model.id, returnURL: returnURL|url_encode, id: itm.id }) }}"><i class="fa fa-pencil btn-xs btn-circle btn-primary"></i></a>
+                                                <a href="#" data-content="{{ itm.id }}" data-model="{{ itm.modelId }}" class="content-delete"><i class="fa fa-times btn-xs btn-circle btn-warning"></i></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
+                    {% else %}
+                        <div class="nestable-lists">
+                            <div class="dd" id="nestable">{{ contents|nestable|raw }}</div>
+                        </div>
                     {% endif %}
                 </div>
             </div>
@@ -45,24 +56,58 @@
 {% endblock %}
 
 {% block extraFooter %}
+    <script type="text/javascript" src="{{ constant('CDN') }}/js/jquery.nestable.js"></script>
     <script>
         $(function () {
-            $.each($('#columns td'), function(key, val) {
-                $(val).css('width', $(val).width() + 'px');
-            });
+            {% if model.listType == 1 %}
+                $.each($('#columns td'), function(key, val) {
+                    $(val).css('width', $(val).width() + 'px');
+                });
 
-            $('#columns').sortable({
-                stop: function (event, ui) {
-                    $.ajax({
-                        type: 'POST',
-                        url: '{{ path('sort-models') }}',
-                        data: 'data=' + encodeURIComponent(JSON.stringify($('#columns').sortable("toArray"))),
-                        success: function (msg) {
-                        }
-                    });
-                }
-            })
+                $('#columns').sortable({
+                    stop: function (event, ui) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ path('sort-contents', {modelId: model.id}) }}',
+                            data: 'data=' + encodeURIComponent(JSON.stringify($('#columns').sortable("toArray"))),
+                            success: function (msg) {
+                            }
+                        });
+                    }
+                });
+            {% elseif model.listType == 2 %}
+                $('#nestable').nestable().on('change', update);
+            {% endif %}
         });
+
+        function update() {
+            var root = {
+                id: 0,
+                children: $('#nestable').nestable('serialize'),
+            }
+
+            _ajax = $.ajax({
+                type: 'POST',
+                url: '{{ path('nestable', {modelId: model.id}) }}',
+                data: 'data=' + encodeURIComponent(JSON.stringify(toArray(root))),
+                success : function(msg) {
+                }
+            });
+        }
+
+        function toArray(node) {
+            var result = [];
+            for (var idx in node.children) {
+                var itm = node.children[idx];
+                result.push({
+                    id: itm.id,
+                    parentId: node.id,
+                    rank: idx,
+                });
+                result = result.concat(toArray(itm));
+            }
+            return result;
+        };
     </script>
 {% endblock %}
 

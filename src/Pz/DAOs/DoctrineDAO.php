@@ -7,7 +7,7 @@ use ReflectionObject;
 
 abstract class DoctrineDAO implements DAOInterface
 {
-    private $db;
+    protected $db;
 
     abstract function getFieldMap();
     abstract function getORMClass();
@@ -63,7 +63,7 @@ abstract class DoctrineDAO implements DAOInterface
                 $reflectionMethod = $reflectionObj->getMethod('set' . ucfirst($itm));
 
                 $value = $this->{$idx};
-                if (strpos($itm, 'date') !== false && $this->{$idx}) {
+                if (strpos($itm, 'date') !== false && $this->{$idx} && gettype($this->{$idx}) == 'string') {
                     $date = new \DateTime();
                     $date->setTimestamp(strtotime($this->{$idx}));
                     $value = $date;
@@ -121,6 +121,7 @@ abstract class DoctrineDAO implements DAOInterface
         $order = isset($options['order']) ? $options['order'] : 'ASC';
         $groupBy = isset($options['groupBy']) ? $options['groupBy'] : null;
         $jt = isset($options['jt']) ? $options['jt'] : null;
+        $dao = isset($options['dao']) ? $options['dao'] : true;
 
         $whereSql = static::convert($m, $whereSql);
 //        foreach ($params as $idx => $itm) {
@@ -135,7 +136,7 @@ abstract class DoctrineDAO implements DAOInterface
         $sort = static::convert($m, $sort);
 
 
-        $qb = $db->createQueryBuilder()->from($m->getORMClass(), $select);
+        $qb = $db->createQueryBuilder()->from($m->getORMClass(), 'entity');
         $qb->select($select);
 
         if ($m->getBaseQuery()) {
@@ -179,17 +180,20 @@ abstract class DoctrineDAO implements DAOInterface
 
         $orms = $qb->getQuery()->getResult();
 
-        $daos = array();
-        foreach ($orms as $orm) {
-            $dao = new $myClass($db);
-            foreach ($m->getFieldMap() as $key => $value) {
-                $funcName = "get" . ucfirst($value);
-                $dao->{$key} = $orm->{$funcName}();
+        if ($dao) {
+            $daos = array();
+            foreach ($orms as $orm) {
+                $dao = new $myClass($db);
+                foreach ($m->getFieldMap() as $key => $value) {
+                    $funcName = "get" . ucfirst($value);
+                    $dao->{$key} = $orm->{$funcName}();
+                }
+                $daos[] = $dao;
             }
-            $daos[] = $dao;
+            return $daos;
+        } else {
+            return $orms;
         }
-        return $daos;
-
     }
 
     public static function convert($m, $sql) {

@@ -21,26 +21,65 @@ class Content implements ControllerProviderInterface
         $controllers->match('/add/{modelId}/{returnURL}/', array($this, 'content'))->bind('add-content');
         $controllers->match('/edit/{modelId}/{returnURL}/{id}/', array($this, 'content'))->bind('edit-content');
         $controllers->match('/remove/', array($this, 'remove'))->bind('remove-content');
-        $controllers->match('/{modelId}/', array($this, 'contents'));
+        $controllers->match('/sort/{modelId}/', array($this, 'sort'))->bind('sort-contents');
+        $controllers->match('/nestable/{modelId}/', array($this, 'nestable'))->bind('nestable');
+        $controllers->match('/{modelId}/', array($this, 'contents'))->bind('contents');
+        $controllers->match('/{modelId}/{pageNum}/{sort}/{order}/', array($this, 'contents'))->bind('contents-page');
         return $controllers;
     }
 
-    public function contents(Application $app, Request $request, $modelId)
+    public function contents(Application $app, Request $request, $modelId, $pageNum = null, $sort = null, $order = null)
     {
         $model = \Pz\DAOs\Model::findById($app['em'], $modelId);
         if (!$model) {
             throw new NotFoundHttpException();
         }
 
+
+        $sort = null;
+        $order = null;
+        $limit = null;
+        if ($model->listType == 0) {
+            $sort = $sort ?: $model->defaultSortBy;
+            $order = $order ?: ($model->defaultOrder == 0 ? 'ASC' : 'DESC');
+            $pageNum = $pageNum ?: 1;
+            $limit = $model->numberPerPage;
+        } else if ($model->listType == 1 || $model->listType == 2) {
+            $sort = 'rank';
+            $order = 'ASC';
+        }
+
+
         $daoClass = DEFAULT_NAMESPACE . '\\DAOs\\' . $model->className;
         $daos = $daoClass::data($app['em'], array(
-            'sort' => 'entity.' . ($request->get('sort') ?: $model->defaultSortBy),
-            'order' => $request->get('order') ?: $model->defaultOrder == 1 ? 'DESC' : 'ASC',
+            'sort' => 'entity.' . $sort,
+            'order' => $order,
+            'page' => $pageNum,
+            'limit' => $limit,
         ));
+
+        $total = null;
+        if ($model->listType == 0) {
+            $result = $daoClass::data($app['em'], array(
+                'select' => 'COUNT(entity.id) AS total',
+                'dao' => false,
+            ));
+            $total = $result[0]['total'];
+        } else if ($model->listType == 2) {
+            $root = new \stdClass();
+            $root->id = 0;
+            $daos = Utils::buildTree($root, $daos);
+        }
+
         return $app['twig']->render("contents.twig", array(
             'model' => $model,
             'contents' => $daos,
             'returnURL' => 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}",
+            'pageNum' => $pageNum,
+            'limit' => $limit,
+            'sort' => $sort,
+            'order' => $order,
+            'total' => $total,
         ));
     }
 
@@ -126,5 +165,30 @@ class Content implements ControllerProviderInterface
         $content->delete();
         return new Response('OK');
 
+    }
+
+    public function sort(Application $app, Request $request, $modelId) {
+        $model = \Pz\DAOs\Model::findById($app['em'], $modelId);
+        $className = "\\Site\\DAOs\\" . $model->className;
+        $data = json_decode($request->get('data'));
+        foreach ($data as $idx => $itm) {
+            $obj = $className::findById($app['em'], $itm);
+            $obj->rank = $idx;
+            $obj->save();
+        }
+        return new Response('OK');
+    }
+
+    public function nestable(Application $app, Request $request, $modelId) {
+        $model = \Pz\DAOs\Model::findById($app['em'], $modelId);
+        $className = "\\Site\\DAOs\\" . $model->className;
+        $data = json_decode($request->get('data'));
+        foreach ($data as $itm) {
+            $obj = $className::findById($app['em'], $itm->id);
+            $obj->rank = $itm->rank;
+            $obj->parentId = $itm->parentId;
+            $obj->save();
+        }
+        return new Response('OK');
     }
 }

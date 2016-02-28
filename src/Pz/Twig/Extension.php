@@ -14,7 +14,7 @@ class Extension extends Twig_Extension {
 		return array(
 			'json_decode' => new \Twig_Filter_Method($this, 'jsonDecode'),
 			'ceil' => new \Twig_Filter_Method($this, 'ceil'),
-			'pages' => new \Twig_Filter_Method($this, 'pages'),
+			'nestable' => new \Twig_Filter_Method($this, 'nestable'),
 
 		);
 	}
@@ -27,7 +27,7 @@ class Extension extends Twig_Extension {
 		return ceil($number);
 	}
 
-	public function pages($node) {
+	public function nestable($node) {
 		if (count($node->_c) == 0) {
 			return '';
 		}
@@ -40,7 +40,7 @@ class Extension extends Twig_Extension {
 			$str .= '<a href="/pz/content/edit/7/' . Utils::encodeURL(Utils::getURL()) . '/' . $itm->id  . '/" class="edit btn-xs btn-circle btn-info"><i class="fa fa-pencil"></i></a>';
  			$str .= '<a href="#" class="delete content-delete btn-xs btn-circle btn-warning" data-content="' . $itm->id . '" data-model="' . $itm->modelId . '"><i class="fa fa-times"></i></a>';
 			$str .= '</div>';
-			$str .= $this->pages($itm);
+			$str .= $this->nestable($itm);
 			$str .= '</li>';
 		}
 		$str .= '</ol>';

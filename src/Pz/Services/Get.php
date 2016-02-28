@@ -34,4 +34,8 @@ class Get implements ServiceProviderInterface
         $className = "\\{$namespace}\\DAOs\\{$className}";
         return $className::findById($this->app['em'], $id);
     }
+
+    public function getRequestURI() {
+        return stripos(Utils::getURL(), '?') === false ? '' : substr(Utils::getURL(), stripos(Utils::getURL(), '?'));
+    }
 }

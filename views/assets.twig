@@ -51,9 +51,9 @@
 						<nav>
 							<oi class="breadcrumb assets_navbar">
 								<li>Location:</li>
-								<li class="home"><a href="{{ path('assets') }}?view={{ view }}&CKEditorFuncNum={{ CKEditorFuncNum }}"><i class="fa fa-home fa-1.5x"></i></a></li>
+								<li class="home"><a href="{{ path('assets') }}"><i class="fa fa-home fa-1.5x"></i></a></li>
 								{% for itm in ancestors %}
-									<li {% if loop.index == ancestors|length %}class="active"{% endif %}><a title="{{ itm.name }}" href="{{ path('assets-by-folder', { id: itm.id }) }}?view={{ view }}&CKEditorFuncNum={{ CKEditorFuncNum }}">{{ itm.name }}</a></li>
+									<li {% if loop.index == ancestors|length %}class="active"{% endif %}><a title="{{ itm.title }}" href="{{ path('assets-folder', { id: itm.id }) }}">{{ itm.title }}</a></li>
 								{% endfor %}
 							</oi>
 						</nav>
@@ -207,7 +207,7 @@
 		var func = function( event, ui ) {
 			$.ajax({
 				type: 'POST',
-				url: '',
+				url: '{{ path('sort-contents', {modelId: 3}) }}',
 				data: 'data=' + encodeURIComponent(JSON.stringify($(ui.item[0]).parent().sortable("toArray", { attribute: 'data-id' }))),
 				success : function(msg) {}
 			});
