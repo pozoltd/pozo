@@ -36,7 +36,7 @@ class Model implements ControllerProviderInterface
         return $app['twig']->render("models.twig", array(
             'models' => $models,
             'modelType' => $modelType,
-            'returnURL' => 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}",
+            'returnURL' => Utils::getURL(),
         ));
     }
 
