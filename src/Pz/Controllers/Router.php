@@ -30,6 +30,7 @@ class Router implements ControllerProviderInterface
         if ($page) {
             return $app['twig']->render($page->template, array(
                 'pageBuilder' => $page,
+                'params' => array(),
             ));
         }
 
@@ -41,9 +42,9 @@ class Router implements ControllerProviderInterface
             $parts = array_slice($args, 0, $i);
 
             //Start compare with / (because no exact match found)
-            $page = \Site\DAOs\Page::findByField($app['em'], '/' . implode('/', $parts) . '/', $this->zdb);
+            $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/' . implode('/', $parts) . '/');
             if (!$page) {
-                $page = \Site\DAOs\Page::findByField($app['em'], '/' . implode('/', $parts), $this->zdb);
+                $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/' . implode('/', $parts));
             }
 
             if ($page) {
@@ -52,9 +53,15 @@ class Router implements ControllerProviderInterface
             }
         }
 
-        return $app['twig']->render($page->template, array(
-            'pageBuilder' => $page,
-        ));
+        if ($page) {
+            return $app['twig']->render($page->template, array(
+                'pageBuilder' => $page,
+                'params' => $page->args,
+            ));
+        } else {
+            return $app->abort(404);
+        }
+
     }
 
 }

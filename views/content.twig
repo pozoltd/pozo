@@ -61,8 +61,9 @@
 
 		$(function() {
 			{% if app.request.get('cat') and not content.id %}
-				if ($('#form_category_select').length > 0) {
+				if ($('#form_category_select').length > 0 && $('#form_category').length > 0) {
 					$('#form_category_select').val('{{ app.request.get('cat') }}');
+					$('#form_category').val(JSON.stringify(['{{ app.request.get('cat') }}']));
 				}
 			{% endif %}
 

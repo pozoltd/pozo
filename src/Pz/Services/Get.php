@@ -35,6 +35,12 @@ class Get implements ServiceProviderInterface
         return $className::findById($this->app['em'], $id);
     }
 
+    public function getBySlug($className, $slug, $namespace = 'Site')
+    {
+        $className = "\\{$namespace}\\DAOs\\{$className}";
+        return $className::findBySlug($this->app['em'], $slug);
+    }
+
     public function getRequestURI() {
         return stripos(Utils::getURL(), '?') === false ? '' : substr(Utils::getURL(), stripos(Utils::getURL(), '?'));
     }

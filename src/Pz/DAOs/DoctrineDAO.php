@@ -77,24 +77,16 @@ abstract class DoctrineDAO implements DAOInterface
         $this->id = $m->getId();
     }
 
+    public static function findBySlug($db, $slug) {
+        return static::findByField($db, 'slug', $slug);
+    }
+
     public static function findByTitle($db, $title) {
-        $daos = static::data($db, array(
-            'whereSql' => 'entity.title = :v1',
-            'params' => array(
-                'v1' => $title,
-            )
-        ));
-        return array_pop($daos);
+        return static::findByField($db, 'title', $title);
     }
 
     public static function findById($db, $id) {
-        $daos = static::data($db, array(
-            'whereSql' => 'entity.id = :v1',
-            'params' => array(
-                'v1' => $id,
-            )
-        ));
-        return array_pop($daos);
+        return static::findByField($db, 'id', $id);
     }
 
     public static function findByField($db, $field, $value) {

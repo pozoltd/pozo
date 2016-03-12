@@ -18,7 +18,7 @@ class Home implements ControllerProviderInterface {
 	}
 
 	public function home(Application $app) {
-		return $app->redirect('/pozo/pages/');
+		return $app->redirect('/pz/page/');
 // 		return $app['twig']->render("home.twig", array(
 // 			'_menu' => 'home',
 // 		));
