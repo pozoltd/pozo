@@ -4,6 +4,7 @@ namespace Pz\DAOs;
 
 use Pz\Common\Utils;
 use ReflectionObject;
+use Serializable;
 
 abstract class DoctrineDAO implements DAOInterface
 {
@@ -18,6 +19,17 @@ abstract class DoctrineDAO implements DAOInterface
         foreach ($this->getFieldMap() as $key => $value) {
             $this->{$key} = null;
         }
+    }
+
+    public function __sleep()
+    {
+        return array_diff(array_keys(get_object_vars($this)), array('db'));
+    }
+
+    public function __wakeup()
+    {
+        $app = require CMS . 'vendor/luckyweida/pz/bootstrap.php';
+        $this->db = $app['em'];
     }
 
     /**
