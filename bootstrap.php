@@ -30,7 +30,14 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
-
+$app->register(new Silex\Provider\SwiftmailerServiceProvider(), array());
+$app['swiftmailer.options'] = array(
+    'host' => SMTP_HOST,
+    'port' => SMTP_PORT,
+    'username' => SMTP_USER,
+    'password' => SMTP_PASS,
+    'encryption' => true
+);
 
 $app->register(new Silex\Provider\ValidatorServiceProvider(), array());
 $app->register(new Silex\Provider\FormServiceProvider());

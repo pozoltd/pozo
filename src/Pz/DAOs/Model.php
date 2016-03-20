@@ -34,9 +34,9 @@ class Model extends \Pz\DAOs\DoctrineDAO {
     public function save() {
         $generated = HOME_DIR . '/src/' . DEFAULT_NAMESPACE . '/DAOs/Generated/' . $this->className . '.php';
         $customised = HOME_DIR . '/src/' . DEFAULT_NAMESPACE . '/DAOs/' . $this->className . '.php';
-        if (file_exists($generated)) {
-            unlink($generated);
-        }
+//        if (file_exists($generated)) {
+//            unlink($generated);
+//        }
 
         $columnsJson = json_decode($this->columnsJson);
         $mappings = array_map(function($value) {
