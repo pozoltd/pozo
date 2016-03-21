@@ -5,7 +5,13 @@
 {% endblock %}
 
 {% block content %}
+	<script id="folder-source" type="text/x-handlebars-template">{% include 'handlebars/folder.twig' %}</script>
+	<script id="file-source" type="text/x-handlebars-template">{% include 'handlebars/file.twig' %}</script>
+	<script id="folderpicker-tablerow-source" type="text/x-handlebars-template">{% include 'handlebars/folderpicker-tablerow.twig' %}</script>
+	<script id="folderpicker-table-source" type="text/x-handlebars-template">{% include 'handlebars/folderpicker-table.twig' %}</script>
+	<script id="formbuilder-source" type="text/x-handlebars-template">{% include 'handlebars/formbuilder.twig' %}</script>
 	<script id="block-source" type="text/x-handlebars-template">{% include 'handlebars/block.twig' %}</script>
+
 	<div class="row">
 		<div class="col-lg-8">
 			<div class="ibox float-e-margins">
@@ -34,10 +40,7 @@
 
 
 {% block extraFooter %}
-	<script id="folder-source" type="text/x-handlebars-template">{% include 'handlebars/folder.twig' %}</script>
-	<script id="file-source" type="text/x-handlebars-template">{% include 'handlebars/file.twig' %}</script>
-	<script id="folderpicker-tablerow-source" type="text/x-handlebars-template">{% include 'handlebars/folderpicker-tablerow.twig' %}</script>
-	<script id="folderpicker-table-source" type="text/x-handlebars-template">{% include 'handlebars/folderpicker-table.twig' %}</script>
+
 
 	<script type="text/javascript" src="/redactor.js"></script>
 

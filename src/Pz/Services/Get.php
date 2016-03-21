@@ -45,6 +45,11 @@ class Get implements ServiceProviderInterface
         return stripos(Utils::getURL(), '?') === false ? '' : substr(Utils::getURL(), stripos(Utils::getURL(), '?'));
     }
 
+    public function getFormWidgets() {
+        global $FORM_WIDGETS;
+        return $FORM_WIDGETS;
+    }
+
     public function root($categoryCode) {
         $category = \Site\DAOs\PageCategory::findByField($this->app['em'], 'code', $categoryCode);
         $cat = $category->id;
