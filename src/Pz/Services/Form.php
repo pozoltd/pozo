@@ -37,17 +37,31 @@ class Form implements ServiceProviderInterface
         if ('POST' == $request->getMethod()) {// we need to make sure we have some sort of token before handling a post, look for csrf
 
             $form->bind($request);
-            $data = $form->getData();
-            $formDescriptor->posted = true;
-
             if ($form->isValid()) {
+                $data = $form->getData();
+
+                $result = array();
+                foreach (json_decode($formDescriptor->fields) as $field) {
+                    $result[$field->label] = $data[$field->id];
+                }
+
+                $code = uniqid();
+                $submission = new \Site\DAOs\FormSubmission($this->app['em']);
+                $submission->title = '#' . $code . ' ' . $data['email'];
+                $submission->uniqueId = $code;
+                $submission->date = date('Y-m-d H:i:s');
+                $submission->from = $formDescriptor->from;
+                $submission->recipients = $formDescriptor->recipients;
+                $submission->content = json_encode($result);
+                $submission->emailStatus = 0;
+                $submission->save();
 
                 $messageBody = $this->app['twig']->render('email.twig', array(
-                    'formDescriptor' => $formDescriptor,
-                    'data' => $data,
+                    'submission' => $submission,
+                    'result' => $result,
                 ));
                 $message = \Swift_Message::newInstance()
-                    ->setSubject(CLIENT . ' EMAIL#' )
+                    ->setSubject(CLIENT . ' EMAIL#' . $submission->uniqueId)
                     ->setFrom(array($formDescriptor->from))
                     ->setTo(array_filter(array_map('trim', explode(',', $formDescriptor->recipients))))
                     ->setBcc(array(EMAIL_BCC))
@@ -55,6 +69,11 @@ class Form implements ServiceProviderInterface
                         $messageBody, 'text/html'
                     );
                 $formDescriptor->sent = $this->app['mailer']->send($message);
+
+                $submission->emailStatus = $formDescriptor->sent ? 1 : 2;
+                $submission->emailRequest = $messageBody;
+                $submission->emailResponse = $formDescriptor->sent;
+                $submission->save();
             }
         }
 
