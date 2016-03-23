@@ -37,6 +37,7 @@
                                             <td>{{ itm.title }}</td>
                                             <td>
                                                 <a href="{{ path('edit-content', { modelId: model.id, returnURL: returnURL|url_encode, id: itm.id }) }}"><i class="fa fa-pencil btn-xs btn-circle btn-primary"></i></a>
+                                                <a href="{{ path('copy-content', { modelId: model.id, returnURL: returnURL|url_encode, id: itm.id }) }}"><i class="fa fa-copy btn-xs btn-circle btn-default"></i></a>
                                                 <a href="#" data-content="{{ itm.id }}" data-model="{{ itm.modelId }}" class="content-delete"><i class="fa fa-times btn-xs btn-circle btn-warning"></i></a>
                                             </td>
                                         </tr>

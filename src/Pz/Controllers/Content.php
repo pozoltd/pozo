@@ -20,6 +20,7 @@ class Content implements ControllerProviderInterface
         $controllers = $app['controllers_factory'];
         $controllers->match('/add/{modelId}/{returnURL}/', array($this, 'content'))->bind('add-content');
         $controllers->match('/edit/{modelId}/{returnURL}/{id}/', array($this, 'content'))->bind('edit-content');
+        $controllers->match('/copy/{modelId}/{returnURL}/{id}/', array($this, 'copy'))->bind('copy-content');
         $controllers->match('/remove/', array($this, 'remove'))->bind('remove-content');
         $controllers->match('/sort/{modelId}/', array($this, 'sort'))->bind('sort-contents');
         $controllers->match('/nestable/{modelId}/', array($this, 'nestable'))->bind('nestable');
@@ -98,7 +99,28 @@ class Content implements ControllerProviderInterface
                 throw new NotFoundHttpException();
             }
         }
-//        Utils::dump($content->active);exit;
+
+        return $this->_content($app, $request, $modelId, $returnURL, $id, $content, $model);
+    }
+
+    public function copy(Application $app, Request $request, $modelId, $returnURL, $id)
+    {
+        $model = \Pz\DAOs\Model::findById($app['em'], $modelId);
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+
+        $daoClass = DEFAULT_NAMESPACE . '\\DAOs\\' . $model->className;
+        $content = $daoClass::findById($app['em'], $id);
+        if (!$content) {
+            throw new NotFoundHttpException();
+        }
+        $content->id = null;
+
+        return $this->_content($app, $request, $modelId, $returnURL, $id, $content, $model);
+    }
+
+    private function _content(Application $app, Request $request, $modelId, $returnURL, $id, $content, $model) {
 
         $form = $app['form.factory']->createBuilder('form', $content);
         $model->columnsJson = json_decode($model->columnsJson);

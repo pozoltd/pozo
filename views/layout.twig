@@ -1,7 +1,7 @@
 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 
 {# {% set user = app['user'].getUser() %} #}
-{% set myModels = app.generic.models() %}
+{% set myModels = app.get.data('Model', {}, 'Pz') %}
 
 {# {% if model is defined and model.name == 'Page' %}#}
 {# 	{% set _menu = 'pages' %}#}
