@@ -114,8 +114,9 @@
 				dataType: 'json',
 				sequentialUploads: true,
 				add: function(e, data) {
+					console.log(data);
 					var uploadErrors = [];
-					if(data.assets[0]['size'] == '' || data.assets[0]['size'] > 5000000) {
+					if(data.files[0]['size'] == '' || data.files[0]['size'] > 5000000) {
 						uploadErrors.push('File size is too big');
 					}
 					if(uploadErrors.length > 0) {

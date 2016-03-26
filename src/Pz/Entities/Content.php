@@ -444,11 +444,6 @@ class Content
      */
     protected $extra15;
 
-    function __construct()
-    {
-        $this->active = 1;
-    }
-
     /**
      * Get id
      *

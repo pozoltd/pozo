@@ -14,7 +14,7 @@ abstract class Content extends \Pz\DAOs\DoctrineDAO {
         $this->parentId = 0;
         $this->added = new \DateTime('now');
         $this->modified = new \DateTime('now');
-        $this->isactive = 1;
+        $this->active = 1;
     }
 
     public function save() {
