@@ -54,6 +54,9 @@ class Router implements ControllerProviderInterface
         }
 
         if ($page) {
+            if ($page->type == 2) {
+                return $app->redirect($page->redirectTo);
+            }
             return $app['twig']->render($page->template, array(
                 'pageBuilder' => $page,
                 'params' => $page->args,
