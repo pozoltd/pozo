@@ -24,6 +24,7 @@ class Content implements ControllerProviderInterface
         $controllers->match('/remove/', array($this, 'remove'))->bind('remove-content');
         $controllers->match('/sort/{modelId}/', array($this, 'sort'))->bind('sort-contents');
         $controllers->match('/nestable/{modelId}/', array($this, 'nestable'))->bind('nestable');
+        $controllers->match('/status/', array($this, 'changeStatus'))->bind('change-status');
         $controllers->match('/{modelId}/', array($this, 'contents'))->bind('contents');
         $controllers->match('/{modelId}/{pageNum}/{sort}/{order}/', array($this, 'contents'))->bind('contents-page');
         return $controllers;
@@ -211,6 +212,24 @@ class Content implements ControllerProviderInterface
             $obj->parentId = $itm->parentId;
             $obj->save();
         }
+        return new Response('OK');
+    }
+
+    public function changestatus(Application $app, Request $request)
+    {
+        $model = \Pz\DAOs\Model::findById($app['em'], $request->get('model'));
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+
+        $daoClass = DEFAULT_NAMESPACE . '\\DAOs\\' . $model->className;
+        $content = $daoClass::findById($app['em'], $request->get('content'));
+        if (!$content) {
+            throw new NotFoundHttpException();
+        }
+
+        $content->active = $request->get('status');
+        $content->save();
         return new Response('OK');
     }
 }

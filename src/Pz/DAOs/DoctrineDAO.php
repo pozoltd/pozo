@@ -111,6 +111,17 @@ abstract class DoctrineDAO implements DAOInterface
         return array_pop($daos);
     }
 
+    public static function active($db, $options=array()) {
+        $whereSql = isset($options['whereSql']) ? $options['whereSql'] : null;
+        if ($whereSql) {
+            $whereSql .= ' AND (entity.active = 1)';
+        } else {
+            $whereSql = 'entity.active = 1';
+        }
+        $options['whereSql'] = $whereSql;
+        return static::data($db, $options);
+    }
+
     public static function data($db, $options=array())
     {
         $myClass = get_called_class();

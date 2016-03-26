@@ -48,6 +48,11 @@ class Content
     protected $modified;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    protected $active;
+
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $startdate;
@@ -438,6 +443,11 @@ class Content
      * @ORM\Column(type="text", nullable=true)
      */
     protected $extra15;
+
+    function __construct()
+    {
+        $this->active = 1;
+    }
 
     /**
      * Get id
@@ -2379,5 +2389,28 @@ class Content
     public function getExtra15()
     {
         return $this->extra15;
+    }
+
+    /**
+     * Set active
+     *
+     * @param integer $active
+     * @return Content
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return integer 
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 }

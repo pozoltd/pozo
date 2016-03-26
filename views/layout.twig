@@ -196,7 +196,30 @@
             return false;
         });
 
-        $(document).on('click', '.content-delete', function(ev) {
+        $(document).on('click', '.js-status', function() {
+            $(this).attr('data-status', $(this).attr('data-status') == 1 ? 0 : 1);
+            $(this).removeClass('btn-danger btn-info');
+            $(this).find('i').removeClass('fa-check fa-ban')
+            if ($(this).attr('data-status') == 1) {
+                $(this).addClass('btn-info');
+                $(this).find('i').addClass('fa-check');
+            } else if ($(this).attr('data-status') == 0) {
+                $(this).addClass('btn-danger');
+                $(this).find('i').addClass('fa-ban');
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('change-status') }}',
+                data: 'content=' + encodeURIComponent($(this).attr('data-content'))  + '&model=' + encodeURIComponent($(this).attr('data-model')) + '&status=' + encodeURIComponent($(this).attr('data-status')),
+                success: function (msg) {
+                }
+            });
+
+            return false;
+        });
+
+        $(document).on('click', '.js-delete', function(ev) {
             var _this = this;
             swal({
                 title: "Are you sure?",

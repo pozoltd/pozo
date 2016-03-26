@@ -27,7 +27,7 @@
                                     <tr>
                                         <th style="width: 40px;" class="text-left">ID</th>
                                         <th class="text-left">Title</th>
-                                        <th style="width: 120px;" class="text-left">&nbsp;</th>
+                                        <th style="width: 160px;" class="text-left">&nbsp;</th>
                                     </tr>
                                 </thead>
                                 <tbody id="columns">
@@ -36,9 +36,10 @@
                                             <td>{{ itm.id }}</td>
                                             <td>{{ itm.title }}</td>
                                             <td>
-                                                <a href="{{ path('edit-content', { modelId: model.id, returnURL: returnURL|url_encode, id: itm.id }) }}"><i class="fa fa-pencil btn-xs btn-circle btn-primary"></i></a>
-                                                <a href="{{ path('copy-content', { modelId: model.id, returnURL: returnURL|url_encode, id: itm.id }) }}"><i class="fa fa-copy btn-xs btn-circle btn-default"></i></a>
-                                                <a href="#" data-content="{{ itm.id }}" data-model="{{ itm.modelId }}" class="content-delete"><i class="fa fa-times btn-xs btn-circle btn-warning"></i></a>
+                                                <a href="#" data-content="{{ itm.id }}" data-model="{{ itm.modelId }}" data-status="{{ itm.active }}" type="button" class="js-status btn {% if itm.active == 1 %}btn-info{% else %}btn-danger{% endif %} btn-circle btn-outline"><i class="fa {% if itm.active == 1 %}fa-check{% else %}fa-ban{% endif %}"></i></a>
+                                                <a href="{{ path('edit-content', { modelId: model.id, returnURL: returnURL|url_encode, id: itm.id }) }}" class="btn btn-xs btn-circle btn-primary"><i class="fa fa-pencil"></i></a>
+                                                <a href="{{ path('copy-content', { modelId: model.id, returnURL: returnURL|url_encode, id: itm.id }) }}" class="btn btn-xs btn-circle btn-default"><i class="fa fa-copy"></i></a>
+                                                <a href="#" data-content="{{ itm.id }}" data-model="{{ itm.modelId }}" class="js-delete btn btn-xs btn-circle btn-danger"><i class="fa fa-times"></i></a>
                                             </td>
                                         </tr>
                                     {% endfor %}

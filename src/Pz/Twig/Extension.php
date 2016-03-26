@@ -43,8 +43,10 @@ class Extension extends Twig_Extension
             $str .= '<div class="dd-handle dd3-handle"></div>';
             $str .= '<div class="dd3-content">';
             $str .= '<span>' . $itm->title . '</span>';
-            $str .= '<a href="/pz/content/edit/7/' . Utils::encodeURL(Utils::getURL()) . '/' . $itm->id . '/" class="edit btn-xs btn-circle btn-info"><i class="fa fa-pencil"></i></a>';
-            $str .= '<a href="#" class="delete content-delete btn-xs btn-circle btn-warning" data-content="' . $itm->id . '" data-model="' . $itm->modelId . '"><i class="fa fa-times"></i></a>';
+            $str .= '<a href="#" data-content="' . $itm->id . '" data-model="' . $itm->modelId . '" data-status="' . $itm->active . '" class="js-status isactive btn btn-xs btn-circle ' . ($itm->active == 1 ? 'btn-info' : 'btn-danger') . ' btn-outline"><i class="fa ' . ($itm->active == 1 ? 'fa-check' : 'fa-ban') . '"></i></a>';
+            $str .= '<a href="/pz/content/edit/7/' . Utils::encodeURL(Utils::getURL()) . '/' . $itm->id . '/" class="edit btn btn-xs btn-circle btn-primary"><i class="fa fa-pencil"></i></a>';
+            $str .= '<a href="/pz/content/copy/7/' . Utils::encodeURL(Utils::getURL()) . '/' . $itm->id . '/" class="copy btn btn-xs btn-circle btn-default"><i class="fa fa-copy"></i></a>';
+            $str .= '<a href="#" data-content="' . $itm->id . '" data-model="' . $itm->modelId . '" class="js-delete delete btn btn-xs btn-circle btn-danger"><i class="fa fa-times"></i></a>';
             $str .= '</div>';
             $str .= $this->nestable($itm);
             $str .= '</li>';

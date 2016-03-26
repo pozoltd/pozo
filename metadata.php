@@ -7,7 +7,8 @@ $CMS_METAS = array(
     'rank',
     'parentId',
     'added',
-    'modified'
+    'modified',
+    'active',
 );
 
 $CMS_WIDGETS = array(

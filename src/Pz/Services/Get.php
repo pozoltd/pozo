@@ -23,6 +23,12 @@ class Get implements ServiceProviderInterface
         return Utils::encodeURL(Utils::getURL());
     }
 
+    public function active($className, $options = array(), $namespace = 'Site')
+    {
+        $className = "\\{$namespace}\\DAOs\\{$className}";
+        return $className::active($this->app['em'], $options);
+    }
+
     public function data($className, $options = array(), $namespace = 'Site')
     {
         $className = "\\{$namespace}\\DAOs\\{$className}";
@@ -53,7 +59,7 @@ class Get implements ServiceProviderInterface
     public function root($categoryCode) {
         $category = \Site\DAOs\PageCategory::findByField($this->app['em'], 'code', $categoryCode);
         $cat = $category->id;
-        $result = \Site\DAOs\Page::data($this->app['em']);
+        $result = \Site\DAOs\Page::active($this->app['em']);
         $pages = array();
         foreach ($result as $itm) {
             $itm->categoryRank = ((empty($itm->categoryRank) || !$itm->categoryRank)) ? array() : (array)json_decode($itm->categoryRank);
