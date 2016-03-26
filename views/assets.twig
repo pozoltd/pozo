@@ -180,8 +180,9 @@
 					'<div>&nbsp</div>' +
 					'<div class="m-b-sm"><a href="/pz/asset/' + itm.id + '/"><i class="fa fa-folder fa-4x"></i></a></div>' +
 					'<div class="child btn btn-outline btn-default">' + itm._childNum + '</div>' +
+					'<a href="#"><div data-content="' + itm.id + '" data-model="' + itm.modelId + '" data-status="' + itm.active + '" class="js-status isactive btn btn-outline ' + (itm.active == 1 ? 'btn-info' : 'btn-danger') + '"><i class="fa ' + (itm.active == 1 ? 'fa-check' : 'fa-ban') + '"></i></div></a>' +
 					'<a href="#"><div data-content="' + itm.id + '" data-model="' + itm.modelId + '" class="js-delete remove btn btn-danger"><i class="fa fa-times"></i></div></a>' +
-					'<a href="/pz/content/edit/' + itm.modelId + '/' + encodeURIComponent('{{ returnURL|url_encode }}') + '/' + itm.id + '/"><div class="edit btn btn-default"><i class="fa fa-pencil"></i></div></a>' +
+					'<a href="/pz/content/edit/' + itm.modelId + '/' + encodeURIComponent('{{ returnURL|url_encode }}') + '/' + itm.id + '/"><div class="edit btn btn-primary"><i class="fa fa-pencil"></i></div></a>' +
 				'</div>'
 			);
 		}
@@ -193,6 +194,7 @@
 					'<div class="text-center">' +
 						'<h4 title="' + itm.name + '" class="btn btn-xs btn-default">' + itm.title + '<h4>' +
 					'</div>' +
+					'<a href="#"><div data-content="' + itm.id + '" data-model="' + itm.modelId + '" data-status="' + itm.active + '" class="js-status isactive btn btn-outline ' + (itm.active == 1 ? 'btn-info' : 'btn-danger') + '"><i class="fa ' + (itm.active == 1 ? 'fa-check' : 'fa-ban') + '"></i></div></a>' +
 					'<a href="#"><div data-content="' + itm.id + '" data-model="' + itm.modelId + '" class="js-delete remove btn btn-danger"><i class="fa fa-times"></i></div></a>' +
 					'<a href="/pz/content/edit/' + itm.modelId + '/' + encodeURIComponent('{{ returnURL|url_encode }}') + '/' + itm.id + '/"><div class="edit btn btn-default"><i class="fa fa-pencil"></i></div></a>' +
 				'</div>'
