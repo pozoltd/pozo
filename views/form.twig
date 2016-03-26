@@ -127,7 +127,7 @@
 
                 repaint_add{{ id }}(itm, json.length - 1);
                 $('#{{ id }}_blocks').sortable({
-                    handle: ".panel-heading",
+                    handle: ".",
                     stop: function (event, ui) {
                         assemble{{ id }}();
                     }

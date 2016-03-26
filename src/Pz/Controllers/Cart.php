@@ -96,7 +96,7 @@ class Cart extends AssetView
             $itm->save();
         }
 
-        $gateway = $this->getPaypalGateway();
+        $gateway = $this->getPaypalGateway($app);
         $params = $this->getPaypalParams($order);
         $response = $gateway->purchase($params)->send();
 
@@ -128,7 +128,7 @@ class Cart extends AssetView
         } else if ($order->paymentStatus == 1) {
 
             $params = $this->getPaypalParams($order);
-            $gateway = $this->getPaypalGateway();
+            $gateway = $this->getPaypalGateway($app);
             $response = $gateway->completePurchase($params)->send();
             $paypalResponse = $response->getData();
 
@@ -149,15 +149,15 @@ class Cart extends AssetView
                 'order' => $order,
             ));
             $message = \Swift_Message::newInstance()
-                ->setSubject(CLIENT . ' ORDER#' . $order->uniqueId . ($order->paymentStatus == 3 ? ' (Declined)' : ''))
-                ->setFrom(array(EMAIL_FROM))
+                ->setSubject($app['get']->system('website-title') . ' ORDER#' . $order->uniqueId . ($order->paymentStatus == 3 ? ' (Declined)' : ''))
+                ->setFrom(array($app['get']->system('email-from')))
                 ->setTo(array($order->email))
-                ->setBcc(array(EMAIL_BCC, EMAIL_OWNER))
+                ->setBcc(array(EMAIL_BCC, $app['get']->system('email-owner')))
                 ->setBody(
                     $messageBody,'text/html'
                 );
-            $this->app['mailer']->send($message);
-
+            $order->emailResponse = $this->app['mailer']->send($message);
+            $order->emailRequest = $messageBody;
             $order->save();
 
         } else if ($order->paymentStatus == 2) {
@@ -257,13 +257,13 @@ class Cart extends AssetView
         return $order;
     }
 
-    private function getPaypalGateway() {
+    private function getPaypalGateway($app) {
         $factory = new GatewayFactory();
         $gateway = $factory->create('PayPal_Express');
-        $gateway->setUsername(PALPAL_USERNAME);
-        $gateway->setPassword(PALPAL_PASSWORD);
-        $gateway->setSignature(PALPAL_SINGATURE);
-        $gateway->setTestMode(PALPAL_TESTMODE);
+        $gateway->setUsername($app['get']->system('paypal-username'));
+        $gateway->setPassword($app['get']->system('paypal-password'));
+        $gateway->setSignature($app['get']->system('paypal-signature'));
+        $gateway->setTestMode($app['get']->system('paypal-testmode'));
         return $gateway;
     }
 

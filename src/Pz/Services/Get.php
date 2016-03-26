@@ -23,6 +23,14 @@ class Get implements ServiceProviderInterface
         return Utils::encodeURL(Utils::getURL());
     }
 
+    public function system($code)
+    {
+        if ($setting = \Site\DAOs\SystemSetting::findByField($this->app['em'], 'code', $code)) {
+            return $setting->value;
+        }
+        $this->app->abort(404);
+    }
+
     public function active($className, $options = array(), $namespace = 'Site')
     {
         $className = "\\{$namespace}\\DAOs\\{$className}";
