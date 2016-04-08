@@ -28,7 +28,7 @@ abstract class DoctrineDAO implements DAOInterface
 
     public function __wakeup()
     {
-        $app = require CMS . 'vendor/luckyweida/pz/bootstrap.php';
+        $app = require __DIR__ . '/../../../bootstrap.php';
         $this->db = $app['em'];
     }
 
