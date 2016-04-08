@@ -3,7 +3,7 @@ use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Silex\Application;
 use Silex\Provider;
 
-require CMS . 'vendor/luckyweida/pz/metadata.php';
+require __DIR__ . '/metadata.php';
 
 $app = new Pz\Application();
 
