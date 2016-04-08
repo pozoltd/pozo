@@ -22,12 +22,12 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:/luckyweida/pz"
+            "url": "git@github.com:/pozoltd/pozo"
         }
     ],
     "autoload": {
         "psr-4": {
-            "Pz\\": "/src/"
+            "Pz\\": "/src/Pz"
         }
     }
 }
