@@ -4,7 +4,7 @@ use Silex\Application;
 use Silex\Provider;
 
 require __DIR__ . '/metadata.php';
-
+ 
 $app = new Pz\Application();
 
 $config = new \Doctrine\ORM\Configuration();
