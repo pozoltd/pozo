@@ -79,7 +79,7 @@
         <div class="row">
             <div class="col-xs-4 text-center" style="width: auto;">
                 {% set folder = app.get.byId('Asset', value) %}
-                <h4 id="{{ id }}-title">{{ folder ? folder.title : 'Choose...' }}</h4>
+                <h4><i class="fa fa-folder"></i>&nbsp;<span id="{{ id }}-title">{{ folder ? folder.title : 'Choose...' }}</span></h4>
             </div>
             <div class="col-xs-8 text-right" style="width: auto;">
                 <p>
