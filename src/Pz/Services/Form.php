@@ -42,7 +42,7 @@ class Form implements ServiceProviderInterface
 
                 $result = array();
                 foreach (json_decode($formDescriptor->fields) as $field) {
-                    $result[$field->label] = $data[$field->id];
+                    $result[] = array($field->label, $data[$field->id], $field->widget);
                 }
 
                 $code = uniqid();
@@ -56,9 +56,9 @@ class Form implements ServiceProviderInterface
                 $submission->emailStatus = 0;
                 $submission->save();
 
+                $this->app['twig.loader.filesystem']->addPath(__DIR__ . '/../../../views/');
                 $messageBody = $this->app['twig']->render('email.twig', array(
                     'submission' => $submission,
-                    'result' => $result,
                 ));
                 $message = \Swift_Message::newInstance()
                     ->setSubject(CLIENT . ' EMAIL#' . $submission->uniqueId)

@@ -309,3 +309,15 @@
         };
     </script>
 {%- endblock formbuilder_widget -%}
+
+{% block formdata_widget -%}
+    <ul class="form-data">
+        {% set value = value|json_decode %}
+        {% for itm in value %}
+            <li>
+                <span class="name">{{ itm.0 }}</span>
+                <span class="content">{{ app.get.formData(itm)|raw }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+{%- endblock formdata_widget -%}

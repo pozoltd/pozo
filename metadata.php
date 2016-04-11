@@ -20,6 +20,7 @@ $CMS_WIDGETS = array(
     'checkbox' => 'Checkbox',
     '\\Pz\\Twig\\Types\\DatePicker' => 'Date picker',
     '\\Pz\\Twig\\Types\\FormBuilder' => 'Form Builder',
+    '\\Pz\\Twig\\Types\\FormData' => 'Form Data',
     'email' => 'Email',
     'hidden' => 'Hidden',
     'password' => 'Password',
