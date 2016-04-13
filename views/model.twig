@@ -187,7 +187,7 @@
             });
 
             //
-            $(document).on('click', '#columns .js-delete', function(ev) {
+            $(document).on('click', '#columns .js-rm-field', function(ev) {
                 $(this).closest('tbody').remove();
                 updateColumns();
                 renderFields();

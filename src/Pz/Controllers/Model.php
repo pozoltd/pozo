@@ -87,6 +87,46 @@ class Model implements ControllerProviderInterface
             $model->rank = $model->id + 1;
             $model->save();
 
+
+            $generated = HOME_DIR . '/src/' . DEFAULT_NAMESPACE . '/DAOs/Generated/' . $model->className . '.php';
+            $customised = HOME_DIR . '/src/' . DEFAULT_NAMESPACE . '/DAOs/' . $model->className . '.php';
+//        if (file_exists($generated)) {
+//            unlink($generated);
+//        }
+
+            $columnsJson = json_decode($model->columnsJson);
+            $mappings = array_map(function($value) {
+                return "'{$value->field}' => '{$value->column}', ";
+            }, $columnsJson);
+
+            $extras = array_map(function($value) {
+                if ($value->widget == 'checkbox') {
+                    $txt = "\n\tpublic function get" . ucfirst($value->field) . "() {\n";
+                    $txt .= "\t\treturn \$model->{$value->field} == 1 ? true : false;";
+                    $txt .= "\n\t}\n";
+                    return $txt;
+                }
+            }, $columnsJson);
+            $extras = array_filter($extras);
+
+            $str = file_get_contents(__DIR__ . '/templates/generated.txt');
+            $str = str_replace('{TIMESTAMP}', date('Y-m-d H:i:s'), $str);
+            $str = str_replace('{NAMESPACE}', DEFAULT_NAMESPACE, $str);
+            $str = str_replace('{CLASSNAME}', $model->className, $str);
+            $str = str_replace('{MODELID}', $model->id, $str);
+            $str = str_replace('{MAPPING}', join("\n\t\t\t", $mappings), $str);
+            $str = str_replace('{EXTRAS}', count($extras) == 0 ? '' : join("\n\t\t\t", $extras), $str);
+            file_put_contents($generated, $str);
+
+            if (!file_exists($customised)) {
+                $str = file_get_contents(__DIR__ . '/templates/customised.txt');
+                $str = str_replace('{TIMESTAMP}', date('Y-m-d H:i:s'), $str);
+                $str = str_replace('{NAMESPACE}', DEFAULT_NAMESPACE, $str);
+                $str = str_replace('{CLASSNAME}', $model->className, $str);
+                file_put_contents($customised, $str);
+            }
+
+
             if ($request->get('submit') == 'apply') {
                 return $app->redirect($app->url('edit-model', array(
                     'modelType' => $model->modelType,
