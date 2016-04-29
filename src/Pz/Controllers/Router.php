@@ -28,6 +28,9 @@ class Router implements ControllerProviderInterface
             $page = \Site\DAOs\Page::findByField($app['em'], 'url', trim($url, '/') . '/');
         }
         if ($page) {
+            if ($page->type == 2) {
+                return $app->redirect($page->redirectTo);
+            }
             return $app['twig']->render($page->objTemplate()->filename, array(
                 'pageBuilder' => $page,
                 'params' => array(),
