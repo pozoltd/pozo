@@ -55,6 +55,18 @@ class Get implements ServiceProviderInterface
         return $className::findBySlug($this->app['em'], $slug);
     }
 
+    public function getByField($className, $field, $value, $namespace = 'Site')
+    {
+        $className = "\\{$namespace}\\DAOs\\{$className}";
+        $result = $className::data($this->app['em'], array(
+            'whereSql' => 'entity.' . $field . ' = :v1',
+            'params' => array(
+                'v1' => $value,
+            )
+        ));
+        return count($result) > 0 ? $result[0] : null;
+    }
+
     public function getRequestURI() {
         return stripos(Utils::getURL(), '?') === false ? '' : substr(Utils::getURL(), stripos(Utils::getURL(), '?'));
     }
@@ -76,7 +88,7 @@ class Get implements ServiceProviderInterface
     public function root($categoryCode) {
         $category = \Site\DAOs\PageCategory::findByField($this->app['em'], 'code', $categoryCode);
         $cat = $category->id;
-        $result = \Site\DAOs\Page::active($this->app['em']);
+        $result = \Site\DAOs\Page::data($this->app['em']);
         $pages = array();
         foreach ($result as $itm) {
             $itm->categoryRank = ((empty($itm->categoryRank) || !$itm->categoryRank)) ? array() : (array)json_decode($itm->categoryRank);

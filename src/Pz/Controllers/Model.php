@@ -84,8 +84,6 @@ class Model implements ControllerProviderInterface
         $form->handleRequest($request);
         if ($form->isValid()) {
             $model->save();
-            $model->rank = $model->id + 1;
-            $model->save();
 
 
             $generated = HOME_DIR . '/src/' . DEFAULT_NAMESPACE . '/DAOs/Generated/' . $model->className . '.php';
@@ -102,7 +100,7 @@ class Model implements ControllerProviderInterface
             $extras = array_map(function($value) {
                 if ($value->widget == 'checkbox') {
                     $txt = "\n\tpublic function get" . ucfirst($value->field) . "() {\n";
-                    $txt .= "\t\treturn \$model->{$value->field} == 1 ? true : false;";
+                    $txt .= "\t\treturn \$this->{$value->field} == 1 ? true : false;";
                     $txt .= "\n\t}\n";
                     return $txt;
                 }

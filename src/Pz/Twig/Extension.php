@@ -60,14 +60,26 @@ class Extension extends Twig_Extension
         if (count($node->_c) == 0) {
             return '';
         }
-        $str = '<ul>';
+
+        $valid = false;
         foreach ($node->_c as $itm) {
-            $str .= '<li>';
-            $str .= '<a href="' . ($itm->url ?: urlencode($itm->title)) . '">' . $itm->title . '</a>';
-            $str .= $this->nav($itm);
-            $str .= '</li>';
+            if ($itm->active == 1) {
+                $valid = true;
+            }
         }
-        $str .= '</ul>';
+
+        $str = '';
+        if ($valid) {
+            $str = '<ul>';
+            foreach ($node->_c as $itm) {
+                $str .= '<li>';
+                $str .= '<a href="' . ($itm->url ?: urlencode($itm->title)) . '">' . $itm->title . '</a>';
+                $str .= $this->nav($itm);
+                $str .= '</li>';
+            }
+            $str .= '</ul>';
+        }
+
         return $str;
     }
 }
