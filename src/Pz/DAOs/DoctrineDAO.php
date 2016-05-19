@@ -130,7 +130,7 @@ abstract class DoctrineDAO implements DAOInterface
         $select = isset($options['select']) ? $options['select'] : 'entity';
         $whereSql = isset($options['whereSql']) ? $options['whereSql'] : null;
         $params = isset($options['params']) ? $options['params'] : array();
-        $page = isset($options['page']) ? $options['page'] : null;
+        $page = isset($options['page']) ? $options['page'] : 1;
         $limit = isset($options['limit']) ? $options['limit'] : null;
         $sort = isset($options['sort']) ? $options['sort'] : 'entity.rank';
         $order = isset($options['order']) ? $options['order'] : 'ASC';
