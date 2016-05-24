@@ -1,0 +1,25 @@
+{# Outputs sitemap recursively #}
+
+{% for item in sitemap %}
+
+    {% if item.sitemapUrl %}
+        <url>
+
+            <loc>{{ constant('DOMAIN') ~ item.sitemapUrl }}</loc>
+
+            {% if item.modified is defined %}
+                <lastmod>{{ item.modified|date("Y-m-d") }}</lastmod>
+            {% endif %}
+
+            <changefreq>{{ item.changefreq|default('daily') }}</changefreq>
+
+            <priority>{{ item.priority|default('0.8') }}</priority>
+
+        </url>
+    {% endif %}
+
+    {% if item.children is defined and item.children|length %}
+        {% include 'includes/urls.xml.twig' with {sitemap: item.children} %}
+    {% endif %}
+
+{% endfor %}
