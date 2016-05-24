@@ -15,7 +15,7 @@ abstract class DoctrineDAO implements DAOInterface
     abstract function getBaseQuery();
 
     public function __construct($db) {
-//        $this->db = $db;
+        $this->db = $db;
         foreach ($this->getFieldMap() as $key => $value) {
             $this->{$key} = null;
         }
