@@ -113,4 +113,15 @@ class Get implements ServiceProviderInterface
         $root = Utils::buildTree($root, $pages);
         return $root;
     }
+
+    public function topNav($categoryCode, $page) {
+        $root = static::root($categoryCode);
+        foreach ($root->_c as $itm) {
+            $ids = Utils::withChildIds($itm, $page->id);
+            if (in_array($page->id, $ids)) {
+                return $itm;
+            }
+        }
+        return null;
+    }
 }
