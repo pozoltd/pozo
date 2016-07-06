@@ -166,6 +166,13 @@
             renderColumns();
             renderFields();
             renderDefaultSortBy();
+            $('#columns select').each(function(key, value) {
+                if ($(value).val() == 'choice' || $(value).val() == '\\Pz\\Twig\\Types\\ChoiceMultiJson') {
+                    $('#sql' + $(value).closest('tbody').find('.id').val()).show();
+                } else {
+                    $('#sql' + $(value).closest('tbody').find('.id').val()).hide();
+                }
+            });
             if (_columns.length == 0) {
                 $('#fields').val('title').change();
             }
