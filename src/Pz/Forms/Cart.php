@@ -1,6 +1,7 @@
 <?php
 namespace Pz\Forms;
 
+use Pz\Common\Utils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -17,6 +18,17 @@ class Cart extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
+
+        $app = isset($options['app']) ? $options['app'] : null;
+
+        $countries = array();
+        if ($app) {
+            $shippings = \Site\DAOs\Shipping::active($app['em']);
+            foreach ($shippings as $itm) {
+                $countries = array_merge($countries, json_decode($itm->title));
+            }
+        }
+
 
         $builder->add('firstname', 'text', array(
             'label' => 'First name:',
@@ -72,8 +84,9 @@ class Cart extends AbstractType
             'constraints' => array(
 //                new Assert\NotBlank()
             )
-        ))->add('country', 'text', array(
+        ))->add('country', 'choice', array(
             'label' => 'Country:',
+            'choices' => $countries,
             'constraints' => array(
                 new Assert\NotBlank()
             )
@@ -85,6 +98,7 @@ class Cart extends AbstractType
         parent::setDefaultOptions($resolver);
         $resolver->setDefaults(array(
             //
+            'app' => null,
 
         ));
     }

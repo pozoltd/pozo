@@ -38,7 +38,9 @@ class Cart extends AssetView
             return $order;
         }
 
-        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order);
+        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order, array(
+            'app' => $app,
+        ));
         $form = $formBuilder->getForm();
 
         $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
@@ -57,7 +59,9 @@ class Cart extends AssetView
             return $order;
         }
 
-        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order);
+        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order, array(
+            'app' => $app,
+        ));
         $form = $formBuilder->getForm();
 
         $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
@@ -83,7 +87,9 @@ class Cart extends AssetView
             return $order;
         }
 
-        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order);
+        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order, array(
+            'app' => $app,
+        ));
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
         if (!$form->isValid()) {
@@ -235,7 +241,9 @@ class Cart extends AssetView
         }
 
         if (count($order->cartOrderItems) == 0) {
-            $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order);
+            $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order, array(
+                'app' => $app,
+            ));
             $form = $formBuilder->getForm();
 
             $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
