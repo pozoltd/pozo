@@ -38,9 +38,7 @@ class Cart extends AssetView
             return $order;
         }
 
-        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order, array(
-            'app' => $app,
-        ));
+        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order);
         $form = $formBuilder->getForm();
 
         $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
@@ -59,9 +57,7 @@ class Cart extends AssetView
             return $order;
         }
 
-        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order, array(
-            'app' => $app,
-        ));
+        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order);
         $form = $formBuilder->getForm();
 
         $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
@@ -87,9 +83,7 @@ class Cart extends AssetView
             return $order;
         }
 
-        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order, array(
-            'app' => $app,
-        ));
+        $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order);
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
         if (!$form->isValid()) {
@@ -190,6 +184,7 @@ class Cart extends AssetView
             $orderItem->prodcut = $product->id;
             $orderItem->quantity = $quantity;
             $orderItem->price = $product->price;
+            $orderItem->weight = $product->weight;
             $orderItem->subtotal = $product->price * $quantity;
             $order->cartOrderItems[] = $orderItem;
         }
@@ -241,9 +236,7 @@ class Cart extends AssetView
         }
 
         if (count($order->cartOrderItems) == 0) {
-            $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order, array(
-                'app' => $app,
-            ));
+            $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order);
             $form = $formBuilder->getForm();
 
             $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');

@@ -19,16 +19,11 @@ class Cart extends AbstractType
     {
         parent::buildForm($builder, $options);
 
-        $app = isset($options['app']) ? $options['app'] : null;
-
+        $order = isset($options['data']) ? $options['data'] : null;
         $countries = array();
-        if ($app) {
-            $shippings = \Site\DAOs\Shipping::active($app['em']);
-            foreach ($shippings as $itm) {
-                $countries = array_merge($countries, json_decode($itm->title));
-            }
+        if ($order) {
+            $countries = $order->getCountries();
         }
-
 
         $builder->add('firstname', 'text', array(
             'label' => 'First name:',
@@ -98,8 +93,7 @@ class Cart extends AbstractType
         parent::setDefaultOptions($resolver);
         $resolver->setDefaults(array(
             //
-            'app' => null,
-
+            'order' => null,
         ));
     }
 }

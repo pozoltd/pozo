@@ -137,6 +137,7 @@ abstract class DoctrineDAO implements DAOInterface
         $groupBy = isset($options['groupBy']) ? $options['groupBy'] : null;
         $jt = isset($options['jt']) ? $options['jt'] : null;
         $dao = isset($options['dao']) ? $options['dao'] : true;
+        $oneOrNull = isset($options['oneOrNull']) ? $options['oneOrNull'] : false;
 
         $whereSql = static::convert($m, $whereSql);
 //        foreach ($params as $idx => $itm) {
@@ -204,6 +205,9 @@ abstract class DoctrineDAO implements DAOInterface
                     $dao->{$key} = $orm->{$funcName}();
                 }
                 $daos[] = $dao;
+            }
+            if ($oneOrNull) {
+                return count($daos) > 0 ? $daos[0] : null;
             }
             return $daos;
         } else {
