@@ -27,6 +27,7 @@ class Cart extends AssetView
         $controllers->match('/add/', array($this, 'add'))->bind('cart-add');
         $controllers->match('/clear/', array($this, 'clear'))->bind('cart-clear');
         $controllers->match('/update/', array($this, 'update'))->bind('cart-update');
+        $controllers->match('/update/country/', array($this, 'updateCountry'))->bind('cart-update-country');
         $controllers->match('/remove/', array($this, 'remove'))->bind('cart-remove');
         return $controllers;
     }
@@ -207,6 +208,14 @@ class Cart extends AssetView
             $order->cartOrderItems[$request->get('idx')]->subtotal = $order->cartOrderItems[$request->get('idx')]->quantity * $order->cartOrderItems[$request->get('idx')]->price;
         }
 
+        $app['session']->set('cart', $order);
+        return new Response('OK');
+    }
+
+    public function updateCountry(Application $app, Request $request)
+    {
+        $order = $this->getOrderFromSession($app);
+        $order->country = $request->get('country');
         $app['session']->set('cart', $order);
         return new Response('OK');
     }
