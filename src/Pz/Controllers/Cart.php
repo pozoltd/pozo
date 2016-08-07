@@ -24,6 +24,7 @@ class Cart extends AssetView
         $controllers->match('/confirm/', array($this, 'confirm'))->bind('cart-confirm');
         $controllers->match('/paypal/', array($this, 'paypal'))->bind('cart-paypal');
         $controllers->match('/paypal/complete/', array($this, 'paypalComplete'))->bind('cart-paypal-complete');
+        $controllers->match('/banking/', array($this, 'banking'))->bind('cart-banking');
         $controllers->match('/add/', array($this, 'add'))->bind('cart-add');
         $controllers->match('/clear/', array($this, 'clear'))->bind('cart-clear');
         $controllers->match('/update/', array($this, 'update'))->bind('cart-update');
@@ -97,24 +98,55 @@ class Cart extends AssetView
             $itm->save();
         }
 
-        $gateway = $this->getPaypalGateway($app);
-        $params = $this->getPaypalParams($order);
-        $response = $gateway->purchase($params)->send();
+        $action = $request->get('action');
+        if ($action == 1) {
+            $gateway = $this->getPaypalGateway($app);
+            $params = $this->getPaypalParams($order);
+            $response = $gateway->purchase($params)->send();
 
-        $order->title = "#{$order->uniqueId} {$order->firstname} {$order->lastname} (\$" . number_format($order->totalPrice, 2, '.', ',') . ") - Pending";
-        $order->paymentStatus = 1;
-        $order->paymentRequest = json_encode($response->getData());
-        $order->paymentToken = $response->getTransactionReference();
-        $order->save();
+            $order->title = "#{$order->uniqueId} {$order->firstname} {$order->lastname} (\$" . number_format($order->totalPrice, 2, '.', ',') . ") - Pending";
+            $order->paymentStatus = $action;
+            $order->paymentRequest = json_encode($response->getData());
+            $order->paymentToken = $response->getTransactionReference();
+            $order->save();
 
-        if ($response->isSuccessful()) {
-            print_r($response);
-            exit;
-        } elseif ($response->isRedirect()) {
-            $response->redirect();
+            if ($response->isSuccessful()) {
+                print_r($response);
+                exit;
+            } elseif ($response->isRedirect()) {
+                $response->redirect();
+            }
+
+            return $app->redirect($app->url('cart'));
+
+        } else if ($action == 4) {
+            $order->title = "#{$order->uniqueId} {$order->firstname} {$order->lastname} (\$" . number_format($order->totalPrice, 2, '.', ',') . ") - Offline Payment";
+            $order->paymentStatus = $action;
+            $order->paymentRequest = '';
+            $order->paymentToken = 'BT-' . strtoupper(substr(md5(uniqid() . time()), 0, 24));
+
+            $messageBody = $this->app['twig']->render('cart-invoice.twig', array(
+                'order' => $order,
+            ));
+            $message = \Swift_Message::newInstance()
+                ->setSubject($app['get']->system('website-title') . ' ORDER #' . $order->uniqueId . ($order->paymentStatus == 3 ? ' (Declined)' : ''))
+                ->setFrom(array($app['get']->system('email-from')))
+                ->setTo(array($order->email))
+                ->setBcc(array(EMAIL_BCC, $app['get']->system('email-owner')))
+                ->setBody(
+                    $messageBody,'text/html'
+                );
+
+            $order->emailResponse = $this->app['mailer']->send($message);
+            $order->emailRequest = $messageBody;
+            $order->save();
+
+            return $app->redirect($app->url('cart-banking', array(
+                'token' => $order->paymentToken,
+            )));
         }
 
-        return $app->redirect($app->url('cart'));
+
     }
 
     public function paypalComplete(Application $app, Request $request) {
@@ -150,7 +182,7 @@ class Cart extends AssetView
                 'order' => $order,
             ));
             $message = \Swift_Message::newInstance()
-                ->setSubject($app['get']->system('website-title') . ' ORDER#' . $order->uniqueId . ($order->paymentStatus == 3 ? ' (Declined)' : ''))
+                ->setSubject($app['get']->system('website-title') . ' ORDER #' . $order->uniqueId . ($order->paymentStatus == 3 ? ' (Declined)' : ''))
                 ->setFrom(array($app['get']->system('email-from')))
                 ->setTo(array($order->email))
                 ->setBcc(array(EMAIL_BCC, $app['get']->system('email-owner')))
@@ -172,6 +204,24 @@ class Cart extends AssetView
             'order' => $order,
         ));
     }
+
+    public function banking(Application $app, Request $request) {
+        $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
+        $template = 'cart-banking.twig';
+
+        $token = $request->get('token');
+        $order = \Site\DAOs\Order::findByField($app['em'], 'paymentToken', $token);
+        if (!$order) {
+            $app->abort(404);
+        }
+
+        $app['session']->set('cart', null);
+        return $app['twig']->render($template, array(
+            'pageBuilder' => $page,
+            'order' => $order,
+        ));
+    }
+
 
     public function add(Application $app, Request $request)
     {
@@ -244,6 +294,11 @@ class Cart extends AssetView
             return $order;
         }
 
+        if (isset($order->id) && $order->id) {
+            unset($order->id);
+            $order->uniqueId = uniqid();
+        }
+
         if (count($order->cartOrderItems) == 0) {
             $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order);
             $form = $formBuilder->getForm();
@@ -273,7 +328,11 @@ class Cart extends AssetView
         $gateway->setUsername($app['get']->system('paypal-username'));
         $gateway->setPassword($app['get']->system('paypal-password'));
         $gateway->setSignature($app['get']->system('paypal-signature'));
-        $gateway->setTestMode($app['get']->system('paypal-testmode'));
+        $gateway->setTestMode($app['get']->system('paypal-testmode') == 'true' ? true : false);
+//        $gateway->setUsername('ns.gresource_api1.gmail.com');
+//        $gateway->setPassword('T7ZDTGU6KN3ZVHQL');
+//        $gateway->setSignature('AlHocZw.D-4wIMlpxjF1YGncCpfIAicPkwVrE4CMz47JMRS0lm9rg57f');
+//        $gateway->setTestMode(false);
         return $gateway;
     }
 
@@ -296,7 +355,7 @@ class Cart extends AssetView
             'amount' => (float)$order->totalPrice,
             'currency' => 'NZD',
             'description' => CLIENT . ' purchase',
-            'transactionId' => $order->uniqueId,
+            'transactionId' => md5($order->uniqueId . time() . uniqid()),
             'transactionReference' => $order->firstname . ' ' . $order->lastname,
             'returnUrl' => $this->app->url('cart-paypal-complete'),
             'cancelUrl' => $this->app->url('cart-paypal-complete'),
