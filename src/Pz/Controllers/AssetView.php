@@ -53,7 +53,10 @@ class AssetView implements ControllerProviderInterface
                     if ('application/pdf' == $fileType) {
                         $image = new imagick($file . '[0]');
                         $image->setImageFormat('jpg');
-                        $image->setColorspace(imagick::COLORSPACE_RGB);
+//                        $image->setColorspace(imagick::COLORSPACE_RGB);
+                        $image->setImageBackgroundColor('white');
+                        $image->setImageAlphaChannel(Imagick::ALPHACHANNEL_REMOVE);
+                        $image->mergeImageLayers(Imagick::LAYERMETHOD_FLATTEN);
                         $image->thumbnailImage($size->width, null);
                         $image->writeImage($thumbnail);
                     } else {
@@ -64,6 +67,15 @@ class AssetView implements ControllerProviderInterface
                 }
                 $file = $thumbnail;
             }
+        } else {
+            $stream = function () use ($file) {
+                readfile($file);
+            };
+            return $app->stream($stream, 200, array(
+                'Content-Type' => $fileType,
+                'Content-length' => filesize($file),
+                'Content-Disposition' => 'filename="' . $fileName . '"'
+            ));
         }
 
         if (!file_exists($file) || !getimagesize($file)) {
