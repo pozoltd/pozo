@@ -44,7 +44,7 @@ class Cart extends AssetView
         $form = $formBuilder->getForm();
 
         $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
-        $template = $page->template;
+        $template = 'cart.twig';
         return $app['twig']->render($template, array(
             'form' => $form->createView(),
             'pageBuilder' => $page,
@@ -63,7 +63,7 @@ class Cart extends AssetView
         $form = $formBuilder->getForm();
 
         $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
-        $template = $page->template;
+        $template = 'cart.twig';
 
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -151,7 +151,7 @@ class Cart extends AssetView
 
     public function paypalComplete(Application $app, Request $request) {
         $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
-        $template = $page->template;
+        $template = 'cart.twig';
 
         $token = $request->get('token');
         $order = \Site\DAOs\Order::findByField($app['em'], 'paymentToken', $token);
@@ -304,7 +304,7 @@ class Cart extends AssetView
             $form = $formBuilder->getForm();
 
             $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
-            $template = $page->template;
+            $template = 'cart.twig';
 
             return $app['twig']->render($template, array(
                 'form' => $form->createView(),
