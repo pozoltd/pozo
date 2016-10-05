@@ -1,11 +1,10 @@
 <?php
 
-namespace Pz\DAOs;
+namespace Pz\Database;
 
 use Doctrine\ORM\Mapping as ORM;
-use Pz\Common\Utils;
 
-class Model extends \Pz\DAOs\DoctrineDAO {
+class Model extends DoctrineDAO {
 
     public function getFieldMap() {
         return array(

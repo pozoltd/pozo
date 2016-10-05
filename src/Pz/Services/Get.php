@@ -25,39 +25,39 @@ class Get implements ServiceProviderInterface
 
     public function system($code)
     {
-        if ($setting = \Site\DAOs\SystemSetting::findByField($this->app['em'], 'code', $code)) {
+        if ($setting = \Pz\DAOs\SystemSetting::findByField($this->app['em'], 'code', $code)) {
             return $setting->value;
         }
         $this->app->abort(404);
     }
 
-    public function active($className, $options = array(), $namespace = 'Site')
+    public function active($className, $options = array(), $namespace = 'Pz\\DAOs')
     {
-        $className = "\\{$namespace}\\DAOs\\{$className}";
+        $className = "\\{$namespace}\\{$className}";
         return $className::active($this->app['em'], $options);
     }
 
-    public function data($className, $options = array(), $namespace = 'Site')
+    public function data($className, $options = array(), $namespace = 'Pz\\DAOs')
     {
-        $className = "\\{$namespace}\\DAOs\\{$className}";
+        $className = "\\{$namespace}\\{$className}";
         return $className::data($this->app['em'], $options);
     }
 
-    public function getById($className, $id, $namespace = 'Site')
+    public function getById($className, $id, $namespace = 'Pz\\DAOs')
     {
-        $className = "\\{$namespace}\\DAOs\\{$className}";
+        $className = "\\{$namespace}\\{$className}";
         return $className::findById($this->app['em'], $id);
     }
 
-    public function getBySlug($className, $slug, $namespace = 'Site')
+    public function getBySlug($className, $slug, $namespace = 'Pz\\DAOs')
     {
-        $className = "\\{$namespace}\\DAOs\\{$className}";
+        $className = "\\{$namespace}\\{$className}";
         return $className::findBySlug($this->app['em'], $slug);
     }
 
-    public function getByField($className, $field, $value, $namespace = 'Site')
+    public function getByField($className, $field, $value, $namespace = 'Pz\\DAOs')
     {
-        $className = "\\{$namespace}\\DAOs\\{$className}";
+        $className = "\\{$namespace}\\{$className}";
         $result = $className::data($this->app['em'], array(
             'whereSql' => 'entity.' . $field . ' = :v1',
             'params' => array(
@@ -86,9 +86,9 @@ class Get implements ServiceProviderInterface
     }
 
     public function root($categoryCode) {
-        $category = \Site\DAOs\PageCategory::findByField($this->app['em'], 'code', $categoryCode);
+        $category = \Pz\DAOs\PageCategory::findByField($this->app['em'], 'code', $categoryCode);
         $cat = $category->id;
-        $result = \Site\DAOs\Page::data($this->app['em']);
+        $result = \Pz\DAOs\Page::data($this->app['em']);
         $pages = array();
         foreach ($result as $itm) {
             $itm->categoryRank = ((empty($itm->categoryRank) || !$itm->categoryRank)) ? array() : (array)json_decode($itm->categoryRank);

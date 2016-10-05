@@ -1,10 +1,10 @@
 <?php
 
-namespace Pz\DAOs;
+namespace Pz\Database;
 
 use Pz\Common\Utils;
 
-abstract class Content extends \Pz\DAOs\DoctrineDAO {
+abstract class Content extends DoctrineDAO {
 
     public function __construct($db) {
         parent::__construct($db);

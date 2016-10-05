@@ -22,7 +22,7 @@ class Form implements ServiceProviderInterface
     public function getForm($code)
     {
 
-        $formDescriptor = \Site\DAOs\FormDescriptor::findByField($this->app['em'], 'code', $code);
+        $formDescriptor = \Pz\DAOs\FormDescriptor::findByField($this->app['em'], 'code', $code);
         if (is_null($formDescriptor)) {
             $this->app->abort(404);
         }
@@ -46,7 +46,7 @@ class Form implements ServiceProviderInterface
                 }
 
                 $code = uniqid();
-                $submission = new \Site\DAOs\FormSubmission($this->app['em']);
+                $submission = new \Pz\DAOs\FormSubmission($this->app['em']);
                 $submission->title = '#' . $code . ' ' . $data['email'];
                 $submission->uniqueId = $code;
                 $submission->date = date('Y-m-d H:i:s');

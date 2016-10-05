@@ -14,6 +14,15 @@ use Pz\Common\Utils;
 class Model implements ControllerProviderInterface
 {
 
+    private $app;
+    private $modelClass;
+
+    public function __construct($app, $options)
+    {
+        $this->app = $app;
+        $this->modelClass = isset($options['modelClass']) ? $options['modelClass'] : 'Pz\\Database\\Model';
+    }
+
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -27,7 +36,8 @@ class Model implements ControllerProviderInterface
 
     public function models(Application $app, Request $request, $modelType = 0)
     {
-        $models = \Pz\DAOs\Model::data($app['em'], array(
+        $className = $this->modelClass;
+        $models = $className::data($app['em'], array(
             'whereSql' => 'entity.modelType = :v1',
             'params' => array(
                 'v1' => $modelType,
@@ -48,7 +58,8 @@ class Model implements ControllerProviderInterface
 
         $fields = $app['em']->getClassMetadata('Pz\Entities\Content')->getFieldNames();
         if ($id) {
-            $model = \Pz\DAOs\Model::findById($app['em'], $id);
+            $className = $this->modelClass;
+            $model = $className::findById($app['em'], $id);
             if (!$model) {
                 throw new NotFoundHttpException();
             }
@@ -60,7 +71,8 @@ class Model implements ControllerProviderInterface
             }
 
         } else {
-            $model = new \Pz\DAOs\Model($app['em']);
+            $className = $this->modelClass;
+            $model = new $className($app['em']);
             $model->label = 'New models';
             $model->className = 'NewModel';
             $model->modelType = $modelType;
@@ -124,7 +136,6 @@ class Model implements ControllerProviderInterface
                 file_put_contents($customised, $str);
             }
 
-
             if ($request->get('submit') == 'apply') {
                 return $app->redirect($app->url('edit-model', array(
                     'modelType' => $model->modelType,
@@ -150,7 +161,8 @@ class Model implements ControllerProviderInterface
     {
         $data = json_decode($request->get('data'));
         foreach ($data as $key => $value) {
-            $model = \Pz\DAOs\Model::findById($app['em'], $value);
+            $className = $this->modelClass;
+            $model = $className::findById($app['em'], $value);
             if ($model) {
                 $model->rank = $key;
                 $model->save();

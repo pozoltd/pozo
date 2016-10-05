@@ -11,8 +11,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Page implements ControllerProviderInterface {
 
+	private $app;
+	private $pageCategoryClass;
+	private $pageClass;
+
+	public function __construct($app, $options)
+	{
+		$this->app = $app;
+		$this->pageCategoryClass = isset($options['pageCategoryClass']) ? $options['pageCategoryClass'] : 'Pz\\DAOs\\PageCategory';
+		$this->pageClass = isset($options['pageClass']) ? $options['pageClass'] : 'Pz\\DAOs\\Page';
+	}
+	
 	public function connect(Application $app) {
-		$content = array();
 		$controllers = $app['controllers_factory'];
 		$controllers->match('/', array($this,'pages'))->bind('pages');
 		$controllers->match('/remove/', array($this,'remove'))->bind('remove-page');
@@ -22,17 +32,17 @@ class Page implements ControllerProviderInterface {
 		return $controllers;
 	}
 	
-	
-	
 	public function pages(Application $app, Request $request) {
 
-		$categories = \Site\DAOs\PageCategory::data($app['em']);
+		$className = $this->pageCategoryClass;
+		$categories = $className::data($app['em']);
 		$cat = $request->get('cat');
 		if (!$cat && count($categories) > 0) {
 			$cat = $categories[0]->id;
 		}
 
-		$result = \Site\DAOs\Page::data($app['em']);
+		$className = $this->pageClass;
+		$result = $className::data($app['em']);
 		$pages = array();
 		foreach ($result as $itm) {
 			$itm->categoryRank = ((empty($itm->categoryRank) || !$itm->categoryRank)) ? array() : (array)json_decode($itm->categoryRank);
@@ -86,7 +96,8 @@ class Page implements ControllerProviderInterface {
 	}
 	
 	public function count(Application $app, Request $request) {
-		$result = \Site\DAOs\Page::data($app['em']);
+		$className = $this->pageClass;
+		$result = $className::data($app['em']);
 		$counter = array();
 		foreach ($result as $itm) {
 			$itm->category = ((empty($itm->category) || !$itm->category)) ? array() : (array)json_decode($itm->category);
@@ -110,8 +121,8 @@ class Page implements ControllerProviderInterface {
 	}
 	
 	public function change(Application $app, Request $request) {
-
-		$result = \Site\DAOs\Page::data($app['em']);
+		$className = $this->pageClass;
+		$result = $className::data($app['em']);
 		$pages = array();
 		foreach ($result as $itm) {
 			$itm->categoryRank = ((empty($itm->categoryRank) || !$itm->categoryRank)) ? array() : (array)json_decode($itm->categoryRank);
@@ -130,7 +141,8 @@ class Page implements ControllerProviderInterface {
 		$root->id = 0;
 		$root = Utils::buildTree($root, $pages);
 
-		$result = \Site\DAOs\Page::data($app['em']);
+		$className = $this->pageClass;
+		$result = $className::data($app['em']);
 		$ids = Utils::withChildIds($root, $request->get('id'));
 		foreach ($ids as $itm) {
 			if ($itm != $request->get('id')) {
@@ -163,7 +175,8 @@ class Page implements ControllerProviderInterface {
 			}
 		}
 
-		$result = \Site\DAOs\Page::findById($app['em'], $request->get('id'));
+		$className = $this->pageClass;
+		$result =$className::findById($app['em'], $request->get('id'));
 		if ($result) {
 			$result->category = (empty($result->category) || !$result->category) ? array() : json_decode($result->category);
 			$categories = array();
@@ -194,7 +207,8 @@ class Page implements ControllerProviderInterface {
 	
 
 	public function sort(Application $app, Request $request) {
-		$result = \Site\DAOs\Page::data($app['em']);
+		$className = $this->pageClass;
+		$result = $className::data($app['em']);
 		$data = json_decode($request->get('data'));
 		foreach ($result as &$itm) {
 			$itm->categoryRank = ((empty($itm->categoryRank) || !$itm->categoryRank)) ? array() : (array)json_decode($itm->categoryRank);

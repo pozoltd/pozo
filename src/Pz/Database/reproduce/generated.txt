@@ -5,7 +5,7 @@
  */
 namespace {NAMESPACE}\DAOs\Generated;
 
-class {CLASSNAME} extends \Pz\DAOs\Content {
+class {CLASSNAME} extends \Pz\Database\Content {
 
     function getFieldMap() {
         global $CMS_METAS;

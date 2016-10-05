@@ -36,14 +36,14 @@ class Cart extends AssetView
     public function cart(Application $app, Request $request)
     {
         $order = $this->getOrderFromSession($app);
-        if (!($order instanceof \Site\DAOs\Order)) {
+        if (!($order instanceof \Pz\DAOs\Order)) {
             return $order;
         }
 
         $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order);
         $form = $formBuilder->getForm();
 
-        $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
+        $page = \Pz\DAOs\Page::findByField($app['em'], 'url', '/cart/');
         $template = 'cart.twig';
         return $app['twig']->render($template, array(
             'form' => $form->createView(),
@@ -55,14 +55,14 @@ class Cart extends AssetView
     public function confirm(Application $app, Request $request)
     {
         $order = $this->getOrderFromSession($app);
-        if (!($order instanceof \Site\DAOs\Order)) {
+        if (!($order instanceof \Pz\DAOs\Order)) {
             return $order;
         }
 
         $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order);
         $form = $formBuilder->getForm();
 
-        $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
+        $page = \Pz\DAOs\Page::findByField($app['em'], 'url', '/cart/');
         $template = 'cart.twig';
 
         $form->handleRequest($request);
@@ -81,7 +81,7 @@ class Cart extends AssetView
     public function paypal(Application $app, Request $request)
     {
         $order = $this->getOrderFromSession($app);
-        if (!($order instanceof \Site\DAOs\Order)) {
+        if (!($order instanceof \Pz\DAOs\Order)) {
             return $order;
         }
 
@@ -150,11 +150,11 @@ class Cart extends AssetView
     }
 
     public function paypalComplete(Application $app, Request $request) {
-        $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
+        $page = \Pz\DAOs\Page::findByField($app['em'], 'url', '/cart/');
         $template = 'cart.twig';
 
         $token = $request->get('token');
-        $order = \Site\DAOs\Order::findByField($app['em'], 'paymentToken', $token);
+        $order = \Pz\DAOs\Order::findByField($app['em'], 'paymentToken', $token);
         if (!$order) {
             $app->abort(404);
 
@@ -206,11 +206,11 @@ class Cart extends AssetView
     }
 
     public function banking(Application $app, Request $request) {
-        $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
+        $page = \Pz\DAOs\Page::findByField($app['em'], 'url', '/cart/');
         $template = 'cart-banking.twig';
 
         $token = $request->get('token');
-        $order = \Site\DAOs\Order::findByField($app['em'], 'paymentToken', $token);
+        $order = \Pz\DAOs\Order::findByField($app['em'], 'paymentToken', $token);
         if (!$order) {
             $app->abort(404);
         }
@@ -226,10 +226,10 @@ class Cart extends AssetView
     public function add(Application $app, Request $request)
     {
         $order = $this->getOrderFromSession($app);
-        $product = \Site\DAOs\Product::findById($app['em'], $request->get('product'));
+        $product = \Pz\DAOs\Product::findById($app['em'], $request->get('product'));
         if ($product) {
             $quantity = $request->get('quantity');
-            $orderItem = new \Site\DAOs\OrderItem($app['em']);
+            $orderItem = new \Pz\DAOs\OrderItem($app['em']);
             $quantity = $quantity < 1 ? 1 : $quantity;
             $orderItem->title = $product->title;
             $orderItem->prodcut = $product->id;
@@ -286,7 +286,7 @@ class Cart extends AssetView
     {
         $order = $app['session']->get('cart');
         if (!$order) {
-            $order = new \Site\DAOs\Order(null);
+            $order = new \Pz\DAOs\Order(null);
             $order->uniqueId = uniqid();
             $order->startdate = date('Y-m-d H:i:s');
             $order->paymentStatus = 0;
@@ -303,7 +303,7 @@ class Cart extends AssetView
             $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Cart(), $order);
             $form = $formBuilder->getForm();
 
-            $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/cart/');
+            $page = \Pz\DAOs\Page::findByField($app['em'], 'url', '/cart/');
             $template = 'cart.twig';
 
             return $app['twig']->render($template, array(

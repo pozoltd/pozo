@@ -24,9 +24,9 @@ class AssetView implements ControllerProviderInterface
 
     public function image(Application $app, Request $request, $imageAsset, $imageSize = null)
     {
-        $asset = \Site\DAOs\Asset::findById($app['em'], $imageAsset);
+        $asset = \Pz\DAOs\Asset::findById($app['em'], $imageAsset);
         if (!$asset) {
-            $asset = \Site\DAOs\Asset::findByField($app['em'], 'title', $imageAsset);
+            $asset = \Pz\DAOs\Asset::findByField($app['em'], 'title', $imageAsset);
             if (!$asset) {
                 $app->abort(404);
             }
@@ -36,9 +36,9 @@ class AssetView implements ControllerProviderInterface
         $file = dirname($_SERVER['SCRIPT_FILENAME']) . '/../uploads/' . $asset->fileLocation;
         if ($imageSize) {
             if ((file_exists($file) && getimagesize($file)) || ('application/pdf' == $fileType)) {
-                $size = \Site\DAOs\ImageSize::findById($app['em'], $imageSize);
+                $size = \Pz\DAOs\ImageSize::findById($app['em'], $imageSize);
                 if (!$size) {
-                    $size = \Site\DAOs\ImageSize::findByField($app['em'], 'title', $imageSize);
+                    $size = \Pz\DAOs\ImageSize::findByField($app['em'], 'title', $imageSize);
                     if (!$size) {
                         $app->abort(404);
                     }
@@ -93,9 +93,9 @@ class AssetView implements ControllerProviderInterface
 
     public function download(Application $app, $imageAsset)
     {
-        $asset = \Site\DAOs\Asset::findById($app['em'], $imageAsset);
+        $asset = \Pz\DAOs\Asset::findById($app['em'], $imageAsset);
         if (!$asset) {
-            $asset = \Site\DAOs\Asset::findByField($app['em'], 'title', $imageAsset);
+            $asset = \Pz\DAOs\Asset::findByField($app['em'], 'title', $imageAsset);
             if (!$asset) {
                 $app->abort(404);
             }

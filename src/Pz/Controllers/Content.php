@@ -14,6 +14,14 @@ use Pz\Common\Utils;
 
 class Content implements ControllerProviderInterface
 {
+    private $app;
+    private $modelClass;
+
+    public function __construct($app, $options)
+    {
+        $this->app = $app;
+        $this->modelClass = isset($options['modelClass']) ? $options['modelClass'] : 'Pz\\Database\\Model';
+    }
 
     public function connect(Application $app)
     {
@@ -32,9 +40,10 @@ class Content implements ControllerProviderInterface
 
     public function contents(Application $app, Request $request, $modelId, $pageNum = null, $sort = null, $order = null)
     {
-        $model = \Pz\DAOs\Model::findById($app['em'], $modelId);
+        $className = $this->modelClass;
+        $model = $className::findById($app['em'], $modelId);
         if (!$model) {
-            throw new NotFoundHttpException();
+            $app->abort(404);
         }
 
 
@@ -52,7 +61,7 @@ class Content implements ControllerProviderInterface
         }
 
 
-        $daoClass = DEFAULT_NAMESPACE . '\\DAOs\\' . $model->className;
+        $daoClass = ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . '\\DAOs\\' . $model->className;
         $daos = $daoClass::data($app['em'], array(
             'sort' => 'entity.' . $sort,
             'order' => $order,
@@ -87,17 +96,18 @@ class Content implements ControllerProviderInterface
 
     public function content(Application $app, Request $request, $modelId, $returnURL, $id = null)
     {
-        $model = \Pz\DAOs\Model::findById($app['em'], $modelId);
+        $className = $this->modelClass;
+        $model = $className::findById($app['em'], $modelId);
         if (!$model) {
-            throw new NotFoundHttpException();
+            $app->abort(404);
         }
 
-        $daoClass = DEFAULT_NAMESPACE . '\\DAOs\\' . $model->className;
+        $daoClass = ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . '\\DAOs\\' . $model->className;
         $content = new $daoClass($app['em']);
         if ($id) {
             $content = $daoClass::findById($app['em'], $id);
             if (!$content) {
-                throw new NotFoundHttpException();
+                $app->abort(404);
             }
         }
 
@@ -106,15 +116,16 @@ class Content implements ControllerProviderInterface
 
     public function copy(Application $app, Request $request, $modelId, $returnURL, $id)
     {
-        $model = \Pz\DAOs\Model::findById($app['em'], $modelId);
+        $className = $this->modelClass;
+        $model = $className::findById($app['em'], $modelId);
         if (!$model) {
-            throw new NotFoundHttpException();
+            $app->abort(404);
         }
 
-        $daoClass = DEFAULT_NAMESPACE . '\\DAOs\\' . $model->className;
+        $daoClass = ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . '\\DAOs\\' . $model->className;
         $content = $daoClass::findById($app['em'], $id);
         if (!$content) {
-            throw new NotFoundHttpException();
+            $app->abort(404);
         }
         $content->id = null;
 
@@ -182,8 +193,9 @@ class Content implements ControllerProviderInterface
     {
         $contentId = $request->get('content');
         $modelId = $request->get('model');
-        $model = \Pz\DAOs\Model::findById($app['em'], $modelId);
-        $className = "\\Site\\DAOs\\" . $model->className;
+        $className = $this->modelClass;
+        $model = $className::findById($app['em'], $modelId);
+        $className = ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . "\\DAOs\\" . $model->className;
         $content = $className::findById($app['em'], $contentId);
         $content->delete();
         return new Response('OK');
@@ -191,8 +203,9 @@ class Content implements ControllerProviderInterface
     }
 
     public function sort(Application $app, Request $request, $modelId) {
-        $model = \Pz\DAOs\Model::findById($app['em'], $modelId);
-        $className = "\\Site\\DAOs\\" . $model->className;
+        $className = $this->modelClass;
+        $model = $className::findById($app['em'], $modelId);
+        $className = ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . "\\DAOs\\" . $model->className;
         $data = json_decode($request->get('data'));
         foreach ($data as $idx => $itm) {
             $obj = $className::findById($app['em'], $itm);
@@ -203,8 +216,9 @@ class Content implements ControllerProviderInterface
     }
 
     public function nestable(Application $app, Request $request, $modelId) {
-        $model = \Pz\DAOs\Model::findById($app['em'], $modelId);
-        $className = "\\Site\\DAOs\\" . $model->className;
+        $className = $this->modelClass;
+        $model = $className::findById($app['em'], $modelId);
+        $className =  ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . "\\DAOs\\" . $model->className;
         $data = json_decode($request->get('data'));
         foreach ($data as $itm) {
             $obj = $className::findById($app['em'], $itm->id);
@@ -215,17 +229,18 @@ class Content implements ControllerProviderInterface
         return new Response('OK');
     }
 
-    public function changestatus(Application $app, Request $request)
+    public function changeStatus(Application $app, Request $request)
     {
-        $model = \Pz\DAOs\Model::findById($app['em'], $request->get('model'));
+        $className = $this->modelClass;
+        $model = $className::findById($app['em'], $request->get('model'));
         if (!$model) {
-            throw new NotFoundHttpException();
+            $app->abort(404);
         }
 
-        $daoClass = DEFAULT_NAMESPACE . '\\DAOs\\' . $model->className;
+        $daoClass = ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . '\\DAOs\\' . $model->className;
         $content = $daoClass::findById($app['em'], $request->get('content'));
         if (!$content) {
-            throw new NotFoundHttpException();
+            $app->abort(404);
         }
 
         $content->active = $request->get('status');

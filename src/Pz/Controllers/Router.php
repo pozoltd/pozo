@@ -13,6 +13,15 @@ use Symfony\Component\HttpFoundation\Request;
 class Router implements ControllerProviderInterface
 {
 
+    private $app;
+    private $pageClass;
+
+    public function __construct($app, $options)
+    {
+        $this->app = $app;
+        $this->pageClass = isset($options['pageClass']) ? $options['pageClass'] : 'Pz\\DAOs\\Page';
+    }
+
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -22,10 +31,10 @@ class Router implements ControllerProviderInterface
 
     public function route(Application $app, Request $request, $url)
     {
-        //Looking for exact match first, start without /
-        $page = \Site\DAOs\Page::findByField($app['em'], 'url', trim($url, '/'));
+        $className = $this->pageClass;
+        $page = $className::findByField($app['em'], 'url', trim($url, '/'));
         if (!$page) {
-            $page = \Site\DAOs\Page::findByField($app['em'], 'url', trim($url, '/') . '/');
+            $page = $className::findByField($app['em'], 'url', trim($url, '/') . '/');
         }
         if ($page) {
             if ($page->type == 2) {
@@ -45,9 +54,9 @@ class Router implements ControllerProviderInterface
             $parts = array_slice($args, 0, $i);
 
             //Start compare with / (because no exact match found)
-            $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/' . implode('/', $parts) . '/');
+            $page = $className::findByField($app['em'], 'url', '/' . implode('/', $parts) . '/');
             if (!$page) {
-                $page = \Site\DAOs\Page::findByField($app['em'], 'url', '/' . implode('/', $parts));
+                $page = $className::findByField($app['em'], 'url', '/' . implode('/', $parts));
             }
 
             if ($page) {

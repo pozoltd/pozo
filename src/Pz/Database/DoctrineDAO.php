@@ -1,6 +1,6 @@
 <?php
 
-namespace Pz\DAOs;
+namespace Pz\Database;
 
 use Pz\Common\Utils;
 use ReflectionObject;
@@ -11,10 +11,13 @@ abstract class DoctrineDAO implements DAOInterface
     protected $db;
 
     abstract function getFieldMap();
+
     abstract function getORMClass();
+
     abstract function getBaseQuery();
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->db = $db;
         foreach ($this->getFieldMap() as $key => $value) {
             $this->{$key} = null;
@@ -36,14 +39,16 @@ abstract class DoctrineDAO implements DAOInterface
      * for content only
      * @return mixed|null
      */
-    public function getModel() {
+    public function getModel()
+    {
         if (isset($this->modelId)) {
             return \Pz\DAOs\Model::findById($this->db, $this->modelId);
         }
         return null;
     }
 
-    public function delete() {
+    public function delete()
+    {
         $myClass = $this->getORMClass();
         if ($this->id) {
             $repo = $this->db->getRepository($myClass);
@@ -57,7 +62,8 @@ abstract class DoctrineDAO implements DAOInterface
         return false;
     }
 
-    public function save() {
+    public function save()
+    {
         $myClass = $this->getORMClass();
         if ($this->id) {
             $repo = $this->db->getRepository($myClass);
@@ -89,19 +95,23 @@ abstract class DoctrineDAO implements DAOInterface
         $this->id = $m->getId();
     }
 
-    public static function findBySlug($db, $slug) {
+    public static function findBySlug($db, $slug)
+    {
         return static::findByField($db, 'slug', $slug);
     }
 
-    public static function findByTitle($db, $title) {
+    public static function findByTitle($db, $title)
+    {
         return static::findByField($db, 'title', $title);
     }
 
-    public static function findById($db, $id) {
+    public static function findById($db, $id)
+    {
         return static::findByField($db, 'id', $id);
     }
 
-    public static function findByField($db, $field, $value) {
+    public static function findByField($db, $field, $value)
+    {
         $daos = static::data($db, array(
             'whereSql' => 'entity.' . $field . ' = :v1',
             'params' => array(
@@ -111,7 +121,8 @@ abstract class DoctrineDAO implements DAOInterface
         return array_pop($daos);
     }
 
-    public static function active($db, $options=array()) {
+    public static function active($db, $options = array())
+    {
         $whereSql = isset($options['whereSql']) ? $options['whereSql'] : null;
         if ($whereSql) {
             $whereSql .= ' AND (entity.active = 1)';
@@ -122,7 +133,7 @@ abstract class DoctrineDAO implements DAOInterface
         return static::data($db, $options);
     }
 
-    public static function data($db, $options=array())
+    public static function data($db, $options = array())
     {
         $myClass = get_called_class();
         $m = new $myClass($db);
@@ -215,9 +226,10 @@ abstract class DoctrineDAO implements DAOInterface
         }
     }
 
-    public static function convert($m, $sql) {
+    public static function convert($m, $sql)
+    {
         $fieldMap = $m->getFieldMap();
-        uasort($fieldMap, function($a, $b) {
+        uasort($fieldMap, function ($a, $b) {
             return strlen($b) - strlen($a);
         });
         foreach ($fieldMap as $idx => $itm) {

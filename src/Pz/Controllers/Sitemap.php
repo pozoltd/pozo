@@ -26,7 +26,7 @@ class Sitemap implements ControllerProviderInterface
     {
         $sitemap = array();
 
-        $result = \Site\DAOs\Page::active($app['em'], array());
+        $result = \Pz\DAOs\Page::active($app['em'], array());
         $sitemap = array();
         foreach ($result as $itm) {
             $itm->sitemapUrl = $itm->url;

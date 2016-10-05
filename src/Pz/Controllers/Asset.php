@@ -36,7 +36,7 @@ class Asset extends  AssetView
 
     public function assets(Application $app, Request $request, $id = 0)
     {
-        $newFolder = new \Site\DAOs\Asset($app['em']);
+        $newFolder = new \Pz\DAOs\Asset($app['em']);
         $newFolder->isFolder = 1;
         $newFolder->parentId = $id;
         $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Folder(), $newFolder);
@@ -48,14 +48,14 @@ class Asset extends  AssetView
         }
 
         $ancestors = array();
-        $this->_ancestors(\Site\DAOs\Asset::data($app['em'], array(
+        $this->_ancestors(\Pz\DAOs\Asset::data($app['em'], array(
             'whereSql' => 'entity.isFolder = 1',
         )), $id, $ancestors);
 
         $json = $this->json($app, $request, $id);
         $json = json_decode($json->getContent());
         foreach ($json[0] as &$itm) {
-            $itm->_childNum = count(\Site\DAOs\Asset::data($app['em'], array(
+            $itm->_childNum = count(\Pz\DAOs\Asset::data($app['em'], array(
                 'whereSql' => 'entity.parentId = :v1',
                 'params' => array(
                     'v1' => $itm->id
@@ -85,14 +85,14 @@ class Asset extends  AssetView
             $app['session']->set('last-folder', $id);
         }
 
-        $folders = \Site\DAOs\Asset::data($app['em'], array(
+        $folders = \Pz\DAOs\Asset::data($app['em'], array(
             'whereSql' => 'entity.parentId = :v1 AND entity.isFolder = 1',
             'params' => array(
                 'v1' => $id
             ),
         ));
 
-        $files = \Site\DAOs\Asset::data($app['em'], array(
+        $files = \Pz\DAOs\Asset::data($app['em'], array(
             'whereSql' => 'entity.parentId = :v1 AND entity.isFolder != 1',
             'params' => array(
                 'v1' => $id
@@ -100,7 +100,7 @@ class Asset extends  AssetView
         ));
 
         $ancestors = array();
-        $this->_ancestors(\Site\DAOs\Asset::data($app['em'], array(
+        $this->_ancestors(\Pz\DAOs\Asset::data($app['em'], array(
             'whereSql' => 'entity.isFolder = 1',
         )), $id, $ancestors);
 
@@ -115,7 +115,7 @@ class Asset extends  AssetView
             $originalName = $files[0]->getClientOriginalName();
             $ext = pathinfo($originalName, PATHINFO_EXTENSION);
 
-            $newFile = new \Site\DAOs\Asset($app['em']);
+            $newFile = new \Pz\DAOs\Asset($app['em']);
             $newFile->isFolder = 0;
             $newFile->parentId = $request->request->get('parentId');
             $newFile->title = $originalName;

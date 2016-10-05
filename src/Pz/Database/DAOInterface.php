@@ -1,6 +1,6 @@
 <?php
 
-namespace Pz\DAOs;
+namespace Pz\Database;
 
 
 interface DAOInterface
