@@ -14,7 +14,7 @@ class Product extends \Pz\Modules\Cart\DAOs\Generated\Product {
     }
 
     public function objCategory() {
-        return \Pz\Modules\Cart\DAOs\ProductCategory::findById($this->db, $this->category);
+        return ProductCategory::findById($this->db, $this->category);
     }
 
 }
