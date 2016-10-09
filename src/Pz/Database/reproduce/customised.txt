@@ -3,9 +3,9 @@
 /**
  * {TIMESTAMP}
  */
-namespace {NAMESPACE}\DAOs;
+namespace {NAMESPACE};
 
-class {CLASSNAME} extends \{NAMESPACE}\DAOs\Generated\{CLASSNAME} {
+class {CLASSNAME} extends \{NAMESPACE}\Generated\{CLASSNAME} {
 
 
 }

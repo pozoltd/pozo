@@ -13,16 +13,6 @@ use Pz\Common\Utils;
 
 class Model implements ControllerProviderInterface
 {
-
-    private $app;
-    private $modelClass;
-
-    public function __construct($app, $options)
-    {
-        $this->app = $app;
-        $this->modelClass = isset($options['modelClass']) ? $options['modelClass'] : 'Pz\\Database\\Model';
-    }
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -36,7 +26,7 @@ class Model implements ControllerProviderInterface
 
     public function models(Application $app, Request $request, $modelType = 0)
     {
-        $className = $this->modelClass;
+        $className = $app['modelClass'];
         $models = $className::data($app['em'], array(
             'whereSql' => 'entity.modelType = :v1',
             'params' => array(
@@ -58,23 +48,24 @@ class Model implements ControllerProviderInterface
 
         $fields = $app['em']->getClassMetadata('Pz\Entities\Content')->getFieldNames();
         if ($id) {
-            $className = $this->modelClass;
+            $className = $app['modelClass'];
             $model = $className::findById($app['em'], $id);
             if (!$model) {
                 throw new NotFoundHttpException();
             }
 
-            $myClass = "\\" . DEFAULT_NAMESPACE . "\\DAOS\\" . $model->className;
+            $myClass = $model->getFullClass();
             if (class_exists($myClass)) {
                 $m = new $myClass($app['em']);
                 $fields = $app['em']->getClassMetadata($m->getORMClass())->getFieldNames();
             }
 
         } else {
-            $className = $this->modelClass;
+            $className = $app['modelClass'];
             $model = new $className($app['em']);
             $model->label = 'New models';
             $model->className = 'NewModel';
+            $model->namespace = 'Site\\DAOs';
             $model->modelType = $modelType;
             $model->dataType = 0;
             $model->listType = 0;
@@ -97,44 +88,47 @@ class Model implements ControllerProviderInterface
         if ($form->isValid()) {
             $model->save();
 
+            if ($model->modelType == 0) {
+                $generated = HOME_DIR . '/src/' . $model->namespace . '/Generated/' . $model->className . '.php';
+                $customised = HOME_DIR . '/src/' . $model->namespace . '/' . $model->className . '.php';
 
-            $generated = HOME_DIR . '/src/' . DEFAULT_NAMESPACE . '/DAOs/Generated/' . $model->className . '.php';
-            $customised = HOME_DIR . '/src/' . DEFAULT_NAMESPACE . '/DAOs/' . $model->className . '.php';
-//        if (file_exists($generated)) {
-//            unlink($generated);
-//        }
+                $columnsJson = json_decode($model->columnsJson);
+                $mappings = array_map(function($value) {
+                    return "'{$value->field}' => '{$value->column}', ";
+                }, $columnsJson);
 
-            $columnsJson = json_decode($model->columnsJson);
-            $mappings = array_map(function($value) {
-                return "'{$value->field}' => '{$value->column}', ";
-            }, $columnsJson);
+                $extras = array_map(function($value) {
+                    if ($value->widget == 'checkbox') {
+                        $txt = "\n\tpublic function get" . ucfirst($value->field) . "() {\n";
+                        $txt .= "\t\treturn \$this->{$value->field} == 1 ? true : false;";
+                        $txt .= "\n\t}\n";
+                        return $txt;
+                    }
+                }, $columnsJson);
+                $extras = array_filter($extras);
 
-            $extras = array_map(function($value) {
-                if ($value->widget == 'checkbox') {
-                    $txt = "\n\tpublic function get" . ucfirst($value->field) . "() {\n";
-                    $txt .= "\t\treturn \$this->{$value->field} == 1 ? true : false;";
-                    $txt .= "\n\t}\n";
-                    return $txt;
-                }
-            }, $columnsJson);
-            $extras = array_filter($extras);
-
-            $str = file_get_contents(__DIR__ . '/templates/generated.txt');
-            $str = str_replace('{TIMESTAMP}', date('Y-m-d H:i:s'), $str);
-            $str = str_replace('{NAMESPACE}', DEFAULT_NAMESPACE, $str);
-            $str = str_replace('{CLASSNAME}', $model->className, $str);
-            $str = str_replace('{MODELID}', $model->id, $str);
-            $str = str_replace('{MAPPING}', join("\n\t\t\t", $mappings), $str);
-            $str = str_replace('{EXTRAS}', count($extras) == 0 ? '' : join("\n\t\t\t", $extras), $str);
-            file_put_contents($generated, $str);
-
-            if (!file_exists($customised)) {
-                $str = file_get_contents(__DIR__ . '/templates/customised.txt');
+                $str = file_get_contents(CMS . 'vendor/pozoltd/pozo/src/Pz/Database/reproduce/generated.txt');
                 $str = str_replace('{TIMESTAMP}', date('Y-m-d H:i:s'), $str);
-                $str = str_replace('{NAMESPACE}', DEFAULT_NAMESPACE, $str);
+                $str = str_replace('{NAMESPACE}', $model->namespace, $str);
                 $str = str_replace('{CLASSNAME}', $model->className, $str);
-                file_put_contents($customised, $str);
+                $str = str_replace('{MODELID}', $model->id, $str);
+                $str = str_replace('{MAPPING}', join("\n\t\t\t", $mappings), $str);
+                $str = str_replace('{EXTRAS}', count($extras) == 0 ? '' : join("\n\t\t\t", $extras), $str);
+                $dir = dirname($generated);
+                if (!file_exists($dir)) {
+                    mkdir($dir, 0777, true);
+                }
+                file_put_contents($generated, $str);
+
+                if (!file_exists($customised)) {
+                    $str = file_get_contents(CMS . 'vendor/pozoltd/pozo/src/Pz/Database/reproduce/customised.txt');
+                    $str = str_replace('{TIMESTAMP}', date('Y-m-d H:i:s'), $str);
+                    $str = str_replace('{NAMESPACE}', $model->namespace, $str);
+                    $str = str_replace('{CLASSNAME}', $model->className, $str);
+                    file_put_contents($customised, $str);
+                }
             }
+
 
             if ($request->get('submit') == 'apply') {
                 return $app->redirect($app->url('edit-model', array(
@@ -161,7 +155,7 @@ class Model implements ControllerProviderInterface
     {
         $data = json_decode($request->get('data'));
         foreach ($data as $key => $value) {
-            $className = $this->modelClass;
+            $className = $app['modelClass'];
             $model = $className::findById($app['em'], $value);
             if ($model) {
                 $model->rank = $key;

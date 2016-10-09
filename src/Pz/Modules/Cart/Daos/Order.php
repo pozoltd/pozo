@@ -3,18 +3,18 @@
 /**
  * 2016-03-18 22:35:01
  */
-namespace Pz\DAOs;
+namespace Pz\Modules\Cart\DAOs;
 
 use Pz\Common\Utils;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class Order extends \Pz\DAOs\Generated\Order {
+class Order extends \Pz\Modules\Cart\DAOs\Generated\Order {
 
     public function getCartOrderItems() {
         if (isset($this->cartOrderItems) && gettype($this->cartOrderItems) == 'array') {
             return $this->cartOrderItems;
         }
-        return \Pz\DAOs\OrderItem::active($this->db, array(
+        return OrderItem::active($this->db, array(
             'whereSql' => 'entity.orderId = :v1',
             'params' => array(
                 'v1' => $this->id,
@@ -45,7 +45,7 @@ class Order extends \Pz\DAOs\Generated\Order {
         if ($totalWeight == 0) {
             return 0;
         }
-        $shipping = \Pz\DAOs\Shipping::active($this->db, array(
+        $shipping = Shipping::active($this->db, array(
             'whereSql' => 'entity.title LIKE :v1',
             'params' => array('v1' => '%"' . $this->getCountry() . '"%'),
             'oneOrNull' => true,
@@ -58,7 +58,7 @@ class Order extends \Pz\DAOs\Generated\Order {
     }
 
     public function getOrderitems() {
-        return \Pz\DAOs\OrderItem::data($this->db, array(
+        return OrderItem::data($this->db, array(
             'whereSql' => 'entity.orderId = :v1',
             'params' => array(
                 'v1' => $this->id,
@@ -71,7 +71,7 @@ class Order extends \Pz\DAOs\Generated\Order {
         if ($this->country) {
             return $this->country;
         }
-        $shipping = \Pz\DAOs\Shipping::active($this->db, array(
+        $shipping = Shipping::active($this->db, array(
             'oneOrNull' => true,
         ));
         $countries = json_decode($shipping->title);
@@ -85,7 +85,7 @@ class Order extends \Pz\DAOs\Generated\Order {
     public function getCountries() {
         $this->__wakeup();
         $countries = array();
-        $shippings = \Pz\DAOs\Shipping::active($this->db);
+        $shippings = Shipping::active($this->db);
         foreach ($shippings as $itm) {
             $countries = array_merge($countries, json_decode($itm->title));
         }

@@ -3,7 +3,7 @@
 /**
  * 2016-04-11 22:17:37
  */
-namespace Pz\DAOs\Generated;
+namespace Pz\Modules\Cart\DAOs\Generated;
 
 class Order extends \Pz\Database\Content {
 

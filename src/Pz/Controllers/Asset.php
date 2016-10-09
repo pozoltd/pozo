@@ -10,9 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-class Asset extends  AssetView
+class Asset extends AssetView
 {
-
     public function connect(Application $app)
     {
         $controllers = parent::connect($app);
@@ -36,7 +35,8 @@ class Asset extends  AssetView
 
     public function assets(Application $app, Request $request, $id = 0)
     {
-        $newFolder = new \Pz\DAOs\Asset($app['em']);
+        $className = $app['assetClass'];
+        $newFolder = new $className($app['em']);
         $newFolder->isFolder = 1;
         $newFolder->parentId = $id;
         $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Folder(), $newFolder);
@@ -48,14 +48,14 @@ class Asset extends  AssetView
         }
 
         $ancestors = array();
-        $this->_ancestors(\Pz\DAOs\Asset::data($app['em'], array(
+        $this->_ancestors($className::data($app['em'], array(
             'whereSql' => 'entity.isFolder = 1',
         )), $id, $ancestors);
 
         $json = $this->json($app, $request, $id);
         $json = json_decode($json->getContent());
         foreach ($json[0] as &$itm) {
-            $itm->_childNum = count(\Pz\DAOs\Asset::data($app['em'], array(
+            $itm->_childNum = count($className::data($app['em'], array(
                 'whereSql' => 'entity.parentId = :v1',
                 'params' => array(
                     'v1' => $itm->id
@@ -67,14 +67,15 @@ class Asset extends  AssetView
             'currentId' => $id,
             'folders' => $json[0],
             'files' => $json[1],
-			'ancestors' => $ancestors,
-			'returnURL' => Utils::getURL(),
+            'ancestors' => $ancestors,
+            'returnURL' => Utils::getURL(),
         ));
 
     }
 
-    public function json(Application $app, Request $request, $id) {
-
+    public function json(Application $app, Request $request, $id)
+    {
+        $className = $app['assetClass'];
         if ($id == -1) {
             if ($app['session']->get('last-folder')) {
                 $id = $app['session']->get('last-folder');
@@ -85,14 +86,14 @@ class Asset extends  AssetView
             $app['session']->set('last-folder', $id);
         }
 
-        $folders = \Pz\DAOs\Asset::data($app['em'], array(
+        $folders = $className::data($app['em'], array(
             'whereSql' => 'entity.parentId = :v1 AND entity.isFolder = 1',
             'params' => array(
                 'v1' => $id
             ),
         ));
 
-        $files = \Pz\DAOs\Asset::data($app['em'], array(
+        $files = $className::data($app['em'], array(
             'whereSql' => 'entity.parentId = :v1 AND entity.isFolder != 1',
             'params' => array(
                 'v1' => $id
@@ -100,7 +101,7 @@ class Asset extends  AssetView
         ));
 
         $ancestors = array();
-        $this->_ancestors(\Pz\DAOs\Asset::data($app['em'], array(
+        $this->_ancestors($className::data($app['em'], array(
             'whereSql' => 'entity.isFolder = 1',
         )), $id, $ancestors);
 
@@ -110,12 +111,13 @@ class Asset extends  AssetView
 
     public function upload(Application $app, Request $request)
     {
+        $className = $app['assetClass'];
         $files = $request->files->get('files');
         if ($files && is_array($files) && count($files) > 0) {
             $originalName = $files[0]->getClientOriginalName();
             $ext = pathinfo($originalName, PATHINFO_EXTENSION);
 
-            $newFile = new \Pz\DAOs\Asset($app['em']);
+            $newFile = new $className($app['em']);
             $newFile->isFolder = 0;
             $newFile->parentId = $request->request->get('parentId');
             $newFile->title = $originalName;

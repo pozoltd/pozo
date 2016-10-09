@@ -12,6 +12,7 @@ class Model extends DoctrineDAO {
             'rank' => 'rank',
             'label' => 'label',
             'className' => 'className',
+            'namespace' => 'namespace',
             'modelType' => 'modelType',
             'dataType' => 'dataType',
             'listType' => 'listType',
@@ -28,6 +29,10 @@ class Model extends DoctrineDAO {
 
     public function getBaseQuery() {
         return null;
+    }
+
+    public function getFullClass() {
+        return $this->namespace . '\\' . $this->className;
     }
 
 }

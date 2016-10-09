@@ -1,5 +1,5 @@
 {% if (total / model.numberPerPage)|ceil > 1 %}
-	<div class="dataTables_paginate paging_simple_numbers" style="margin-top: 20px">
+	<div class="dataTables_paginate paging_simple_numbers">
 		<ul class="pagination">
 			<li><a href="{{ path('contents-page', { modelId: model.id, pageNum: 1, sort: sort, order: order }) }}{{ app.get.requestURI }}"><i class="fa fa-angle-double-left"></i></a></li>
 			<li><a href="{{ path('contents-page', { modelId: model.id, pageNum: max(1, pageNum - 1), sort: sort, order: order }) }}{{ app.get.requestURI }}"><i class="fa fa-angle-left"></i></a></li>

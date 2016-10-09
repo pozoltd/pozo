@@ -112,13 +112,13 @@ abstract class DoctrineDAO implements DAOInterface
 
     public static function findByField($db, $field, $value)
     {
-        $daos = static::data($db, array(
+        return static::data($db, array(
             'whereSql' => 'entity.' . $field . ' = :v1',
             'params' => array(
                 'v1' => $value,
-            )
+            ),
+            'oneOrNull' => true,
         ));
-        return array_pop($daos);
     }
 
     public static function active($db, $options = array())
@@ -151,15 +151,6 @@ abstract class DoctrineDAO implements DAOInterface
         $oneOrNull = isset($options['oneOrNull']) ? $options['oneOrNull'] : false;
 
         $whereSql = static::convert($m, $whereSql);
-//        foreach ($params as $idx => $itm) {
-//            foreach ($model['columnsJson'] as $itm2) {
-//                if ($idx == $itm2['field']) {
-//                    unset($params[$idx]);
-//                    $params[$itm2['mapping']] = $itm;
-//                }
-//            }
-//        }
-
         $sort = static::convert($m, $sort);
 
 

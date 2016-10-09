@@ -3,7 +3,7 @@
 /**
  * 2016-07-31 19:33:45
  */
-namespace Pz\DAOs\Generated;
+namespace Pz\Modules\Cart\DAOs\Generated;
 
 class Product extends \Pz\Database\Content {
 

@@ -31,42 +31,6 @@ class Get implements ServiceProviderInterface
         $this->app->abort(404);
     }
 
-    public function active($className, $options = array(), $namespace = 'Pz\\DAOs')
-    {
-        $className = "\\{$namespace}\\{$className}";
-        return $className::active($this->app['em'], $options);
-    }
-
-    public function data($className, $options = array(), $namespace = 'Pz\\DAOs')
-    {
-        $className = "\\{$namespace}\\{$className}";
-        return $className::data($this->app['em'], $options);
-    }
-
-    public function getById($className, $id, $namespace = 'Pz\\DAOs')
-    {
-        $className = "\\{$namespace}\\{$className}";
-        return $className::findById($this->app['em'], $id);
-    }
-
-    public function getBySlug($className, $slug, $namespace = 'Pz\\DAOs')
-    {
-        $className = "\\{$namespace}\\{$className}";
-        return $className::findBySlug($this->app['em'], $slug);
-    }
-
-    public function getByField($className, $field, $value, $namespace = 'Pz\\DAOs')
-    {
-        $className = "\\{$namespace}\\{$className}";
-        $result = $className::data($this->app['em'], array(
-            'whereSql' => 'entity.' . $field . ' = :v1',
-            'params' => array(
-                'v1' => $value,
-            )
-        ));
-        return count($result) > 0 ? $result[0] : null;
-    }
-
     public function getRequestURI() {
         return stripos(Utils::getURL(), '?') === false ? '' : substr(Utils::getURL(), stripos(Utils::getURL(), '?'));
     }
@@ -124,4 +88,5 @@ class Get implements ServiceProviderInterface
         }
         return null;
     }
+
 }

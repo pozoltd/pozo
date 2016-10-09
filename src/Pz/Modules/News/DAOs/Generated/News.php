@@ -1,25 +1,24 @@
 <?php
 
 /**
- * 2016-07-07 23:01:10
+ * 2016-07-07 22:39:48
  */
-namespace Pz\DAOs\Generated;
+namespace Pz\Modules\News\DAOs\Generated;
 
-class Shipping extends \Pz\Database\Content {
+class News extends \Pz\Database\Content {
 
     function getFieldMap() {
         global $CMS_METAS;
         return array_merge(array(
             'title' => 'title', 
+			'content' => 'content', 
+			'pageTitle' => 'extra1', 
 			'description' => 'description', 
-			'upto' => 'extra1', 
-			'firstPrice' => 'price', 
-			'additionalPrice' => 'extra2', 
         ), array_combine($CMS_METAS, $CMS_METAS));
     }
 
     function getBaseQuery() {
-        return 'entity.modelId = 19';
+        return 'entity.modelId = 8';
     }
 
     

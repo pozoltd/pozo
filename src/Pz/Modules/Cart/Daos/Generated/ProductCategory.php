@@ -1,21 +1,23 @@
 <?php
 
 /**
- * 2016-07-31 21:00:36
+ * 2016-07-31 21:22:27
  */
-namespace Pz\DAOs\Generated;
+namespace Pz\Modules\Cart\DAOs\Generated;
 
-class Brand extends \Pz\Database\Content {
+class ProductCategory extends \Pz\Database\Content {
 
     function getFieldMap() {
         global $CMS_METAS;
         return array_merge(array(
             'title' => 'title', 
+			'brands' => 'extra1', 
+			'image' => 'image', 
         ), array_combine($CMS_METAS, $CMS_METAS));
     }
 
     function getBaseQuery() {
-        return 'entity.modelId = 15';
+        return 'entity.modelId = 14';
     }
 
     

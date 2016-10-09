@@ -28,7 +28,7 @@ class Form implements ServiceProviderInterface
         }
         $formDescriptor->sent = false;
 
-        $formBuilder = new \Pz\Services\FormBuilder($formDescriptor, $this->app, array());
+        $formBuilder = new \Pz\Forms\FormBuilder($formDescriptor, $this->app, array());
         $form = $this->app['form.factory']->create(
             $formBuilder, array()
         );

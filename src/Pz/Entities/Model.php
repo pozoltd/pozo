@@ -30,7 +30,12 @@ class Model {
 	 * @ORM\Column(type="string", length=128)
 	 */
 	protected $className;
-	
+
+    /**
+     * @ORM\Column(type="string", length=128)
+     */
+    protected $namespace;
+
 	/**
 	 * @ORM\Column(type="integer")
 	 */
@@ -144,6 +149,22 @@ class Model {
     public function getClassName()
     {
         return $this->className;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * @param mixed $namespace
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
     }
 
     /**

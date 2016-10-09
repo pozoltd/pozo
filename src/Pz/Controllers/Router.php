@@ -12,16 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Router implements ControllerProviderInterface
 {
-
-    private $app;
-    private $pageClass;
-
-    public function __construct($app, $options)
-    {
-        $this->app = $app;
-        $this->pageClass = isset($options['pageClass']) ? $options['pageClass'] : 'Pz\\DAOs\\Page';
-    }
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -31,7 +21,7 @@ class Router implements ControllerProviderInterface
 
     public function route(Application $app, Request $request, $url)
     {
-        $className = $this->pageClass;
+        $className = $app['pageClass'];
         $page = $className::findByField($app['em'], 'url', trim($url, '/'));
         if (!$page) {
             $page = $className::findByField($app['em'], 'url', trim($url, '/') . '/');
@@ -76,7 +66,9 @@ class Router implements ControllerProviderInterface
         } else {
             return $app->abort(404);
         }
-
     }
 
+    public function getPageClass() {
+        return $app['pageClass'];
+    }
 }

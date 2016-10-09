@@ -1,11 +1,11 @@
 <?php
 
 /**
- * 2016-07-07 22:54:57
+ * 2016-07-31 21:00:36
  */
-namespace Pz\DAOs\Generated;
+namespace Pz\Modules\Cart\DAOs\Generated;
 
-class Country extends \Pz\Database\Content {
+class Brand extends \Pz\Database\Content {
 
     function getFieldMap() {
         global $CMS_METAS;
@@ -15,7 +15,7 @@ class Country extends \Pz\Database\Content {
     }
 
     function getBaseQuery() {
-        return 'entity.modelId = 18';
+        return 'entity.modelId = 15';
     }
 
     

@@ -1,16 +1,5 @@
 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
-
-{# {% set user = app['user'].getUser() %} #}
-{% set myModels = app.get.data('Model', {}, 'Pz\\Database') %}
-
-{# {% if model is defined and model.name == 'Page' %}#}
-{# 	{% set _menu = 'pages' %}#}
-{# {% endif %}#}
-
-{# {% if model is defined and model.name == 'Asset' %}#}
-{# 	{% set _menu = 'assets' %}#}
-{# {% endif %}#}
-
+{% set myModels = app.db.data('Model') %}
 
 <!DOCTYPE html>
 <html>

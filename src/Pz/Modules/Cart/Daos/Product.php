@@ -3,9 +3,9 @@
 /**
  * 2016-03-04 21:39:25
  */
-namespace Pz\DAOs;
+namespace Pz\Modules\Cart\DAOs;
 
-class Product extends \Pz\DAOs\Generated\Product {
+class Product extends \Pz\Modules\Cart\DAOs\Generated\Product {
 
     public function save() {
 
@@ -14,7 +14,7 @@ class Product extends \Pz\DAOs\Generated\Product {
     }
 
     public function objCategory() {
-        return \Pz\DAOs\ProductCategory::findById($this->db, $this->category);
+        return \Pz\Modules\Cart\DAOs\ProductCategory::findById($this->db, $this->category);
     }
 
 }

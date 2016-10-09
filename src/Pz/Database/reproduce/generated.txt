@@ -3,7 +3,7 @@
 /**
  * {TIMESTAMP}
  */
-namespace {NAMESPACE}\DAOs\Generated;
+namespace {NAMESPACE}\Generated;
 
 class {CLASSNAME} extends \Pz\Database\Content {
 

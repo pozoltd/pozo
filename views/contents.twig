@@ -17,11 +17,8 @@
                             <span class="txt">Add new</span>
                         </button>
                     </a>
-                    <div>&nbsp;</div>
-
                     {% if model.listType != 2 %}
                         {% if contents|length > 0 %}
-                            {% include 'includes/pagination.twig' %}
                             <table class="table table-striped table-bordered table-hover table-middle">
                                 <thead>
                                     <tr>
@@ -45,6 +42,7 @@
                                     {% endfor %}
                                 </tbody>
                             </table>
+                            {% include 'includes/pagination.twig' %}
                         {% endif %}
                     {% else %}
                         <div class="nestable-lists">

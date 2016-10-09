@@ -42,7 +42,6 @@ class UserProvider implements UserProviderInterface
 
     public function supportsClass($class)
     {
-//        return $class === 'Symfony\Component\Security\Core\User\User';
-        return $class === DAO_USER;
+        return $class === $this->userClass;
     }
 }

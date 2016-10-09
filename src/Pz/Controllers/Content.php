@@ -14,15 +14,6 @@ use Pz\Common\Utils;
 
 class Content implements ControllerProviderInterface
 {
-    private $app;
-    private $modelClass;
-
-    public function __construct($app, $options)
-    {
-        $this->app = $app;
-        $this->modelClass = isset($options['modelClass']) ? $options['modelClass'] : 'Pz\\Database\\Model';
-    }
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -40,7 +31,7 @@ class Content implements ControllerProviderInterface
 
     public function contents(Application $app, Request $request, $modelId, $pageNum = null, $sort = null, $order = null)
     {
-        $className = $this->modelClass;
+        $className = $app['modelClass'];
         $model = $className::findById($app['em'], $modelId);
         if (!$model) {
             $app->abort(404);
@@ -61,7 +52,7 @@ class Content implements ControllerProviderInterface
         }
 
 
-        $daoClass = ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . '\\DAOs\\' . $model->className;
+        $daoClass = $model->getFullClass();
         $daos = $daoClass::data($app['em'], array(
             'sort' => 'entity.' . $sort,
             'order' => $order,
@@ -96,13 +87,13 @@ class Content implements ControllerProviderInterface
 
     public function content(Application $app, Request $request, $modelId, $returnURL, $id = null)
     {
-        $className = $this->modelClass;
+        $className = $app['modelClass'];
         $model = $className::findById($app['em'], $modelId);
         if (!$model) {
             $app->abort(404);
         }
 
-        $daoClass = ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . '\\DAOs\\' . $model->className;
+        $daoClass = $model->getFullClass();
         $content = new $daoClass($app['em']);
         if ($id) {
             $content = $daoClass::findById($app['em'], $id);
@@ -116,13 +107,13 @@ class Content implements ControllerProviderInterface
 
     public function copy(Application $app, Request $request, $modelId, $returnURL, $id)
     {
-        $className = $this->modelClass;
+        $className = $app['modelClass'];
         $model = $className::findById($app['em'], $modelId);
         if (!$model) {
             $app->abort(404);
         }
 
-        $daoClass = ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . '\\DAOs\\' . $model->className;
+        $daoClass = $model->getFullClass();
         $content = $daoClass::findById($app['em'], $id);
         if (!$content) {
             $app->abort(404);
@@ -193,9 +184,9 @@ class Content implements ControllerProviderInterface
     {
         $contentId = $request->get('content');
         $modelId = $request->get('model');
-        $className = $this->modelClass;
+        $className = $app['modelClass'];
         $model = $className::findById($app['em'], $modelId);
-        $className = ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . "\\DAOs\\" . $model->className;
+        $className = $model->getFullClass();
         $content = $className::findById($app['em'], $contentId);
         $content->delete();
         return new Response('OK');
@@ -203,9 +194,9 @@ class Content implements ControllerProviderInterface
     }
 
     public function sort(Application $app, Request $request, $modelId) {
-        $className = $this->modelClass;
+        $className = $app['modelClass'];
         $model = $className::findById($app['em'], $modelId);
-        $className = ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . "\\DAOs\\" . $model->className;
+        $className = $model->getFullClass();
         $data = json_decode($request->get('data'));
         foreach ($data as $idx => $itm) {
             $obj = $className::findById($app['em'], $itm);
@@ -216,9 +207,9 @@ class Content implements ControllerProviderInterface
     }
 
     public function nestable(Application $app, Request $request, $modelId) {
-        $className = $this->modelClass;
+        $className = $app['modelClass'];
         $model = $className::findById($app['em'], $modelId);
-        $className =  ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . "\\DAOs\\" . $model->className;
+        $className =  $model->getFullClass();
         $data = json_decode($request->get('data'));
         foreach ($data as $itm) {
             $obj = $className::findById($app['em'], $itm->id);
@@ -231,13 +222,13 @@ class Content implements ControllerProviderInterface
 
     public function changeStatus(Application $app, Request $request)
     {
-        $className = $this->modelClass;
+        $className = $app['modelClass'];
         $model = $className::findById($app['em'], $request->get('model'));
         if (!$model) {
             $app->abort(404);
         }
 
-        $daoClass = ($model->modelType ? 'Pz' : DEFAULT_NAMESPACE) . '\\DAOs\\' . $model->className;
+        $daoClass = $model->getFullClass();
         $content = $daoClass::findById($app['em'], $request->get('content'));
         if (!$content) {
             $app->abort(404);

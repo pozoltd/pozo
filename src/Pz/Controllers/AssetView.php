@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AssetView implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -24,9 +23,10 @@ class AssetView implements ControllerProviderInterface
 
     public function image(Application $app, Request $request, $imageAsset, $imageSize = null)
     {
-        $asset = \Pz\DAOs\Asset::findById($app['em'], $imageAsset);
+        $classname = $app['assetClass'];
+        $asset = $classname::findById($app['em'], $imageAsset);
         if (!$asset) {
-            $asset = \Pz\DAOs\Asset::findByField($app['em'], 'title', $imageAsset);
+            $asset = $classname::findByField($app['em'], 'title', $imageAsset);
             if (!$asset) {
                 $app->abort(404);
             }
@@ -93,9 +93,10 @@ class AssetView implements ControllerProviderInterface
 
     public function download(Application $app, $imageAsset)
     {
-        $asset = \Pz\DAOs\Asset::findById($app['em'], $imageAsset);
+        $classname = $app['assetClass'];
+        $asset = $classname::findById($app['em'], $imageAsset);
         if (!$asset) {
-            $asset = \Pz\DAOs\Asset::findByField($app['em'], 'title', $imageAsset);
+            $asset = $classname::findByField($app['em'], 'title', $imageAsset);
             if (!$asset) {
                 $app->abort(404);
             }

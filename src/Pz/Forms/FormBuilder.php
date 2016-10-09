@@ -1,6 +1,6 @@
 <?php
 
-namespace Pz\Services;
+namespace Pz\Forms;
 
 use Pz\Common\Utils;
 use Symfony\Component\Form\AbstractType;

@@ -30,6 +30,11 @@ class Model extends AbstractType
             'constraints' => array(
                 new Assert\NotBlank()
             )
+        ))->add('namespace', 'text', array(
+            'label' => 'Namespace:',
+            'constraints' => array(
+                new Assert\NotBlank()
+            )
         ))->add('modelType', 'choice', array(
             'label' => 'Model type:',
             'expanded' => true,
@@ -49,9 +54,9 @@ class Model extends AbstractType
             'label' => 'Listing type:',
             'expanded' => true,
             'choices' => array(
-                0 => 'Pagination',
                 1 => 'Drag & Drop',
                 2 => 'Nested tree',
+                0 => 'Pagination',
             )
         ))->add('numberPerPage', 'text', array(
             'label' => 'Page size:',
