@@ -6,6 +6,16 @@ use Silex\Provider;
 require __DIR__ . '/metadata.php';
  
 $app = new Pz\Application();
+$app['modelClass'] = 'Pz\\Database\\Model';
+$app['pageCategoryClass'] = 'Pz\\DAOs\\PageCategory';
+$app['pageClass'] = 'Pz\\DAOs\\Page';
+$app['assetClass'] = 'Pz\\DAOs\\Asset';
+$app['imageSizeClass'] = 'Pz\\DAOs\\ImageSize';
+$app['formDescriptorClass'] = 'Pz\\DAOs\\FormDescriptor';
+$app['formSubmissionClass'] = 'Pz\\DAOs\\FormSubmission';
+$app['orderClass'] = 'Pz\\Modules\\Cart\\DAOs\\Order';
+$app['orderItemClass'] = 'Pz\\Modules\\Cart\\DAOs\\OrderItem';
+$app['productClass'] = 'Pz\\Modules\\Cart\\DAOs\\Product';
 
 $config = new \Doctrine\ORM\Configuration();
 $config->setMetadataCacheImpl(new \Doctrine\Common\Cache\ArrayCache());

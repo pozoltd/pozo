@@ -23,10 +23,10 @@ class AssetView implements ControllerProviderInterface
 
     public function image(Application $app, Request $request, $imageAsset, $imageSize = null)
     {
-        $classname = $app['assetClass'];
-        $asset = $classname::findById($app['em'], $imageAsset);
+        $assetClass = $app['assetClass'];
+        $asset = $assetClass::findById($app['em'], $imageAsset);
         if (!$asset) {
-            $asset = $classname::findByField($app['em'], 'title', $imageAsset);
+            $asset = $assetClass::findByField($app['em'], 'title', $imageAsset);
             if (!$asset) {
                 $app->abort(404);
             }
@@ -36,9 +36,10 @@ class AssetView implements ControllerProviderInterface
         $file = dirname($_SERVER['SCRIPT_FILENAME']) . '/../uploads/' . $asset->fileLocation;
         if ($imageSize) {
             if ((file_exists($file) && getimagesize($file)) || ('application/pdf' == $fileType)) {
-                $size = \Pz\DAOs\ImageSize::findById($app['em'], $imageSize);
+                $imageSizeClass = $app['imageSizeClass'];
+                $size = $imageSizeClass::findById($app['em'], $imageSize);
                 if (!$size) {
-                    $size = \Pz\DAOs\ImageSize::findByField($app['em'], 'title', $imageSize);
+                    $size = $imageSizeClass::findByField($app['em'], 'title', $imageSize);
                     if (!$size) {
                         $app->abort(404);
                     }
@@ -93,10 +94,10 @@ class AssetView implements ControllerProviderInterface
 
     public function download(Application $app, $imageAsset)
     {
-        $classname = $app['assetClass'];
-        $asset = $classname::findById($app['em'], $imageAsset);
+        $assetClass = $app['assetClass'];
+        $asset = $assetClass::findById($app['em'], $imageAsset);
         if (!$asset) {
-            $asset = $classname::findByField($app['em'], 'title', $imageAsset);
+            $asset = $assetClass::findByField($app['em'], 'title', $imageAsset);
             if (!$asset) {
                 $app->abort(404);
             }

@@ -8,7 +8,7 @@ namespace Pz\DAOs;
 class Page extends \Pz\DAOs\Generated\Page {
 
     public function objTemplate() {
-        return \Pz\DAOs\Template::findById($this->db, $this->template);
+        return Template::findById($this->db, $this->template);
     }
 
 }

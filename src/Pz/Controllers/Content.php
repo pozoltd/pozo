@@ -14,6 +14,8 @@ use Pz\Common\Utils;
 
 class Content implements ControllerProviderInterface
 {
+    private $app;
+
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -31,8 +33,8 @@ class Content implements ControllerProviderInterface
 
     public function contents(Application $app, Request $request, $modelId, $pageNum = null, $sort = null, $order = null)
     {
-        $className = $app['modelClass'];
-        $model = $className::findById($app['em'], $modelId);
+        $modelClass = $app['modelClass'];
+        $model = $modelClass::findById($app['em'], $modelId);
         if (!$model) {
             $app->abort(404);
         }
@@ -87,8 +89,8 @@ class Content implements ControllerProviderInterface
 
     public function content(Application $app, Request $request, $modelId, $returnURL, $id = null)
     {
-        $className = $app['modelClass'];
-        $model = $className::findById($app['em'], $modelId);
+        $modelClass = $app['modelClass'];
+        $model = $modelClass::findById($app['em'], $modelId);
         if (!$model) {
             $app->abort(404);
         }
@@ -107,8 +109,8 @@ class Content implements ControllerProviderInterface
 
     public function copy(Application $app, Request $request, $modelId, $returnURL, $id)
     {
-        $className = $app['modelClass'];
-        $model = $className::findById($app['em'], $modelId);
+        $modelClass = $app['modelClass'];
+        $model = $modelClass::findById($app['em'], $modelId);
         if (!$model) {
             $app->abort(404);
         }
@@ -184,8 +186,8 @@ class Content implements ControllerProviderInterface
     {
         $contentId = $request->get('content');
         $modelId = $request->get('model');
-        $className = $app['modelClass'];
-        $model = $className::findById($app['em'], $modelId);
+        $modelClass = $app['modelClass'];
+        $model = $modelClass::findById($app['em'], $modelId);
         $className = $model->getFullClass();
         $content = $className::findById($app['em'], $contentId);
         $content->delete();
@@ -194,8 +196,8 @@ class Content implements ControllerProviderInterface
     }
 
     public function sort(Application $app, Request $request, $modelId) {
-        $className = $app['modelClass'];
-        $model = $className::findById($app['em'], $modelId);
+        $modelClass = $app['modelClass'];
+        $model = $modelClass::findById($app['em'], $modelId);
         $className = $model->getFullClass();
         $data = json_decode($request->get('data'));
         foreach ($data as $idx => $itm) {
@@ -207,8 +209,8 @@ class Content implements ControllerProviderInterface
     }
 
     public function nestable(Application $app, Request $request, $modelId) {
-        $className = $app['modelClass'];
-        $model = $className::findById($app['em'], $modelId);
+        $modelClass = $app['modelClass'];
+        $model = $modelClass::findById($app['em'], $modelId);
         $className =  $model->getFullClass();
         $data = json_decode($request->get('data'));
         foreach ($data as $itm) {
@@ -222,8 +224,8 @@ class Content implements ControllerProviderInterface
 
     public function changeStatus(Application $app, Request $request)
     {
-        $className = $app['modelClass'];
-        $model = $className::findById($app['em'], $request->get('model'));
+        $modelClass = $app['modelClass'];
+        $model = $modelClass::findById($app['em'], $request->get('model'));
         if (!$model) {
             $app->abort(404);
         }

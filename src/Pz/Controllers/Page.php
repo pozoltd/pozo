@@ -25,15 +25,15 @@ class Page implements ControllerProviderInterface
     public function pages(Application $app, Request $request)
     {
 
-        $className = $app['pageCategoryClass'];
-        $categories = $className::data($app['em']);
+        $pageCategoryClass = $app['pageCategoryClass'];
+        $categories = $pageCategoryClass::data($app['em']);
         $cat = $request->get('cat');
         if (!$cat && count($categories) > 0) {
             $cat = $categories[0]->id;
         }
 
-        $className = $app['pageClass'];
-        $result = $className::data($app['em']);
+        $pageClass = $app['pageClass'];
+        $result = $pageClass::data($app['em']);
         $pages = array();
         foreach ($result as $itm) {
             $itm->categoryRank = ((empty($itm->categoryRank) || !$itm->categoryRank)) ? array() : (array)json_decode($itm->categoryRank);
@@ -88,8 +88,8 @@ class Page implements ControllerProviderInterface
 
     public function count(Application $app, Request $request)
     {
-        $className = $app['pageClass'];
-        $result = $className::data($app['em']);
+        $pageClass = $app['pageClass'];
+        $result = $pageClass::data($app['em']);
         $counter = array();
         foreach ($result as $itm) {
             $itm->category = ((empty($itm->category) || !$itm->category)) ? array() : (array)json_decode($itm->category);
@@ -114,8 +114,8 @@ class Page implements ControllerProviderInterface
 
     public function change(Application $app, Request $request)
     {
-        $className = $app['pageClass'];
-        $result = $className::data($app['em']);
+        $pageClass = $app['pageClass'];
+        $result = $pageClass::data($app['em']);
         $pages = array();
         foreach ($result as $itm) {
             $itm->categoryRank = ((empty($itm->categoryRank) || !$itm->categoryRank)) ? array() : (array)json_decode($itm->categoryRank);
@@ -134,8 +134,8 @@ class Page implements ControllerProviderInterface
         $root->id = 0;
         $root = Utils::buildTree($root, $pages);
 
-        $className = $app['pageClass'];
-        $result = $className::data($app['em']);
+        $pageClass = $app['pageClass'];
+        $result = $pageClass::data($app['em']);
         $ids = Utils::withChildIds($root, $request->get('id'));
         foreach ($ids as $itm) {
             if ($itm != $request->get('id')) {
@@ -168,8 +168,8 @@ class Page implements ControllerProviderInterface
             }
         }
 
-        $className = $app['pageClass'];
-        $result = $className::findById($app['em'], $request->get('id'));
+        $pageClass = $app['pageClass'];
+        $result = $pageClass::findById($app['em'], $request->get('id'));
         if ($result) {
             $result->category = (empty($result->category) || !$result->category) ? array() : json_decode($result->category);
             $categories = array();
@@ -201,8 +201,8 @@ class Page implements ControllerProviderInterface
 
     public function sort(Application $app, Request $request)
     {
-        $className = $app['pageClass'];
-        $result = $className::data($app['em']);
+        $pageClass = $app['pageClass'];
+        $result = $pageClass::data($app['em']);
         $data = json_decode($request->get('data'));
         foreach ($result as &$itm) {
             $itm->categoryRank = ((empty($itm->categoryRank) || !$itm->categoryRank)) ? array() : (array)json_decode($itm->categoryRank);

@@ -35,18 +35,6 @@ abstract class DoctrineDAO implements DAOInterface
         $this->db = $app['em'];
     }
 
-    /**
-     * for content only
-     * @return mixed|null
-     */
-    public function getModel()
-    {
-        if (isset($this->modelId)) {
-            return \Pz\DAOs\Model::findById($this->db, $this->modelId);
-        }
-        return null;
-    }
-
     public function delete()
     {
         $myClass = $this->getORMClass();

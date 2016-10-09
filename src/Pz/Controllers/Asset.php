@@ -35,8 +35,8 @@ class Asset extends AssetView
 
     public function assets(Application $app, Request $request, $id = 0)
     {
-        $className = $app['assetClass'];
-        $newFolder = new $className($app['em']);
+        $assetClass = $app['assetClass'];
+        $newFolder = new $assetClass($app['em']);
         $newFolder->isFolder = 1;
         $newFolder->parentId = $id;
         $formBuilder = $app['form.factory']->createBuilder(new \Pz\Forms\Folder(), $newFolder);
@@ -48,14 +48,14 @@ class Asset extends AssetView
         }
 
         $ancestors = array();
-        $this->_ancestors($className::data($app['em'], array(
+        $this->_ancestors($assetClass::data($app['em'], array(
             'whereSql' => 'entity.isFolder = 1',
         )), $id, $ancestors);
 
         $json = $this->json($app, $request, $id);
         $json = json_decode($json->getContent());
         foreach ($json[0] as &$itm) {
-            $itm->_childNum = count($className::data($app['em'], array(
+            $itm->_childNum = count($assetClass::data($app['em'], array(
                 'whereSql' => 'entity.parentId = :v1',
                 'params' => array(
                     'v1' => $itm->id
@@ -75,7 +75,7 @@ class Asset extends AssetView
 
     public function json(Application $app, Request $request, $id)
     {
-        $className = $app['assetClass'];
+        $assetClass = $app['assetClass'];
         if ($id == -1) {
             if ($app['session']->get('last-folder')) {
                 $id = $app['session']->get('last-folder');
@@ -86,14 +86,14 @@ class Asset extends AssetView
             $app['session']->set('last-folder', $id);
         }
 
-        $folders = $className::data($app['em'], array(
+        $folders = $assetClass::data($app['em'], array(
             'whereSql' => 'entity.parentId = :v1 AND entity.isFolder = 1',
             'params' => array(
                 'v1' => $id
             ),
         ));
 
-        $files = $className::data($app['em'], array(
+        $files = $assetClass::data($app['em'], array(
             'whereSql' => 'entity.parentId = :v1 AND entity.isFolder != 1',
             'params' => array(
                 'v1' => $id
@@ -101,7 +101,7 @@ class Asset extends AssetView
         ));
 
         $ancestors = array();
-        $this->_ancestors($className::data($app['em'], array(
+        $this->_ancestors($assetClass::data($app['em'], array(
             'whereSql' => 'entity.isFolder = 1',
         )), $id, $ancestors);
 
@@ -111,13 +111,13 @@ class Asset extends AssetView
 
     public function upload(Application $app, Request $request)
     {
-        $className = $app['assetClass'];
+        $assetClass = $app['assetClass'];
         $files = $request->files->get('files');
         if ($files && is_array($files) && count($files) > 0) {
             $originalName = $files[0]->getClientOriginalName();
             $ext = pathinfo($originalName, PATHINFO_EXTENSION);
 
-            $newFile = new $className($app['em']);
+            $newFile = new $assetClass($app['em']);
             $newFile->isFolder = 0;
             $newFile->parentId = $request->request->get('parentId');
             $newFile->title = $originalName;
