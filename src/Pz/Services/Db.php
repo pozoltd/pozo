@@ -22,6 +22,7 @@ class Db implements ServiceProviderInterface
     {
         $model = $this->model($className);
         $className = $model->getFullClass();
+        var_dump($className);exit;
         return $className::active($this->app['em'], $options);
     }
 
