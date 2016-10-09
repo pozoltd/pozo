@@ -32,7 +32,7 @@ class Model extends DoctrineDAO {
     }
 
     public function getFullClass() {
-        return '\\' . $this->namespace . '\\' . $this->className;
+        return $this->namespace . '\\' . $this->className;
     }
 
 }
