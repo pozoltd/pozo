@@ -8,6 +8,7 @@ namespace Pz\Modules\Cart\DAOs;
 class Product extends \Pz\Modules\Cart\DAOs\Generated\Product {
 
     public function save() {
+
         $this->title = ($this->subtitle1 ? $this->subtitle1 . ' ' : '') . ($this->subtitle2 ? $this->subtitle2 . ' ' : '') . ($this->subtitle3 ? $this->subtitle3 . ' ' : '');
         parent::save();
     }
