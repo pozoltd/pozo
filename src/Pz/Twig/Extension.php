@@ -55,30 +55,20 @@ class Extension extends Twig_Extension
         return $str;
     }
 
-    public function nav($node)
+    public function nav($node, $options = array())
     {
-        if (count($node->_c) == 0) {
-            return '';
-        }
-
-        $valid = false;
-        foreach ($node->_c as $itm) {
-            if ($itm->active == 1) {
-                $valid = true;
-            }
-        }
-
         $str = '';
-        if ($valid) {
-            $str = '<ul>';
-            foreach ($node->_c as $itm) {
-                $str .= '<li>';
-                $str .= '<a href="' . ($itm->url ?: urlencode($itm->title)) . '">' . $itm->title . '</a>';
-                $str .= $this->nav($itm);
-                $str .= '</li>';
+        $str = "<ul" . ((isset($options['class']) && $options['class']) ? " class=\"{$options['class']}\"" : '') . ">";
+        foreach ($node->_c as $itm) {
+            if ($itm->active != 1) {
+                continue;
             }
-            $str .= '</ul>';
+            $str .= "<li" . ((isset($options['selected']) && $options['selected']->id == $itm->id) ? " class=\"active\"" : '') . ">";
+            $str .= "<a href=\"" . ($itm->url ?: urlencode($itm->title)) . "\" >{$itm->title}</a>";
+            $str .= $this->nav($itm);
+            $str .= "</li>";
         }
+        $str .= "</ul>";
 
         return $str;
     }
