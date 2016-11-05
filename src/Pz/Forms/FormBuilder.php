@@ -27,10 +27,21 @@ class FormBuilder extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+//        while (@ob_end_clean());
         $fields = json_decode($this->formDescriptor->fields);
         foreach ($fields as $key => $field) {
+//            Utils::dump($field);
             $builder->add($field->id, $field->widget, $this->getOptionsForField($field));
         }
+
+//        $builder->add('antispam', new \Pz\Forms\Types\Robot(), array(
+//            "mapped" => false,
+//            'label' => '',
+//            'constraints' => array(
+//                new \Pz\Forms\Constraints\Robot(),
+//            )
+//        ));
+//        exit;
     }
 
     public function getName()
@@ -44,13 +55,19 @@ class FormBuilder extends AbstractType
             'label' => $field->label
         );
 
-        $fieldType = isset($field->fieldType) ? $field->fieldType : null;
-
-        switch ($fieldType) {
+        switch ($field->widget) {
             case 'choice':
                 $options['choices'] = $this->getChoicesForField($field);
                 $options['multiple'] = false;
                 $options['expanded'] = false;
+                break;
+            case 'repeated':
+                $options['type'] = 'password';
+                $options['invalid_message'] = 'The password fields must match.';
+                $options['options'] = array('attr' => array('class' => 'password-field'));
+                $options['required'] = true;
+                $options['first_options'] = array('label' => 'Password:');
+                $options['second_options'] = array('label' => 'Repeat Password:');
                 break;
         }
 

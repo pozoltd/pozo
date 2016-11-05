@@ -38,6 +38,7 @@ $FORM_WIDGETS = array(
     'hidden' => 'Hidden',
     'text' => 'Text',
     'textarea' => 'Textarea',
+    'repeated' => 'Repeated',
     '\\Pz\\Twig\\Types\\Wysiwyg' => 'Wysiwyg',
 );
 ?>

@@ -45,6 +45,8 @@ class Form implements ServiceProviderInterface
                     $result[] = array($field->label, $data[$field->id], $field->widget);
                 }
 
+                $this->beforeSend($formDescriptor, $result, $data);
+
                 $code = uniqid();
                 $formSubmissionClass = $this->app['formSubmissionClass'];
                 $submission = new $formSubmissionClass($this->app['em']);
@@ -62,7 +64,7 @@ class Form implements ServiceProviderInterface
                     'submission' => $submission,
                 ));
                 $message = \Swift_Message::newInstance()
-                    ->setSubject(CLIENT . ' EMAIL#' . $submission->uniqueId)
+                    ->setSubject(CLIENT . " {$formDescriptor->title}#" . $submission->uniqueId)
                     ->setFrom(array($formDescriptor->from))
                     ->setTo(array_filter(array_map('trim', explode(',', $formDescriptor->recipients))))
                     ->setBcc(array(EMAIL_BCC))
@@ -83,4 +85,9 @@ class Form implements ServiceProviderInterface
         return $formDescriptor;
 
     }
+
+    public function beforeSend($formDescriptor, &$result, $data) {
+
+    }
+
 }
