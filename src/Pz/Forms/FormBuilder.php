@@ -34,13 +34,13 @@ class FormBuilder extends AbstractType
             $builder->add($field->id, $field->widget, $this->getOptionsForField($field));
         }
 
-//        $builder->add('antispam', new \Pz\Forms\Types\Robot(), array(
-//            "mapped" => false,
-//            'label' => '',
-//            'constraints' => array(
-//                new \Pz\Forms\Constraints\Robot(),
-//            )
-//        ));
+        $builder->add('antispam', new \Pz\Forms\Types\Robot(), array(
+            "mapped" => false,
+            'label' => '',
+            'constraints' => array(
+                new \Pz\Forms\Constraints\Robot(),
+            )
+        ));
 //        exit;
     }
 

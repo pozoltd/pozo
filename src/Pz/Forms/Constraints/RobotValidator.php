@@ -9,7 +9,7 @@ class RobotValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         $url = 'https://www.google.com/recaptcha/api/siteverify';
-        $myvars = 'response=' . $_POST['g-recaptcha-response'] . '&secret=' . RECAPTCHA;
+        $myvars = 'response=' . $_POST['g-recaptcha-response'] . '&secret=' . RECAPTCHA_SERVER;
 
 //        $ch = curl_init($url);
 //        curl_setopt($ch, CURLOPT_POST, 1);
