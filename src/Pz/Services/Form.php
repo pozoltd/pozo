@@ -19,7 +19,7 @@ class Form implements ServiceProviderInterface
     }
 
 
-    public function getForm($code)
+    public function getForm($code, $object = null)
     {
         $formDescriptorClass = $this->app['formDescriptorClass'];
         $formDescriptor = $formDescriptorClass::findByField($this->app['em'], 'code', $code);
@@ -28,9 +28,10 @@ class Form implements ServiceProviderInterface
         }
         $formDescriptor->sent = false;
 
-        $formBuilder = new \Pz\Forms\FormBuilder($formDescriptor, $this->app, array());
+        $formBuilderClass = $this->app['formBuilderClass'];
+        $formBuilder = new $formBuilderClass($formDescriptor, $this->app, array());
         $form = $this->app['form.factory']->create(
-            $formBuilder, array()
+            $formBuilder, $object
         );
 
         $request = $this->app['request'];
@@ -38,45 +39,53 @@ class Form implements ServiceProviderInterface
 
             $form->bind($request);
             if ($form->isValid()) {
-                $data = $form->getData();
-
+                $data = (array)$form->getData();
                 $result = array();
                 foreach (json_decode($formDescriptor->fields) as $field) {
                     $result[] = array($field->label, $data[$field->id], $field->widget);
+                    $formDescriptor->thankyouMessage = str_replace("{{$field->id}}", $data[$field->id], $formDescriptor->thankyouMessage);
                 }
-
                 $this->beforeSend($formDescriptor, $result, $data);
 
-                $code = uniqid();
-                $formSubmissionClass = $this->app['formSubmissionClass'];
-                $submission = new $formSubmissionClass($this->app['em']);
-                $submission->title = '#' . $code . ' ' . $data['email'];
-                $submission->uniqueId = $code;
-                $submission->date = date('Y-m-d H:i:s');
-                $submission->from = $formDescriptor->from;
-                $submission->recipients = $formDescriptor->recipients;
-                $submission->content = json_encode($result);
-                $submission->emailStatus = 0;
-                $submission->save();
+                if ($formDescriptor->recipients) {
+                    $code = uniqid();
+                    $formSubmissionClass = $this->app['formSubmissionClass'];
+                    $submission = new $formSubmissionClass($this->app['em']);
+                    $submission->title = '#' . $code . ' ' . (isset($data['email']) ? $data['email'] : '');
+                    $submission->uniqueId = $code;
+                    $submission->date = date('Y-m-d H:i:s');
+                    $submission->from = $formDescriptor->from;
+                    $submission->recipients = $formDescriptor->recipients;
+                    $submission->content = json_encode($result);
+                    $submission->emailStatus = 0;
+                    $submission->save();
 
-                $this->app['twig.loader.filesystem']->addPath(__DIR__ . '/../../../views/');
-                $messageBody = $this->app['twig']->render('email.twig', array(
-                    'submission' => $submission,
-                ));
-                $message = \Swift_Message::newInstance()
-                    ->setSubject(CLIENT . " {$formDescriptor->title}#" . $submission->uniqueId)
-                    ->setFrom(array($formDescriptor->from))
-                    ->setTo(array_filter(array_map('trim', explode(',', $formDescriptor->recipients))))
-                    ->setBcc(array(EMAIL_BCC))
-                    ->setBody(
-                        $messageBody, 'text/html'
-                    );
-                $formDescriptor->sent = $this->app['mailer']->send($message);
 
-                $submission->emailStatus = $formDescriptor->sent ? 1 : 2;
-                $submission->emailRequest = $messageBody;
-                $submission->emailResponse = $formDescriptor->sent;
-                $submission->save();
+                    $this->app['twig.loader.filesystem']->addPath(__DIR__ . '/../../../views/');
+                    $messageBody = $this->app['twig']->render('email.twig', array(
+                        'submission' => $submission,
+                    ));
+
+                    $message = \Swift_Message::newInstance()
+                        ->setSubject(CLIENT . " {$formDescriptor->title}#" . $submission->uniqueId)
+                        ->setFrom(array($formDescriptor->from))
+                        ->setTo(array_filter(array_map('trim', explode(',', $formDescriptor->recipients))))
+                        ->setBcc(array(EMAIL_BCC))
+                        ->setBody(
+                            $messageBody, 'text/html'
+                        );
+                    $formDescriptor->sent = $this->app['mailer']->send($message);
+
+                    $submission->emailStatus = $formDescriptor->sent ? 1 : 2;
+                    $submission->emailRequest = $messageBody;
+                    $submission->emailResponse = $formDescriptor->sent;
+                    $submission->save();
+                } else {
+                    $formDescriptor->sent = 1;
+                }
+
+
+
             }
         }
 
@@ -86,7 +95,8 @@ class Form implements ServiceProviderInterface
 
     }
 
-    public function beforeSend($formDescriptor, &$result, $data) {
+    public function beforeSend($formDescriptor, &$result, $data)
+    {
 
     }
 

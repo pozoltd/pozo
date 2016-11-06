@@ -27,21 +27,20 @@ class FormBuilder extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-//        while (@ob_end_clean());
         $fields = json_decode($this->formDescriptor->fields);
         foreach ($fields as $key => $field) {
-//            Utils::dump($field);
             $builder->add($field->id, $field->widget, $this->getOptionsForField($field));
         }
 
-        $builder->add('antispam', new \Pz\Forms\Types\Robot(), array(
-            "mapped" => false,
-            'label' => '',
-            'constraints' => array(
-                new \Pz\Forms\Constraints\Robot(),
-            )
-        ));
-//        exit;
+        if ($this->formDescriptor->antiSpam) {
+            $builder->add('antispam', new \Pz\Forms\Types\Robot(), array(
+                "mapped" => false,
+                'label' => '',
+                'constraints' => array(
+                    new \Pz\Forms\Constraints\Robot(),
+                )
+            ));
+        }
     }
 
     public function getName()
@@ -103,6 +102,13 @@ class FormBuilder extends AbstractType
 
         if ($field->widget == 'email') {
             $validations[] = new Assert\Email();
+        }
+
+        if ($field->widget == 'repeated') {
+            $validations[] = new Assert\Length(array(
+                'min' => 8,
+                'max' => 32,
+            ));
         }
 
         if (isset($field->required) && $field->required) {

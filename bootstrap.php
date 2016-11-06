@@ -16,6 +16,7 @@ $app['formSubmissionClass'] = 'Pz\\DAOs\\FormSubmission';
 $app['orderClass'] = 'Pz\\Modules\\Cart\\DAOs\\Order';
 $app['orderItemClass'] = 'Pz\\Modules\\Cart\\DAOs\\OrderItem';
 $app['productClass'] = 'Pz\\Modules\\Cart\\DAOs\\Product';
+$app['formBuilderClass'] = 'Pz\\Forms\\FormBuilder';
 
 $config = new \Doctrine\ORM\Configuration();
 $config->setMetadataCacheImpl(new \Doctrine\Common\Cache\ArrayCache());
