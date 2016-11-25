@@ -51,7 +51,10 @@ class FormBuilder extends AbstractType
     public function getOptionsForField($field)
     {
         $options = array(
-            'label' => $field->label
+            'label' => $field->label,
+            'attr' => array(
+                'placeholder' => preg_replace("/[^a-zA-Z0-9\ ]+/", "", $field->label),
+            ),
         );
 
         switch ($field->widget) {
@@ -65,8 +68,8 @@ class FormBuilder extends AbstractType
                 $options['invalid_message'] = 'The password fields must match.';
                 $options['options'] = array('attr' => array('class' => 'password-field'));
                 $options['required'] = true;
-                $options['first_options'] = array('label' => 'Password:');
-                $options['second_options'] = array('label' => 'Repeat Password:');
+                $options['first_options'] = array('label' => 'Password (8 characters or more):', 'attr' => array('placeholder' => 'Enter Password'));
+                $options['second_options'] = array('label' => 'Repeat Password:', 'attr' => array('placeholder' => 'Confirm Password'));
                 break;
         }
 
