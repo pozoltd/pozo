@@ -7,7 +7,7 @@
         "symfony/twig-bridge": "2.7.*",
         "symfony/config": "2.7.*",
         "symfony/translation": "2.7.*",
-        "symfony/locale": "2.7.*",
+        "symfony/intl": "2.7.*",
         "symfony/form": "2.7.*",
         "symfony/validator": "2.7.*",
         "symfony/security": "2.7.*",
@@ -17,7 +17,7 @@
         "blueimp/jquery-file-upload": "9.6.0",
         "omnipay/paypal": "~2.0",
         "phpoffice/phpexcel": "1.8.*",
-        "facebook/php-sdk-v4": "~5.0"
+        "facebook/graph-sdk": "~5.0"
     },
     "repositories": [
         {
