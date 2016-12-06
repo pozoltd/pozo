@@ -117,7 +117,7 @@ class Content implements ControllerProviderInterface
 
         $daoClass = $model->getFullClass();
         $content = $daoClass::findById($app['em'], $id);
-        if (!$content) {
+        if (!$content) { 
             $app->abort(404);
         }
         $content->id = null;
