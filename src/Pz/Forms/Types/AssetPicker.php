@@ -1,13 +1,13 @@
 <?php
-namespace Pz\Twig\Types;
+namespace Pz\Forms\Types;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class DatePicker extends AbstractType {
+class AssetPicker extends AbstractType {
 
 	public function getName() {
-		return 'datepicker';
+		return 'assetpicker';
 	}
 
 	public function setDefaultOptions(OptionsResolverInterface $resolver) {

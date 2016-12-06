@@ -12,33 +12,35 @@ $CMS_METAS = array(
 );
 
 $CMS_WIDGETS = array(
-    '\\Pz\\Twig\\Types\\AssetPicker' => 'Asset picker',
-    '\\Pz\\Twig\\Types\\AssetFolderPicker' => 'Asset folder picker',
-    '\\Pz\\Twig\\Types\\Blocks' => 'Blocks',
+    '\\Pz\\Forms\\Types\\AssetPicker' => 'Asset picker',
+    '\\Pz\\Forms\\Types\\AssetFolderPicker' => 'Asset folder picker',
+    '\\Pz\\Forms\\Types\\Blocks' => 'Blocks',
     'choice' => 'Choice',
-    '\\Pz\\Twig\\Types\\ChoiceMultiJson' => 'Choice Multi JSON',
+    '\\Pz\\Forms\\Types\\ChoiceMultiJson' => 'Choice Multi JSON',
     'checkbox' => 'Checkbox',
-    '\\Pz\\Twig\\Types\\DatePicker' => 'Date picker',
-    '\\Pz\\Twig\\Types\\FormBuilder' => 'Form Builder',
-    '\\Pz\\Twig\\Types\\FormData' => 'Form Data',
+    '\\Pz\\Forms\\Types\\DatePicker' => 'Date picker',
+    '\\Pz\\Forms\\Types\\DateTimePicker' => 'Date time picker',
+    '\\Pz\\Forms\\Types\\FormBuilder' => 'Form Builder',
+    '\\Pz\\Forms\\Types\\FormData' => 'Form Data',
     'email' => 'Email',
     'hidden' => 'Hidden',
     'password' => 'Password',
     'text' => 'Text',
     'textarea' => 'Textarea',
-    '\\Pz\\Twig\\Types\\Wysiwyg' => 'Wysiwyg',
+    '\\Pz\\Forms\\Types\\Wysiwyg' => 'Wysiwyg',
 );
 
 
 $FORM_WIDGETS = array(
     'choice' => 'Choice',
     'checkbox' => 'Checkbox',
-    '\\Pz\\Twig\\Types\\DatePicker' => 'Date picker',
+    '\\Pz\\Forms\\Types\\DatePicker' => 'Date picker',
+    '\\Pz\\Forms\\Types\\DateTimePicker' => 'Date time picker',
     'email' => 'Email',
     'hidden' => 'Hidden',
     'text' => 'Text',
     'textarea' => 'Textarea',
     'repeated' => 'Repeated',
-    '\\Pz\\Twig\\Types\\Wysiwyg' => 'Wysiwyg',
+    '\\Pz\\Forms\\Types\\Wysiwyg' => 'Wysiwyg',
 );
 ?>

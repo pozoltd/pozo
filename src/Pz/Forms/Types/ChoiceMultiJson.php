@@ -1,5 +1,5 @@
 <?php
-namespace Pz\Twig\Types;
+namespace Pz\Forms\Types;
 
 use Pz\Common\Utils;
 use Symfony\Component\Form\AbstractType;

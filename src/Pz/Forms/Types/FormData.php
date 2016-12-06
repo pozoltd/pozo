@@ -1,13 +1,13 @@
 <?php
-namespace Pz\Twig\Types;
+namespace Pz\Forms\Types;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class AssetFolderPicker extends AbstractType {
+class FormData extends AbstractType {
 
 	public function getName() {
-		return 'assetfolderpicker';
+		return 'formdata';
 	}
 
 	public function setDefaultOptions(OptionsResolverInterface $resolver) {
