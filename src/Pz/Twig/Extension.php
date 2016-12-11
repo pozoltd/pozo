@@ -9,7 +9,7 @@ class Extension extends Twig_Extension
 
     public function getName()
     {
-        return 'some.extension';
+        return 'pozo.extension';
     }
 
     public function getFilters()
@@ -17,6 +17,7 @@ class Extension extends Twig_Extension
         return array(
             'json_decode' => new \Twig_Filter_Method($this, 'jsonDecode'),
             'ceil' => new \Twig_Filter_Method($this, 'ceil'),
+            'purify' => new \Twig_Filter_Method($this, 'purify'),
             'nestable' => new \Twig_Filter_Method($this, 'nestable'),
             'nav' => new \Twig_Filter_Method($this, 'nav'),
         );
@@ -30,6 +31,12 @@ class Extension extends Twig_Extension
     public function ceil($number)
     {
         return ceil($number);
+    }
+
+    public function purify($str)
+    {
+        $purify = new \HTMLPurifier();
+        return $purify->purify($str);
     }
 
     public function nestable($node)
