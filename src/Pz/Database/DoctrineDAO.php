@@ -126,6 +126,7 @@ abstract class DoctrineDAO implements DAOInterface
         $myClass = get_called_class();
         $m = new $myClass($db);
 
+        $count = isset($options['count']) ? $options['count'] : 0;
         $select = isset($options['select']) ? $options['select'] : 'entity';
         $whereSql = isset($options['whereSql']) ? $options['whereSql'] : null;
         $params = isset($options['params']) ? $options['params'] : array();
@@ -137,6 +138,11 @@ abstract class DoctrineDAO implements DAOInterface
         $jt = isset($options['jt']) ? $options['jt'] : null;
         $dao = isset($options['dao']) ? $options['dao'] : true;
         $oneOrNull = isset($options['oneOrNull']) ? $options['oneOrNull'] : false;
+
+        if ($count) {
+            $select = 'COUNT(entity.id) AS total';
+            $dao = 0;
+        }
 
         $whereSql = static::convert($m, $whereSql);
         $sort = static::convert($m, $sort);
