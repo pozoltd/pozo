@@ -11,4 +11,7 @@ class Page extends \Pz\DAOs\Generated\Page {
         return Template::findById($this->db, $this->template);
     }
 
+    public function has($categoryCode, $page) {
+
+    }
 }

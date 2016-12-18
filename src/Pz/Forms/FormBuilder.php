@@ -29,6 +29,9 @@ class FormBuilder extends AbstractType
     {
         $fields = json_decode($this->formDescriptor->fields);
         foreach ($fields as $key => $field) {
+            if (strpos($field->widget, '\\') !== false) {
+                $field->widget = new $field->widget();
+            }
             $builder->add($field->id, $field->widget, $this->getOptionsForField($field));
         }
 

@@ -47,7 +47,7 @@ $app['swiftmailer.options'] = array(
     'port' => SMTP_PORT,
     'username' => SMTP_USER,
     'password' => SMTP_PASS,
-    'encryption' => true
+    'encryption' => 'tls'
 );
 
 $app->register(new Silex\Provider\ValidatorServiceProvider(), array());
