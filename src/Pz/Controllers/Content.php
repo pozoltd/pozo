@@ -148,7 +148,9 @@ class Content implements ControllerProviderInterface
                     $choices[$val['key']] = $val['value'];
                 }
                 $options['choices'] = $choices;
-
+                $options['empty_data'] = null;
+                $options['required'] = false;
+                $options['placeholder'] = 'Choose an option...';
             }
             if ($itm->required == 1) {
                 $options['constraints'] = array(

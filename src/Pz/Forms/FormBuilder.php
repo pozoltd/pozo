@@ -65,6 +65,9 @@ class FormBuilder extends AbstractType
                 $options['choices'] = $this->getChoicesForField($field);
                 $options['multiple'] = false;
                 $options['expanded'] = false;
+                $options['empty_data'] = null;
+                $options['required'] = false;
+                $options['placeholder'] = 'Choose an option...';
                 break;
             case 'repeated':
                 $options['type'] = 'password';

@@ -23,6 +23,11 @@ class Get implements ServiceProviderInterface
         return Utils::encodeURL(Utils::getURL());
     }
 
+    public function slugify($str)
+    {
+        return Utils::slugify($str);
+    }
+
     public function system($code)
     {
         if ($setting = \Pz\DAOs\SystemSetting::findByField($this->app['em'], 'code', $code)) {

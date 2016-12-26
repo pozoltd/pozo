@@ -19,8 +19,10 @@ class Form implements ServiceProviderInterface
     }
 
 
-    public function getForm($code, $object = null)
+    public function getForm($code, $options = array())
     {
+        $dao = isset($options['dao']) && $options['dao'] ? $options['dao'] : null;
+
         $formDescriptorClass = $this->app['formDescriptorClass'];
         $formDescriptor = $formDescriptorClass::findByField($this->app['em'], 'code', $code);
         if (is_null($formDescriptor)) {
@@ -31,7 +33,7 @@ class Form implements ServiceProviderInterface
         $formBuilderClass = $this->app['formBuilderClass'];
         $formBuilder = new $formBuilderClass($formDescriptor, $this->app, array());
         $form = $this->app['form.factory']->create(
-            $formBuilder, $object
+            $formBuilder, $dao
         );
 
         $request = $this->app['request'];
@@ -46,6 +48,10 @@ class Form implements ServiceProviderInterface
                     $formDescriptor->thankyouMessage = str_replace("{{$field->id}}", $data[$field->id], $formDescriptor->thankyouMessage);
                 }
                 $this->beforeSend($formDescriptor, $result, $data);
+
+                if ($dao) {
+                    $dao->save();
+                }
 
                 if ($formDescriptor->recipients) {
                     $code = uniqid();
@@ -83,9 +89,6 @@ class Form implements ServiceProviderInterface
                 } else {
                     $formDescriptor->sent = 1;
                 }
-
-
-
             }
         }
 
