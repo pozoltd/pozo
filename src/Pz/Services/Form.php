@@ -40,7 +40,7 @@ class Form implements ServiceProviderInterface
         if ('POST' == $request->getMethod()) {// we need to make sure we have some sort of token before handling a post, look for csrf
 
             $form->bind($request);
-            var_dump($formDescriptor->id);exit;
+
             if ($form->isValid()) {
                 $data = (array)$form->getData();
                 $result = array();
