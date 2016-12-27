@@ -40,6 +40,7 @@ class Form implements ServiceProviderInterface
         if ('POST' == $request->getMethod()) {// we need to make sure we have some sort of token before handling a post, look for csrf
 
             $form->bind($request);
+            var_dump($formDescriptor->id);exit;
             if ($form->isValid()) {
                 $data = (array)$form->getData();
                 $result = array();
@@ -47,7 +48,7 @@ class Form implements ServiceProviderInterface
                     $result[] = array($field->label, $data[$field->id], $field->widget);
                     $formDescriptor->thankyouMessage = str_replace("{{$field->id}}", $data[$field->id], $formDescriptor->thankyouMessage);
                 }
-                $this->beforeSend($formDescriptor, $result, $data);
+                $this->beforeSend($formDescriptor, $result, $data, $dao);
 
                 if ($dao) {
                     $dao->save();
@@ -98,7 +99,7 @@ class Form implements ServiceProviderInterface
 
     }
 
-    public function beforeSend($formDescriptor, &$result, $data)
+    public function beforeSend($formDescriptor, &$result, $data, $dao)
     {
 
     }
