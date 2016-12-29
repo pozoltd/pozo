@@ -139,7 +139,7 @@ class Content implements ControllerProviderInterface
             $options = array(
                 'label' => $itm->label,
             );
-            if ($itm->widget == 'choice' || $itm->widget == '\\Pz\\Twig\\Types\\ChoiceMultiJson') {
+            if ($itm->widget == 'choice' || $itm->widget == '\\Pz\\Forms\\Types\\ChoiceMultiJson') {
                 $conn = $app['em']->getConnection();
                 $stmt = $conn->executeQuery($itm->sql);
                 $stmt->execute();
