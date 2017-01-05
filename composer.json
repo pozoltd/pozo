@@ -18,7 +18,8 @@
         "omnipay/paypal": "~2.0",
         "phpoffice/phpexcel": "1.8.*",
         "facebook/graph-sdk": "~5.0",
-        "google/apiclient": "v1.1.8"
+        "google/apiclient": "v1.1.8",
+        "ezyang/htmlpurifier": "v4.8.0"
     },
     "repositories": [
         {
