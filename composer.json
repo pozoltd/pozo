@@ -17,7 +17,8 @@
         "blueimp/jquery-file-upload": "9.6.0",
         "omnipay/paypal": "~2.0",
         "phpoffice/phpexcel": "1.8.*",
-        "facebook/graph-sdk": "~5.0"
+        "facebook/graph-sdk": "~5.0",
+        "google/apiclient": "1.0.*@beta"
     },
     "repositories": [
         {
