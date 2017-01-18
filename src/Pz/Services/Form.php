@@ -32,19 +32,22 @@ class Form implements ServiceProviderInterface
 
         $formBuilderClass = $this->app['formBuilderClass'];
         $formBuilder = new $formBuilderClass($formDescriptor, $this->app, array());
-        $form = $this->app['form.factory']->create(
+        $formDescriptor->form = $this->app['form.factory']->create(
             $formBuilder, $dao
         );
 
         $request = $this->app['request'];
         if ('POST' == $request->getMethod()) {// we need to make sure we have some sort of token before handling a post, look for csrf
 
-            $form->bind($request);
+            $formDescriptor->form->bind($request);
 
-            if ($form->isValid()) {
-                $data = (array)$form->getData();
+            if ($formDescriptor->form->isValid()) {
+                $data = (array)$formDescriptor->form->getData();
                 $result = array();
                 foreach (json_decode($formDescriptor->fields) as $field) {
+                    if ($field->widget == 'submit') {
+                        continue;
+                    }
                     $result[] = array($field->label, $data[$field->id], $field->widget);
                     $formDescriptor->thankyouMessage = str_replace("{{$field->id}}", $data[$field->id], $formDescriptor->thankyouMessage);
                 }
@@ -90,11 +93,13 @@ class Form implements ServiceProviderInterface
                 } else {
                     $formDescriptor->sent = 1;
                 }
+
+                $this->afterSend($formDescriptor, $result, $data, $dao);
             }
         }
 
 
-        $formDescriptor->form = $form->createView();
+        $formDescriptor->form = $formDescriptor->form->createView();
         return $formDescriptor;
 
     }

@@ -42,5 +42,6 @@ $FORM_WIDGETS = array(
     'textarea' => 'Textarea',
     'repeated' => 'Repeated',
     '\\Pz\\Forms\\Types\\Wysiwyg' => 'Wysiwyg',
+    'submit' => 'Submit',
 );
 ?>
