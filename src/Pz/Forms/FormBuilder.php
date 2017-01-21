@@ -67,7 +67,7 @@ class FormBuilder extends AbstractType
                 $options['expanded'] = false;
                 $options['empty_data'] = null;
                 $options['required'] = false;
-                $options['placeholder'] = 'Choose an option...';
+                $options['placeholder'] = 'Choose...';
                 break;
             case 'repeated':
                 $options['type'] = 'password';

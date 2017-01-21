@@ -37,7 +37,7 @@ class Form implements ServiceProviderInterface
         );
 
         $request = $this->app['request'];
-        if ('POST' == $request->getMethod()) {// we need to make sure we have some sort of token before handling a post, look for csrf
+        if ('POST' == $request->getMethod() && isset($_POST['form_' . $formDescriptor->code])) {// we need to make sure we have some sort of token before handling a post, look for csrf
 
             $formDescriptor->form->bind($request);
 
