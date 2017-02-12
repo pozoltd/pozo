@@ -44,7 +44,7 @@ class Asset extends AssetView
         $form->handleRequest($request);
         if ($form->isValid()) {
             $newFolder->save();
-            return $app->redirect($app->url('assets-folder', array('id' => $newFolder->id)));
+            return $app->redirect($app->url('assets-folder', array('id' => $id)));
         }
 
         $ancestors = array();

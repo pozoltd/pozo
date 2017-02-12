@@ -228,13 +228,13 @@
                         swal({
                             title: "Deleted",
                             text: "Your data has been deleted.",
-                            type: "success",
-                            showCancelButton: false,
-                            confirmButtonText: "OK",
-                            closeOnConfirm: true,
-                        }, function () {
-                            $(_this).closest('.content-container').remove();
+                            type: 'success',
+                            timer: 1000,
+                            showConfirmButton: false
                         });
+                        setTimeout(function () {
+                            $(_this).closest('.content-container').remove();
+                        }, 800)
                     }
                 });
 
