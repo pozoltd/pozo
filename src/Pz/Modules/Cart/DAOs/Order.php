@@ -46,7 +46,7 @@ class Order extends \Pz\Modules\Cart\DAOs\Generated\Order {
             return 0;
         }
         $shipping = Shipping::active($this->db, array(
-            'whereSql' => 'entity.title LIKE :v1',
+            'whereSql' => 'entity.countries LIKE :v1',
             'params' => array('v1' => '%"' . $this->getCountry() . '"%'),
             'oneOrNull' => true,
         ));
@@ -87,9 +87,10 @@ class Order extends \Pz\Modules\Cart\DAOs\Generated\Order {
         $countries = array();
         $shippings = Shipping::active($this->db);
         foreach ($shippings as $itm) {
-            $countries = array_merge($countries, json_decode($itm->title));
+            $countries = array_merge($countries, json_decode($itm->countries));
         }
         $countries = array_combine(array_values($countries), array_values($countries));
+        sort($countries);
         return $countries;
     }
 }

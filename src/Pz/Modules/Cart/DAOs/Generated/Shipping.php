@@ -10,8 +10,8 @@ class Shipping extends \Pz\Database\Content {
     function getFieldMap() {
         global $CMS_METAS;
         return array_merge(array(
-            'title' => 'title', 
-			'description' => 'description', 
+            'countries' => 'description',
+			'title' => 'title',
 			'upto' => 'extra1', 
 			'firstPrice' => 'price', 
 			'additionalPrice' => 'extra2', 
