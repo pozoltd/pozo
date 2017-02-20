@@ -74,7 +74,7 @@ class Order extends \Pz\Modules\Cart\DAOs\Generated\Order {
         $shipping = Shipping::active($this->db, array(
             'oneOrNull' => true,
         ));
-        $countries = json_decode($shipping->title);
+        $countries = json_decode($shipping->countries);
         if (count($countries) == 0) {
             throw new AccessDeniedHttpException('No shipping methods found');
         }
