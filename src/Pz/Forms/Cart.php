@@ -79,9 +79,8 @@ class Cart extends AbstractType
             'constraints' => array(
 //                new Assert\NotBlank()
             )
-        ))->add('country', 'choice', array(
+        ))->add('country', 'text', array(
             'label' => 'Country:',
-            'choices' => $countries,
             'constraints' => array(
                 new Assert\NotBlank()
             )
