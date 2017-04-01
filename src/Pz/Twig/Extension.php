@@ -1,6 +1,7 @@
 <?php
 namespace Pz\Twig;
 
+use PrettyDateTime\PrettyDateTime;
 use \Twig_Extension;
 use Pz\Common\Utils;
 
@@ -20,6 +21,7 @@ class Extension extends Twig_Extension
             'purify' => new \Twig_Filter_Method($this, 'purify'),
             'nestable' => new \Twig_Filter_Method($this, 'nestable'),
             'nav' => new \Twig_Filter_Method($this, 'nav'),
+            'prettydatetime' => new \Twig_Filter_Method($this, 'prettydatetime'),
         );
     }
 
@@ -78,5 +80,9 @@ class Extension extends Twig_Extension
         $str .= "</ul>";
 
         return $str;
+    }
+
+    public function prettydatetime($value) {
+        return PrettyDateTime::parse($value);
     }
 }
