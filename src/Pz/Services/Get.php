@@ -33,7 +33,7 @@ class Get implements ServiceProviderInterface
         if ($setting = \Pz\DAOs\SystemSetting::findByField($this->app['em'], 'code', $code)) {
             return $setting->value;
         }
-        $this->app->abort(404);
+        return null;
     }
 
     public function getRequestURI() {
