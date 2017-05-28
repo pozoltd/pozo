@@ -145,6 +145,12 @@ abstract class DoctrineDAO implements DAOInterface
         }
 
         $whereSql = static::convert($m, $whereSql);
+        $params = static::convertParams($m, $params);
+
+        if (isset($options['debug'])) {
+            var_dump($whereSql, $params);exit;
+        }
+
         $sort = static::convert($m, $sort);
 
 
@@ -221,5 +227,21 @@ abstract class DoctrineDAO implements DAOInterface
             $sql = str_replace($idx, $itm, $sql);
         }
         return $sql;
+    }
+
+    public static function convertParams($m, $params)
+    {
+        $fieldMap = $m->getFieldMap();
+        uasort($fieldMap, function ($a, $b) {
+            return strlen($b) - strlen($a);
+        });
+        $result = array();
+        foreach ($params as $idx => $itm) {
+            if (isset($fieldMap[$idx])) {
+                $idx = $fieldMap[$idx];
+            }
+            $result[$idx] = $itm;
+        }
+        return $result;
     }
 }
