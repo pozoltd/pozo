@@ -53,7 +53,7 @@ abstract class DoctrineDAO implements DAOInterface
     public function save()
     {
         $myClass = $this->getORMClass();
-        if ($this->id) {
+        if (isset($this->id) && $this->id) {
             $repo = $this->db->getRepository($myClass);
             $m = $repo->find($this->id);
         } else {

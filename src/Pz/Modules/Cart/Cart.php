@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Cart implements ControllerProviderInterface
 {
-    private $app;
+    protected $app;
 
     public function __construct($app) {
         $this->app = $app;
@@ -292,7 +292,7 @@ class Cart implements ControllerProviderInterface
     }
 
 
-    private function getOrderFromSession(Application $app)
+    protected function getOrderFromSession(Application $app)
     {
         $order = $app['session']->get('cart');
         if (!$order) {
@@ -334,7 +334,7 @@ class Cart implements ControllerProviderInterface
         return $order;
     }
 
-    private function getPaypalGateway($app) {
+    protected function getPaypalGateway($app) {
         $factory = new GatewayFactory();
         $gateway = $factory->create('PayPal_Express');
         $gateway->setUsername($app['get']->system('paypal-username'));
@@ -349,7 +349,7 @@ class Cart implements ControllerProviderInterface
     }
 
 
-    private function getPaypalParams($order) {
+    protected function getPaypalParams($order) {
         $cardInput = array(
             'firstName' => $order->firstname,
             'lastName' => $order->lastname,
